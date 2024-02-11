@@ -27,7 +27,7 @@ public class CauldronTest {
 
         double waterPerInput = 500;
 
-        double yield() {
+        double yieldValue() {
             double a = 1.45992201759558E+02;
             double b = 7.78379997224069E-05;
             double c = 2.35321095525948E+00;
@@ -42,7 +42,7 @@ public class CauldronTest {
         }
 
         int yield_mB(double amount) {
-            return (int) MathHelper.clamp(yield() * amount * 1000, 0, waterPerInput * amount);
+            return (int) MathHelper.clamp(yieldValue() * amount * 1000, 0, waterPerInput * amount);
         }
 
         int usage_mB(double amount) {
