@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import crazypants.enderio.api.EIOTags;
 import crazypants.enderio.api.addon.IEnderIOAddon;
 import crazypants.enderio.base.Log;
 import net.minecraftforge.common.config.Configuration;
@@ -18,24 +19,15 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.NetworkCheckHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod(modid = EnderIOEndergy.MODID, name = EnderIOEndergy.MOD_NAME, version = EnderIOEndergy.VERSION, dependencies = EnderIOEndergy.DEPENDENCIES)
 @EventBusSubscriber
 public class EnderIOEndergy implements IEnderIOAddon {
 
-  @NetworkCheckHandler
-  @SideOnly(Side.CLIENT)
-  public boolean checkModLists(Map<String, String> modList, Side side) {
-    return true;
-  }
-
   public static final @Nonnull String MODID = "enderioeaddons";
   public static final @Nonnull String DOMAIN = "enderio";
   public static final @Nonnull String MOD_NAME = "Ender IO Addons";
-  public static final @Nonnull String VERSION = "@VERSION@";
+  public static final @Nonnull String VERSION = EIOTags.VERSION;
 
   public static final @Nonnull String DEPENDENCIES = "after:" + crazypants.enderio.base.EnderIO.MODID;
 
