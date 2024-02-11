@@ -1,8 +1,30 @@
-include ':enderio-base', ':enderio-machines', ':enderio-conduits', ':enderio-invpanel', ':enderio-integration-tic', ':enderio-integration-forestry', ':enderio-integration-thaumcraft', ':enderio-conduits-refinedstorage', ':enderio-conduits-opencomputers', ':enderio-conduits-appliedenergistics', ':enderio-addons', ':enderio-zoo', ':enderio-endergy', 'ap', ':enderio-conduits-mekanism', ':enderio-addons'
-
-rootProject.name = 'EnderIO'
-
-rootProject.children.each { project ->
-    String fileBaseName = project.name.toLowerCase()
-    project.buildFileName = "${fileBaseName}.gradle"
+pluginManagement {
+    repositories {
+        maven {
+            // RetroFuturaGradle
+            name 'GTNH Maven'
+            url 'https://nexus.gtnewhorizons.com/repository/public/'
+            //noinspection GroovyAssignabilityCheck
+            mavenContent {
+                includeGroup 'com.gtnewhorizons'
+                includeGroup 'com.gtnewhorizons.retrofuturagradle'
+            }
+        }
+        gradlePluginPortal()
+        mavenCentral()
+        mavenLocal()
+    }
 }
+
+plugins {
+    id 'com.diffplug.blowdryerSetup' version '1.7.0'
+    // Automatic toolchain provisioning
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}
+
+blowdryerSetup {
+    repoSubfolder 'spotless'
+    github 'GregTechCEu/Buildscripts', 'tag', 'v1.0.7'
+}
+
+rootProject.name = rootProject.projectDir.getName()

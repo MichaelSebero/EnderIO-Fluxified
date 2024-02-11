@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.vladsch.flexmark:flexmark:0.34.52'
+        classpath 'com.vladsch.flexmark:flexmark-pdf-converter:0.34.52'
+    }
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
+processResources.doLast {
+    def resdir = new File(project.sourceSets.main.output.resourcesDir, "assets/enderio/config/recipes")
+    project.fileTree([dir: resdir, include: '*.xml']).files.each { file ->
+        def baseFilename = file.name.take(file.name.lastIndexOf('.'))
+        def inputFile = new File(resdir, "${baseFilename}.xml")
+        def outputFile = new File(resdir, "${baseFilename}.pdf")
+        com.vladsch.flexmark.pdf.converter.PdfConverterExtension.exportToPdf(outputFile.path,
+            "<html><head></head><body><div style='white-space:pre-wrap; font-family:monospace;'>" +
+            groovy.xml.XmlUtil.escapeXml(inputFile.text) +
+            "</div></body></html>", "", new com.vladsch.flexmark.util.options.MutableDataSet())
+    }
+}
