@@ -9,21 +9,20 @@ import net.minecraft.item.ItemStack;
 
 public interface ISlotSelector {
 
-  boolean isAnvil();
+    boolean isAnvil();
 
-  boolean isItem();
+    boolean isItem();
 
-  boolean isSlot();
+    boolean isSlot();
 
-  EntityEquipmentSlot getSlot();
+    EntityEquipmentSlot getSlot();
 
-  int getTabOrder();
+    int getTabOrder();
 
-  ItemStack getItem(EntityPlayer player);
+    ItemStack getItem(EntityPlayer player);
 
-  Slot setContainerSlot(Slot containerSlot);
+    Slot setContainerSlot(Slot containerSlot);
 
-  @Nullable
-  Slot getContainerSlot();
-
+    @Nullable
+    Slot getContainerSlot();
 }

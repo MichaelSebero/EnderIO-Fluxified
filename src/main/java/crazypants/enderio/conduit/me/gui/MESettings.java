@@ -10,13 +10,13 @@ import crazypants.enderio.conduits.gui.BaseSettingsPanel;
 
 public class MESettings extends BaseSettingsPanel {
 
-  public MESettings(@Nonnull IGuiExternalConnection gui, @Nonnull IClientConduit con) {
-    super(IconEIO.WRENCH_OVERLAY_ME, ConduitAppliedEnergisticsObject.item_me_conduit.getUnlocalisedName(), gui, con, "simple_settings");
-  }
+    public MESettings(@Nonnull IGuiExternalConnection gui, @Nonnull IClientConduit con) {
+        super(IconEIO.WRENCH_OVERLAY_ME, ConduitAppliedEnergisticsObject.item_me_conduit.getUnlocalisedName(), gui, con,
+                "simple_settings");
+    }
 
-  @Override
-  protected boolean hasInOutModes() {
-    return false;
-  }
-
+    @Override
+    protected boolean hasInOutModes() {
+        return false;
+    }
 }

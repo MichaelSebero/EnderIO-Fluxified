@@ -23,47 +23,48 @@ import net.minecraftforge.fml.common.eventhandler.Cancelable;
 @Cancelable
 public class TeleportEntityEvent extends EntityEvent {
 
-  /**
-   * The target coords. These can be edited by event handlers.
-   */
-  private @Nonnull BlockPos targetPos;
+    /**
+     * The target coords. These can be edited by event handlers.
+     */
+    private @Nonnull BlockPos targetPos;
 
-  private int dimension;
+    private int dimension;
 
-  private final @Nonnull TravelSource source;
+    private final @Nonnull TravelSource source;
 
-  /**
-   * Fired before an entity teleports to the given location.
-   * 
-   * @param entity
-   *          The entity teleporting
-   * @param pos
-   *          The target coord
-   */
-  public TeleportEntityEvent(@Nonnull Entity entity, @Nonnull TravelSource source, @Nonnull BlockPos pos, int dimension) {
-    super(entity);
-    this.targetPos = pos;
-    this.source = source;
-    this.setDimension(dimension);
-  }
+    /**
+     * Fired before an entity teleports to the given location.
+     * 
+     * @param entity
+     *               The entity teleporting
+     * @param pos
+     *               The target coord
+     */
+    public TeleportEntityEvent(@Nonnull Entity entity, @Nonnull TravelSource source, @Nonnull BlockPos pos,
+                               int dimension) {
+        super(entity);
+        this.targetPos = pos;
+        this.source = source;
+        this.setDimension(dimension);
+    }
 
-  public @Nonnull BlockPos getTarget() {
-    return targetPos;
-  }
+    public @Nonnull BlockPos getTarget() {
+        return targetPos;
+    }
 
-  public void setTargetPos(@Nonnull BlockPos target) {
-    this.targetPos = target;
-  }
+    public void setTargetPos(@Nonnull BlockPos target) {
+        this.targetPos = target;
+    }
 
-  public int getDimension() {
-    return dimension;
-  }
+    public int getDimension() {
+        return dimension;
+    }
 
-  public void setDimension(int dimension) {
-    this.dimension = dimension;
-  }
+    public void setDimension(int dimension) {
+        this.dimension = dimension;
+    }
 
-  public @Nonnull TravelSource getSource() {
-    return source;
-  }
+    public @Nonnull TravelSource getSource() {
+        return source;
+    }
 }

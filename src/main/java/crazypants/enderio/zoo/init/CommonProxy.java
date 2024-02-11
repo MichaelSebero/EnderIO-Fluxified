@@ -6,11 +6,9 @@ import net.minecraft.potion.PotionEffect;
 
 public class CommonProxy {
 
-  public void setInstantConfusionOnPlayer(EntityPlayer ent, int duration) {
-    ent.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, duration, 1, false, true));
-  }
+    public void setInstantConfusionOnPlayer(EntityPlayer ent, int duration) {
+        ent.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, duration, 1, false, true));
+    }
 
-  public void preInit() {
-  }
-
+    public void preInit() {}
 }

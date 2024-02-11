@@ -8,12 +8,11 @@ import crazypants.enderio.base.invpanel.database.IInventoryDatabaseServer;
 
 public interface IDatabaseHandler {
 
-  @Nonnull
-  IInventoryDatabaseServer getDatabase();
+    @Nonnull
+    IInventoryDatabaseServer getDatabase();
 
-  int getChangeCount();
+    int getChangeCount();
 
-  @Nonnull
-  List<InventoryDatabaseSource> getSources();
-
+    @Nonnull
+    List<InventoryDatabaseSource> getSources();
 }

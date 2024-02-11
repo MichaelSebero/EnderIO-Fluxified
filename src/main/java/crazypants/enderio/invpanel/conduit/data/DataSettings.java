@@ -10,13 +10,13 @@ import crazypants.enderio.invpanel.init.InvpanelObject;
 
 public class DataSettings extends BaseSettingsPanel {
 
-  public DataSettings(@Nonnull IGuiExternalConnection gui, @Nonnull IClientConduit con) {
-    super(IconEIO.WRENCH_OVERLAY_DATA, InvpanelObject.item_data_conduit.getUnlocalisedName(), gui, con, "simple_settings");
-  }
+    public DataSettings(@Nonnull IGuiExternalConnection gui, @Nonnull IClientConduit con) {
+        super(IconEIO.WRENCH_OVERLAY_DATA, InvpanelObject.item_data_conduit.getUnlocalisedName(), gui, con,
+                "simple_settings");
+    }
 
-  @Override
-  protected boolean hasInOutModes() {
-    return false;
-  }
-
+    @Override
+    protected boolean hasInOutModes() {
+        return false;
+    }
 }

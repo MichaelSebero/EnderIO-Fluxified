@@ -4,14 +4,13 @@ import javax.annotation.Nonnull;
 
 public interface IInventoryPanel {
 
-  float getAvailablePower();
+    float getAvailablePower();
 
-  void refuelPower(@Nonnull IInventoryDatabaseServer db);
+    void refuelPower(@Nonnull IInventoryDatabaseServer db);
 
-  float getPowerLevel();
+    float getPowerLevel();
 
-  boolean usePower(float amount);
+    boolean usePower(float amount);
 
-  void addPower(float amount);
-
+    void addPower(float amount);
 }

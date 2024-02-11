@@ -1,5 +1,15 @@
 package gg.galaxygaming.gasconduits.client;
 
+import java.awt.Color;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+
 import com.enderio.core.client.gui.button.ColorButton;
 import com.enderio.core.client.gui.button.MultiIconButton;
 import com.enderio.core.client.gui.button.ToggleButton;
@@ -7,6 +17,7 @@ import com.enderio.core.client.render.ColorUtil;
 import com.enderio.core.client.render.EnderWidget;
 import com.enderio.core.common.util.DyeColor;
 import com.enderio.core.common.util.NNList;
+
 import crazypants.enderio.base.EnderIO;
 import crazypants.enderio.base.conduit.ConnectionMode;
 import crazypants.enderio.base.conduit.IClientConduit;
@@ -27,13 +38,6 @@ import gg.galaxygaming.gasconduits.common.conduit.GasConduitObject;
 import gg.galaxygaming.gasconduits.common.conduit.IGasConduit;
 import gg.galaxygaming.gasconduits.common.conduit.ender.EnderGasConduit;
 import gg.galaxygaming.gasconduits.common.network.PacketEnderGasConduit;
-import java.awt.Color;
-import javax.annotation.Nonnull;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 
 public class GasSettings extends BaseSettingsPanel {
 
@@ -68,7 +72,8 @@ public class GasSettings extends BaseSettingsPanel {
     private final IGasConduit conduit;
 
     public GasSettings(@Nonnull final IGuiExternalConnection gui, @Nonnull IClientConduit con) {
-        super(IconEIO.WRENCH_OVERLAY_GAS, GasConduitObject.itemGasConduit.getUnlocalisedName(), gui, con, "in_out_settings");
+        super(IconEIO.WRENCH_OVERLAY_GAS, GasConduitObject.itemGasConduit.getUnlocalisedName(), gui, con,
+                "in_out_settings");
 
         conduit = (IGasConduit) con;
         if (con instanceof EnderGasConduit) {
@@ -109,13 +114,13 @@ public class GasSettings extends BaseSettingsPanel {
         colorB.setToolTipHeading(Lang.GUI_SIGNAL_COLOR.get());
         colorB.setColorIndex(conduit.getExtractionSignalColor(gui.getDir()).ordinal());
 
-        rsB = new RedstoneModeButton(gui, ID_REDSTONE_BUTTON, x, y, new ConduitRedstoneModeControlable(conduit, gui, colorB));
+        rsB = new RedstoneModeButton(gui, ID_REDSTONE_BUTTON, x, y,
+                new ConduitRedstoneModeControlable(conduit, gui, colorB));
 
         x = priLeft + priWidth + 9;
 
         priUpB = MultiIconButton.createAddButton(gui, ID_PRIORITY_UP, x, y);
         priDownB = MultiIconButton.createMinusButton(gui, ID_PRIORITY_DOWN, x, y + 8);
-
     }
 
     @Override

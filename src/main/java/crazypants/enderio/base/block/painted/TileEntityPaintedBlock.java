@@ -7,13 +7,11 @@ import info.loenwind.autosave.annotations.Storable;
 @Storable
 public class TileEntityPaintedBlock extends TileEntityEio implements IPaintable.IPaintableTileEntity {
 
-  public TileEntityPaintedBlock() {
-  }
+    public TileEntityPaintedBlock() {}
 
-  @Override
-  public void onAfterDataPacket() {
-    super.onAfterDataPacket();
-    updateBlock();
-  }
-
+    @Override
+    public void onAfterDataPacket() {
+        super.onAfterDataPacket();
+        updateBlock();
+    }
 }

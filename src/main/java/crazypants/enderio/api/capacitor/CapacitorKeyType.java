@@ -5,21 +5,21 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 
 public enum CapacitorKeyType {
-  ENERGY_BUFFER,
-  ENERGY_INTAKE,
-  ENERGY_USE,
-  ENERGY_LOSS,
-  ENERGY_GEN,
-  ENERGY_EFFICIENCY,
-  SPEED,
-  AREA,
-  AMOUNT,
-  ABSORPTION
 
-  ;
+    ENERGY_BUFFER,
+    ENERGY_INTAKE,
+    ENERGY_USE,
+    ENERGY_LOSS,
+    ENERGY_GEN,
+    ENERGY_EFFICIENCY,
+    SPEED,
+    AREA,
+    AMOUNT,
+    ABSORPTION
 
-  public @Nonnull String getName() {
-    return name().toLowerCase(Locale.ENGLISH);
-  }
+    ;
 
+    public @Nonnull String getName() {
+        return name().toLowerCase(Locale.ENGLISH);
+    }
 }

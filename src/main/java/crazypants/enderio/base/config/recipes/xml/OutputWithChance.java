@@ -7,33 +7,33 @@ import crazypants.enderio.base.config.recipes.StaxFactory;
 
 public class OutputWithChance extends Output {
 
-  private float chance = 1f;
+    private float chance = 1f;
 
-  @Override
-  public Object readResolve() throws InvalidRecipeConfigException {
-    super.readResolve();
-    if (chance < 0) {
-      throw new InvalidRecipeConfigException("Invalid negative chance in <output>");
-    }
-    if (chance > 1) {
-      throw new InvalidRecipeConfigException("Invalid chance above 100% in <output>");
-    }
+    @Override
+    public Object readResolve() throws InvalidRecipeConfigException {
+        super.readResolve();
+        if (chance < 0) {
+            throw new InvalidRecipeConfigException("Invalid negative chance in <output>");
+        }
+        if (chance > 1) {
+            throw new InvalidRecipeConfigException("Invalid chance above 100% in <output>");
+        }
 
-    return this;
-  }
-
-  @Override
-  public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("chance".equals(name)) {
-      this.chance = Float.valueOf(value);
-      return true;
+        return this;
     }
 
-    return super.setAttribute(factory, name, value);
-  }
+    @Override
+    public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException,
+                                                                                XMLStreamException {
+        if ("chance".equals(name)) {
+            this.chance = Float.valueOf(value);
+            return true;
+        }
 
-  public float getChance() {
-    return chance;
-  }
+        return super.setAttribute(factory, name, value);
+    }
 
+    public float getChance() {
+        return chance;
+    }
 }

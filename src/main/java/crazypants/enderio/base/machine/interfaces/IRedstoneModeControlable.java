@@ -6,11 +6,10 @@ import crazypants.enderio.base.machine.modes.RedstoneControlMode;
 
 public interface IRedstoneModeControlable {
 
-  @Nonnull
-  RedstoneControlMode getRedstoneControlMode();
+    @Nonnull
+    RedstoneControlMode getRedstoneControlMode();
 
-  void setRedstoneControlMode(@Nonnull RedstoneControlMode mode);
+    void setRedstoneControlMode(@Nonnull RedstoneControlMode mode);
 
-  boolean getRedstoneControlStatus();
-
+    boolean getRedstoneControlStatus();
 }

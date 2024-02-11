@@ -5,10 +5,10 @@ import crazypants.enderio.zoo.EnderIOZoo;
 
 public final class Config {
 
-  public static final ValueFactoryEIO F = new ValueFactoryEIO(EnderIOZoo.MODID);
+    public static final ValueFactoryEIO F = new ValueFactoryEIO(EnderIOZoo.MODID);
 
-  static {
-    // force sub-configs to be classloaded with the main config
-    ZooConfig.F.getClass();
-  }
+    static {
+        // force sub-configs to be classloaded with the main config
+        ZooConfig.F.getClass();
+    }
 }

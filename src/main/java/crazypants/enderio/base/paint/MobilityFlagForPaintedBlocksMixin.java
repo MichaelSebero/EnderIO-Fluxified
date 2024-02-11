@@ -2,12 +2,12 @@ package crazypants.enderio.base.paint;
 
 import javax.annotation.Nonnull;
 
-import com.enderio.core.common.mixin.SimpleMixin;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+
+import com.enderio.core.common.mixin.SimpleMixin;
 
 @SimpleMixin(IPaintable.ITexturePaintableBlock.class)
 @SimpleMixin(IPaintable.IBlockPaintableBlock.class)
@@ -15,14 +15,13 @@ import net.minecraft.block.state.IBlockState;
 @SimpleMixin(IPaintable.IBlockPaintableBlock.INonSolidBlockPaintableBlock.class)
 public abstract class MobilityFlagForPaintedBlocksMixin extends Block {
 
-  private MobilityFlagForPaintedBlocksMixin(Material materialIn) {
-    super(materialIn);
-  }
+    private MobilityFlagForPaintedBlocksMixin(Material materialIn) {
+        super(materialIn);
+    }
 
-  @Override
-  public @Nonnull EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
-    // Some mods coremod vanilla to move blocks with TEs, so let's try to enforce it.
-    return EnumPushReaction.BLOCK;
-  }
-
+    @Override
+    public @Nonnull EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
+        // Some mods coremod vanilla to move blocks with TEs, so let's try to enforce it.
+        return EnumPushReaction.BLOCK;
+    }
 }

@@ -11,25 +11,24 @@ import mezz.jei.api.gui.IAdvancedGuiHandler;
 
 public class AdvancedGuiHandlerEnderIO implements IAdvancedGuiHandler<GuiContainerBaseEIO> {
 
-  public AdvancedGuiHandlerEnderIO() {
-  }
+    public AdvancedGuiHandlerEnderIO() {}
 
-  @Override
-  @Nonnull
-  public Class<GuiContainerBaseEIO> getGuiContainerClass() {
-    return GuiContainerBaseEIO.class;
-  }
+    @Override
+    @Nonnull
+    public Class<GuiContainerBaseEIO> getGuiContainerClass() {
+        return GuiContainerBaseEIO.class;
+    }
 
-  @Override
-  @Nullable
-  public List<Rectangle> getGuiExtraAreas(@Nonnull GuiContainerBaseEIO guiContainer) {
-    return guiContainer.getBlockingAreas();
-  }
+    @Override
+    @Nullable
+    public List<Rectangle> getGuiExtraAreas(@Nonnull GuiContainerBaseEIO guiContainer) {
+        return guiContainer.getBlockingAreas();
+    }
 
-  @Override
-  @Nullable
-  public Object getIngredientUnderMouse(@Nonnull GuiContainerBaseEIO guiContainer, int mouseX, int mouseY) {
-    return guiContainer.getIngredientUnderMouse(mouseX - guiContainer.getGuiLeft(), mouseY - guiContainer.getGuiTop());
-  }
-
+    @Override
+    @Nullable
+    public Object getIngredientUnderMouse(@Nonnull GuiContainerBaseEIO guiContainer, int mouseX, int mouseY) {
+        return guiContainer.getIngredientUnderMouse(mouseX - guiContainer.getGuiLeft(),
+                mouseY - guiContainer.getGuiTop());
+    }
 }

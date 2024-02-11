@@ -6,9 +6,6 @@ import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
 
-import crazypants.enderio.base.EnderIO;
-import crazypants.enderio.base.Log;
-import crazypants.enderio.base.item.darksteel.upgrade.elytra.CapeFilterLayer;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -22,47 +19,50 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper.UnableToAccessFieldExc
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import crazypants.enderio.base.EnderIO;
+import crazypants.enderio.base.Log;
+import crazypants.enderio.base.item.darksteel.upgrade.elytra.CapeFilterLayer;
+
 @EventBusSubscriber(modid = EnderIO.MODID, value = Side.CLIENT)
 @SideOnly(Side.CLIENT)
 public final class UpgradeRenderManager {
 
-  // no WeakHashSet in Java...
-  private static final Map<RenderPlayer, Object> injected = new WeakHashMap<RenderPlayer, Object>();
+    // no WeakHashSet in Java...
+    private static final Map<RenderPlayer, Object> injected = new WeakHashMap<RenderPlayer, Object>();
 
-  private UpgradeRenderManager() {
-  }
+    private UpgradeRenderManager() {}
 
-  @SideOnly(Side.CLIENT)
-  @SubscribeEvent
-  public static void onPlayerRenderPre(RenderPlayerEvent.Pre event) {
-    final RenderPlayer renderer = event.getRenderer();
-    if (renderer != null && !injected.containsKey(renderer)) {
-      UpgradeRenderManager.replaceCapeLayer(renderer);
-      renderer.addLayer(new UpgradeRenderDispatcher(renderer));
-      injected.put(renderer, null);
-    }
-  }
-
-  private static void replaceCapeLayer(@Nonnull RenderPlayer renderLivingBase) {
-    try {
-      List<LayerRenderer<AbstractClientPlayer>> value = ReflectionHelper.getPrivateValue(RenderLivingBase.class, renderLivingBase, "layerRenderers",
-          "field_177097_h");
-      if (value != null) {
-        LayerRenderer<AbstractClientPlayer> capeLayer = null;
-        for (LayerRenderer<AbstractClientPlayer> layerRenderer : value) {
-          if (layerRenderer instanceof LayerCape && !(layerRenderer instanceof CapeFilterLayer)) {
-            capeLayer = layerRenderer;
-            break;
-          }
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onPlayerRenderPre(RenderPlayerEvent.Pre event) {
+        final RenderPlayer renderer = event.getRenderer();
+        if (renderer != null && !injected.containsKey(renderer)) {
+            UpgradeRenderManager.replaceCapeLayer(renderer);
+            renderer.addLayer(new UpgradeRenderDispatcher(renderer));
+            injected.put(renderer, null);
         }
-        if (capeLayer != null) {
-          renderLivingBase.addLayer(new CapeFilterLayer(capeLayer));
-          value.remove(capeLayer);
-        }
-      }
-    } catch (UnableToAccessFieldException e) {
-      Log.warn("Unable to access RenderLivingBase.layerRenderers, reason: " + e);
     }
-  }
 
+    private static void replaceCapeLayer(@Nonnull RenderPlayer renderLivingBase) {
+        try {
+            List<LayerRenderer<AbstractClientPlayer>> value = ReflectionHelper.getPrivateValue(RenderLivingBase.class,
+                    renderLivingBase, "layerRenderers",
+                    "field_177097_h");
+            if (value != null) {
+                LayerRenderer<AbstractClientPlayer> capeLayer = null;
+                for (LayerRenderer<AbstractClientPlayer> layerRenderer : value) {
+                    if (layerRenderer instanceof LayerCape && !(layerRenderer instanceof CapeFilterLayer)) {
+                        capeLayer = layerRenderer;
+                        break;
+                    }
+                }
+                if (capeLayer != null) {
+                    renderLivingBase.addLayer(new CapeFilterLayer(capeLayer));
+                    value.remove(capeLayer);
+                }
+            }
+        } catch (UnableToAccessFieldException e) {
+            Log.warn("Unable to access RenderLivingBase.layerRenderers, reason: " + e);
+        }
+    }
 }

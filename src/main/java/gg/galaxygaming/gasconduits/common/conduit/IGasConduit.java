@@ -1,12 +1,14 @@
 package gg.galaxygaming.gasconduits.common.conduit;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.util.EnumFacing;
+
 import crazypants.enderio.base.conduit.IClientConduit;
 import crazypants.enderio.base.conduit.IExtractor;
 import crazypants.enderio.base.conduit.IServerConduit;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import mekanism.api.gas.IGasHandler;
-import net.minecraft.util.EnumFacing;
 
 public interface IGasConduit extends IGasHandler, IExtractor, IServerConduit, IClientConduit {
 

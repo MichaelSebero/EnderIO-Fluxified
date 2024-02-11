@@ -12,43 +12,41 @@ import slimeknights.tconstruct.library.modifiers.IModifier;
 
 public class OurBookTransformer extends BookTransformer {
 
-  public OurBookTransformer() {
-  }
+    public OurBookTransformer() {}
 
-  @Override
-  public void transform(BookData book) {
-    SectionData section1 = null, section2 = null;
-    for (SectionData section : book.sections) {
-      if (section.name.equals("modifiers")) {
-        section1 = section;
-      }
-      if (section.name.equals("eiomodifiers")) {
-        section2 = section;
-      }
-    }
-    if (section1 != null && section2 != null) {
-      for (PageData page : section2.pages) {
-        page.parent = section1;
-        section1.pages.add(page);
-      }
-      PageData pageData = section1.pages.get(0);
-      PageContent content = pageData.content;
-      if (content instanceof ContentListing) {
-        ContentListing listing = (ContentListing) content;
-        for (PageData page : section2.pages) {
-          page.parent = section1;
-          if (page.content instanceof ContentModifier) {
-            IModifier modifier = TinkerRegistry.getModifier(((ContentModifier) page.content).modifierName);
-            if (modifier != null) {
-              page.name = "page-eio-" + modifier.getIdentifier();
-              listing.addEntry(modifier.getLocalizedName(), page);
+    @Override
+    public void transform(BookData book) {
+        SectionData section1 = null, section2 = null;
+        for (SectionData section : book.sections) {
+            if (section.name.equals("modifiers")) {
+                section1 = section;
             }
-          }
+            if (section.name.equals("eiomodifiers")) {
+                section2 = section;
+            }
         }
-      }
-      section2.pages.clear();
-      book.sections.remove(section2);
+        if (section1 != null && section2 != null) {
+            for (PageData page : section2.pages) {
+                page.parent = section1;
+                section1.pages.add(page);
+            }
+            PageData pageData = section1.pages.get(0);
+            PageContent content = pageData.content;
+            if (content instanceof ContentListing) {
+                ContentListing listing = (ContentListing) content;
+                for (PageData page : section2.pages) {
+                    page.parent = section1;
+                    if (page.content instanceof ContentModifier) {
+                        IModifier modifier = TinkerRegistry.getModifier(((ContentModifier) page.content).modifierName);
+                        if (modifier != null) {
+                            page.name = "page-eio-" + modifier.getIdentifier();
+                            listing.addEntry(modifier.getLocalizedName(), page);
+                        }
+                    }
+                }
+            }
+            section2.pages.clear();
+            book.sections.remove(section2);
+        }
     }
-  }
-
 }

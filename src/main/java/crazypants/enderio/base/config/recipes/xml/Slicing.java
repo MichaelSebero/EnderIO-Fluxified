@@ -19,70 +19,72 @@ import crazypants.enderio.base.recipe.slicensplice.SliceAndSpliceRecipeManager;
 
 public class Slicing extends AbstractCrafting {
 
-  private int energy;
-  private final NNList<Item> inputs = new NNList<>();
+    private int energy;
+    private final NNList<Item> inputs = new NNList<>();
 
-  @Override
-  public Object readResolve() throws InvalidRecipeConfigException {
-    try {
-      super.readResolve();
-      if (inputs.size() != 6) {
-        throw new InvalidRecipeConfigException("Wrong number of <input>");
-      }
-      if (energy <= 0) {
-        throw new InvalidRecipeConfigException("Invalid low value for 'energy'");
-      }
+    @Override
+    public Object readResolve() throws InvalidRecipeConfigException {
+        try {
+            super.readResolve();
+            if (inputs.size() != 6) {
+                throw new InvalidRecipeConfigException("Wrong number of <input>");
+            }
+            if (energy <= 0) {
+                throw new InvalidRecipeConfigException("Invalid low value for 'energy'");
+            }
 
-      for (Item input : inputs) {
-        valid = valid && input.isValid();
-      }
+            for (Item input : inputs) {
+                valid = valid && input.isValid();
+            }
 
-    } catch (InvalidRecipeConfigException e) {
-      throw new InvalidRecipeConfigException(e, "in <slicing>");
-    }
-    return this;
-  }
-
-  @Override
-  public void enforceValidity() throws InvalidRecipeConfigException {
-    super.enforceValidity();
-    for (Item input : inputs) {
-      input.enforceValidity();
-    }
-  }
-
-  @Override
-  public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
-    if (isValid() && isActive()) {
-      NNList<IRecipeInput> inputStacks = new NNList<>();
-      for (NNIterator<Item> itr = inputs.fastIterator(); itr.hasNext();) {
-        final Item item = itr.next();
-        inputStacks.add(new ThingsRecipeInput(item.getThing(), inputStacks.size()));
-      }
-      RecipeOutput recipeOutput = new RecipeOutput(getOutput().getItemStack());
-      SliceAndSpliceRecipeManager.getInstance()
-          .addRecipe(new Recipe(recipeOutput, energy, RecipeBonusType.NONE, recipeLevel, inputStacks.toArray(new IRecipeInput[inputStacks.size()])));
-    }
-  }
-
-  @Override
-  public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("energy".equals(name)) {
-      this.energy = Integer.parseInt(value);
-      return true;
+        } catch (InvalidRecipeConfigException e) {
+            throw new InvalidRecipeConfigException(e, "in <slicing>");
+        }
+        return this;
     }
 
-    return super.setAttribute(factory, name, value);
-  }
-
-  @Override
-  public boolean setElement(StaxFactory factory, String name, StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("input".equals(name)) {
-      inputs.add(factory.read(new Item().setAllowDelaying(false), startElement));
-      return true;
+    @Override
+    public void enforceValidity() throws InvalidRecipeConfigException {
+        super.enforceValidity();
+        for (Item input : inputs) {
+            input.enforceValidity();
+        }
     }
 
-    return super.setElement(factory, name, startElement);
-  }
+    @Override
+    public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
+        if (isValid() && isActive()) {
+            NNList<IRecipeInput> inputStacks = new NNList<>();
+            for (NNIterator<Item> itr = inputs.fastIterator(); itr.hasNext();) {
+                final Item item = itr.next();
+                inputStacks.add(new ThingsRecipeInput(item.getThing(), inputStacks.size()));
+            }
+            RecipeOutput recipeOutput = new RecipeOutput(getOutput().getItemStack());
+            SliceAndSpliceRecipeManager.getInstance()
+                    .addRecipe(new Recipe(recipeOutput, energy, RecipeBonusType.NONE, recipeLevel,
+                            inputStacks.toArray(new IRecipeInput[inputStacks.size()])));
+        }
+    }
 
+    @Override
+    public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException,
+                                                                                XMLStreamException {
+        if ("energy".equals(name)) {
+            this.energy = Integer.parseInt(value);
+            return true;
+        }
+
+        return super.setAttribute(factory, name, value);
+    }
+
+    @Override
+    public boolean setElement(StaxFactory factory, String name,
+                              StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
+        if ("input".equals(name)) {
+            inputs.add(factory.read(new Item().setAllowDelaying(false), startElement));
+            return true;
+        }
+
+        return super.setElement(factory, name, startElement);
+    }
 }

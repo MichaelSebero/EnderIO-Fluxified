@@ -16,71 +16,71 @@ import crazypants.enderio.base.recipe.RecipeLevel;
 
 public class Aliases implements IRecipeRoot {
 
-  @Override
-  public Object readResolve() throws InvalidRecipeConfigException {
-    return this;
-  }
-
-  @Override
-  public boolean isValid() {
-    return true;
-  }
-
-  @Override
-  public boolean isActive() {
-    return true;
-  }
-
-  @Override
-  public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public <T extends IRecipeRoot> T addRecipes(IRecipeRoot other, Overrides overrides) throws InvalidRecipeConfigException {
-    return (T) this;
-  }
-
-  @Override
-  public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("enderio".equals(name)) {
-      return true;
-    }
-    if ("xsi".equals(name)) {
-      return true;
-    }
-    if ("schemaLocation".equals(name)) {
-      return true;
+    @Override
+    public Object readResolve() throws InvalidRecipeConfigException {
+        return this;
     }
 
-    return false;
-  }
-
-  @Override
-  public boolean setElement(StaxFactory factory, String name, StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("alias".equals(name)) {
-      aliases.add(factory.read(new Alias(), startElement));
-    } else {
-      factory.skip(startElement);
+    @Override
+    public boolean isValid() {
+        return true;
     }
-    return true;
-  }
 
-  @Override
-  public void enforceValidity() throws InvalidRecipeConfigException {
-  }
+    @Override
+    public boolean isActive() {
+        return true;
+    }
 
-  @Override
-  public List<AbstractConditional> getRecipes() {
-    return Collections.emptyList();
-  }
+    @Override
+    public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {}
 
-  // json
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IRecipeRoot> T addRecipes(IRecipeRoot other,
+                                                Overrides overrides) throws InvalidRecipeConfigException {
+        return (T) this;
+    }
 
-  private final NNList<Alias> aliases = new NNList<>();
+    @Override
+    public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException,
+                                                                                XMLStreamException {
+        if ("enderio".equals(name)) {
+            return true;
+        }
+        if ("xsi".equals(name)) {
+            return true;
+        }
+        if ("schemaLocation".equals(name)) {
+            return true;
+        }
 
-  protected NNList<Alias> getAliases() {
-    return aliases;
-  }
+        return false;
+    }
 
+    @Override
+    public boolean setElement(StaxFactory factory, String name,
+                              StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
+        if ("alias".equals(name)) {
+            aliases.add(factory.read(new Alias(), startElement));
+        } else {
+            factory.skip(startElement);
+        }
+        return true;
+    }
+
+    @Override
+    public void enforceValidity() throws InvalidRecipeConfigException {}
+
+    @Override
+    public List<AbstractConditional> getRecipes() {
+        return Collections.emptyList();
+    }
+
+    // json
+
+    private final NNList<Alias> aliases = new NNList<>();
+
+    protected NNList<Alias> getAliases() {
+        return aliases;
+    }
 }

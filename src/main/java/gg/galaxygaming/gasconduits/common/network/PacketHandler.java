@@ -1,10 +1,13 @@
 package gg.galaxygaming.gasconduits.common.network;
 
-import com.enderio.core.common.network.ThreadedNetworkWrapper;
-import gg.galaxygaming.gasconduits.GasConduitsConstants;
 import javax.annotation.Nonnull;
+
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import com.enderio.core.common.network.ThreadedNetworkWrapper;
+
+import gg.galaxygaming.gasconduits.GasConduitsConstants;
 
 public class PacketHandler {
 

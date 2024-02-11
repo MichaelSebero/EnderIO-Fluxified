@@ -8,7 +8,6 @@ import crazypants.enderio.api.ILocalizable;
 
 public interface INotifier {
 
-  @Nonnull
-  Set<? extends ILocalizable> getNotification();
-
+    @Nonnull
+    Set<? extends ILocalizable> getNotification();
 }

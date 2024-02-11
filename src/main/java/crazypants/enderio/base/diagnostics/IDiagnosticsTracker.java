@@ -4,14 +4,13 @@ import java.util.List;
 
 public interface IDiagnosticsTracker {
 
-  String getActivityDescription();
+    String getActivityDescription();
 
-  List<String> getLines();
+    List<String> getLines();
 
-  void start(Object on);
+    void start(Object on);
 
-  void stop();
+    void stop();
 
-  void discard();
-
+    void discard();
 }

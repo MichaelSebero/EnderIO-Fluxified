@@ -5,7 +5,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IHaveTESR {
 
-  @SideOnly(Side.CLIENT)
-  void bindTileEntitySpecialRenderer();
-
+    @SideOnly(Side.CLIENT)
+    void bindTileEntitySpecialRenderer();
 }

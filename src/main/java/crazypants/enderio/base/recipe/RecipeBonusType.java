@@ -1,27 +1,27 @@
 package crazypants.enderio.base.recipe;
 
 public enum RecipeBonusType {
-  NONE(false, false),
-  MULTIPLY_OUTPUT(true, true),
-  CHANCE_ONLY(false, true);
 
-  private final boolean multiply, chances;
+    NONE(false, false),
+    MULTIPLY_OUTPUT(true, true),
+    CHANCE_ONLY(false, true);
 
-  private RecipeBonusType(boolean multiply, boolean chances) {
-    this.multiply = multiply;
-    this.chances = chances;
-  }
+    private final boolean multiply, chances;
 
-  public boolean doMultiply() {
-    return multiply;
-  }
+    private RecipeBonusType(boolean multiply, boolean chances) {
+        this.multiply = multiply;
+        this.chances = chances;
+    }
 
-  public boolean doChances() {
-    return chances;
-  }
+    public boolean doMultiply() {
+        return multiply;
+    }
 
-  public boolean useBalls() {
-    return multiply || chances;
-  }
+    public boolean doChances() {
+        return chances;
+    }
 
+    public boolean useBalls() {
+        return multiply || chances;
+    }
 }

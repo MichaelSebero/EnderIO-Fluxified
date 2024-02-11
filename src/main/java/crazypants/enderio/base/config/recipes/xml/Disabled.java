@@ -8,26 +8,24 @@ import crazypants.enderio.base.recipe.RecipeLevel;
 
 public class Disabled extends AbstractConditional {
 
-  @Override
-  public Object readResolve() throws InvalidRecipeConfigException {
-    try {
-      super.readResolve();
-      valid = true;
-    } catch (InvalidRecipeConfigException e) {
-      throw new InvalidRecipeConfigException(e, "in <disabled>");
+    @Override
+    public Object readResolve() throws InvalidRecipeConfigException {
+        try {
+            super.readResolve();
+            valid = true;
+        } catch (InvalidRecipeConfigException e) {
+            throw new InvalidRecipeConfigException(e, "in <disabled>");
+        }
+        return this;
     }
-    return this;
-  }
 
-  @Override
-  public void enforceValidity() throws InvalidRecipeConfigException {
-  }
+    @Override
+    public void enforceValidity() throws InvalidRecipeConfigException {}
 
-  @Override
-  public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
-    if (isValid() && isActive()) {
-      Log.debug("Recipe '" + recipeName + "' is disabled");
+    @Override
+    public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
+        if (isValid() && isActive()) {
+            Log.debug("Recipe '" + recipeName + "' is disabled");
+        }
     }
-  }
-
 }

@@ -12,7 +12,6 @@ import net.minecraftforge.energy.IEnergyStorage;
  */
 public interface IPowerInterface extends IEnergyStorage {
 
-  @Nonnull
-  Object getProvider();
-
+    @Nonnull
+    Object getProvider();
 }

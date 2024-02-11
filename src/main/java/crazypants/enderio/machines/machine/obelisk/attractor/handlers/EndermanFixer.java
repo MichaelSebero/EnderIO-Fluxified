@@ -6,10 +6,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class EndermanFixer {
 
-  @SubscribeEvent
-  public void onEndermanTeleport(EnderTeleportEvent event) {
-    if (event.getEntityLiving() instanceof EntityEnderman && event.getEntityLiving().getEntityData().getBoolean("EIO:tracked")) {
-      event.setCanceled(true);
+    @SubscribeEvent
+    public void onEndermanTeleport(EnderTeleportEvent event) {
+        if (event.getEntityLiving() instanceof EntityEnderman &&
+                event.getEntityLiving().getEntityData().getBoolean("EIO:tracked")) {
+            event.setCanceled(true);
+        }
     }
-  }
 }

@@ -7,14 +7,13 @@ import net.minecraft.item.ItemBlock;
 
 public class ItemBlockInfinity extends ItemBlock {
 
-  public ItemBlockInfinity(@Nonnull Block block) {
-    super(block);
-    setHasSubtypes(true);
-  }
+    public ItemBlockInfinity(@Nonnull Block block) {
+        super(block);
+        setHasSubtypes(true);
+    }
 
-  @Override
-  public int getMetadata(int damage) {
-    return damage;
-  }
-
+    @Override
+    public int getMetadata(int damage) {
+        return damage;
+    }
 }

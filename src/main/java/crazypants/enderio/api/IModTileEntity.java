@@ -8,19 +8,18 @@ import net.minecraft.util.ResourceLocation;
 
 public interface IModTileEntity {
 
-  @Nonnull
-  String getUnlocalisedName();
+    @Nonnull
+    String getUnlocalisedName();
 
-  @Nonnull
-  ResourceLocation getRegistryName();
+    @Nonnull
+    ResourceLocation getRegistryName();
 
-  @Nonnull
-  Class<? extends TileEntity> getTileEntityClass();
+    @Nonnull
+    Class<? extends TileEntity> getTileEntityClass();
 
-  @Nullable
-  TileEntity getTileEntity();
+    @Nullable
+    TileEntity getTileEntity();
 
-  @Nonnull
-  TileEntity getTileEntityNN();
-
+    @Nonnull
+    TileEntity getTileEntityNN();
 }

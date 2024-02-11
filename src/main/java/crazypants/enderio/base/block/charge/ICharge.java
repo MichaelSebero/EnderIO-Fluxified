@@ -9,16 +9,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ICharge {
 
-  void setID(int id);
+    void setID(int id);
 
-  int getID();
+    int getID();
 
-  void explode(@Nonnull EntityPrimedCharge entity);
+    void explode(@Nonnull EntityPrimedCharge entity);
 
-  @SideOnly(Side.CLIENT)
-  void explodeEffect(@Nonnull World world, double x, double y, double z);
+    @SideOnly(Side.CLIENT)
+    void explodeEffect(@Nonnull World world, double x, double y, double z);
 
-  @Nonnull
-  Block getBlock();
-
+    @Nonnull
+    Block getBlock();
 }

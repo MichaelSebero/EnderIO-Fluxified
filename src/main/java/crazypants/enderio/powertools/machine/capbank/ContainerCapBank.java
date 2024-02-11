@@ -4,24 +4,22 @@ import java.awt.Point;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import com.enderio.core.common.ContainerEnderCap;
 import com.enderio.core.common.inventory.EnderInventory;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 public class ContainerCapBank extends ContainerEnderCap<EnderInventory, TileCapBank> {
 
-  public ContainerCapBank(@Nonnull InventoryPlayer playerInv, @Nonnull TileCapBank te) {
-    super(playerInv, new EnderInventory(), te);
-  }
+    public ContainerCapBank(@Nonnull InventoryPlayer playerInv, @Nonnull TileCapBank te) {
+        super(playerInv, new EnderInventory(), te);
+    }
 
-  @Override
-  protected void addSlots() {
-  }
+    @Override
+    protected void addSlots() {}
 
-  @Override
-  public @Nonnull Point getPlayerInventoryOffset() {
-    return new Point(8, 84);
-  }
-
+    @Override
+    public @Nonnull Point getPlayerInventoryOffset() {
+        return new Point(8, 84);
+    }
 }

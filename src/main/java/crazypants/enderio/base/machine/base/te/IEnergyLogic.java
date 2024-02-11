@@ -2,33 +2,34 @@ package crazypants.enderio.base.machine.base.te;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.item.ItemStack;
+
 import crazypants.enderio.api.capacitor.ICapacitorData;
 import crazypants.enderio.base.power.IEnergyTank;
-import net.minecraft.item.ItemStack;
 
 public interface IEnergyLogic {
 
-  void serverTick();
+    void serverTick();
 
-  void processTasks(boolean redstoneCheck);
+    void processTasks(boolean redstoneCheck);
 
-  int getScaledPower();
+    int getScaledPower();
 
-  boolean displayPower();
+    boolean displayPower();
 
-  boolean hasPower();
+    boolean hasPower();
 
-  @Nonnull
-  ICapacitorData getCapacitorData();
+    @Nonnull
+    ICapacitorData getCapacitorData();
 
-  @Nonnull
-  IEnergyTank getEnergy();
+    @Nonnull
+    IEnergyTank getEnergy();
 
-  void updateCapacitorFromSlot();
+    void updateCapacitorFromSlot();
 
-  void readCustomNBT(@Nonnull ItemStack stack);
+    void readCustomNBT(@Nonnull ItemStack stack);
 
-  void writeCustomNBT(@Nonnull ItemStack stack);
+    void writeCustomNBT(@Nonnull ItemStack stack);
 
-  void damageCapacitor();
+    void damageCapacitor();
 }

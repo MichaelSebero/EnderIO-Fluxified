@@ -3,16 +3,6 @@ package crazypants.enderio.base.item.xptransfer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.enderio.core.api.client.gui.IResourceTooltipProvider;
-import com.enderio.core.common.fluid.FluidWrapper;
-import com.enderio.core.common.fluid.IFluidWrapper;
-
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.EnderIOTab;
-import crazypants.enderio.base.fluid.Fluids;
-import crazypants.enderio.base.lang.Lang;
-import crazypants.enderio.base.network.PacketHandler;
-import crazypants.enderio.base.xp.XpUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -30,113 +20,131 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.enderio.core.api.client.gui.IResourceTooltipProvider;
+import com.enderio.core.common.fluid.FluidWrapper;
+import com.enderio.core.common.fluid.IFluidWrapper;
+
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.EnderIOTab;
+import crazypants.enderio.base.fluid.Fluids;
+import crazypants.enderio.base.lang.Lang;
+import crazypants.enderio.base.network.PacketHandler;
+import crazypants.enderio.base.xp.XpUtil;
+
 public class ItemXpTransfer extends Item implements IResourceTooltipProvider {
 
-  public static ItemXpTransfer create(@Nonnull IModObject modObject, @Nullable Block block) {
-    return new ItemXpTransfer(modObject);
-  }
-
-  protected ItemXpTransfer(@Nonnull IModObject modObject) {
-    setCreativeTab(EnderIOTab.tabEnderIOItems);
-    modObject.apply(this);
-    setMaxStackSize(1);
-    setHasSubtypes(true);
-  }
-
-  @Override
-  public @Nonnull EnumActionResult onItemUseFirst(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side,
-      float hitX, float hitY, float hitZ, @Nonnull EnumHand hand) {
-    if (world.isRemote) {
-      return EnumActionResult.PASS;
+    public static ItemXpTransfer create(@Nonnull IModObject modObject, @Nullable Block block) {
+        return new ItemXpTransfer(modObject);
     }
-    boolean res;
-    boolean swing = false;
-    if (player.isSneaking()) {
-      res = tranferFromPlayerToBlock(player, world, pos, side);
-      swing = res;
-    } else {
-      res = tranferFromBlockToPlayer(player, world, pos, side);
+
+    protected ItemXpTransfer(@Nonnull IModObject modObject) {
+        setCreativeTab(EnderIOTab.tabEnderIOItems);
+        modObject.apply(this);
+        setMaxStackSize(1);
+        setHasSubtypes(true);
     }
-    if (res) {
-      sendXPUpdate(player, world, pos, swing);
-      return EnumActionResult.SUCCESS;
-    }
-    return EnumActionResult.PASS;
-  }
 
-  @Override
-  public boolean canDestroyBlockInCreative(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull ItemStack stack, @Nonnull EntityPlayer player) {
-    return false;
-  }
-
-  public static void sendXPUpdate(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, boolean swing) {
-    PacketHandler.INSTANCE.sendTo(new PacketXpTransferEffects(swing, pos), (EntityPlayerMP) player);
-    world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.1F,
-        0.5F * ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.8F), false);
-  }
-
-  public static boolean tranferFromBlockToPlayer(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
-    try {
-      IFluidWrapper wrapper = FluidWrapper.wrap(world, pos, side);
-      if (wrapper != null) {
-        FluidStack availableFluid = wrapper.getAvailableFluid();
-        if (availableFluid != null && availableFluid.getFluid() == Fluids.XP_JUICE.getFluid() && availableFluid.amount > 0) {
-          int currentXP = XpUtil.getPlayerXP(player);
-          int nextLevelXP = XpUtil.getExperienceForLevel(player.experienceLevel + 1);
-          int requiredXP = nextLevelXP - currentXP;
-          int fluidVolume = XpUtil.experienceToLiquid(requiredXP);
-          FluidStack fs = new FluidStack(Fluids.XP_JUICE.getFluid(), fluidVolume);
-          FluidStack res = wrapper.drain(fs);
-          if (res != null && res.amount > 0) {
-            int xpToGive = XpUtil.liquidToExperience(res.amount);
-            XpUtil.addPlayerXP(player, xpToGive);
-            return true;
-          }
+    @Override
+    public @Nonnull EnumActionResult onItemUseFirst(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                    @Nonnull BlockPos pos, @Nonnull EnumFacing side,
+                                                    float hitX, float hitY, float hitZ, @Nonnull EnumHand hand) {
+        if (world.isRemote) {
+            return EnumActionResult.PASS;
         }
-      }
-    } catch (XpUtil.TooManyXPLevelsException e) {
-      player.sendStatusMessage(Lang.GUI_TOO_MANY_LEVELS.toChatServer(), true);
+        boolean res;
+        boolean swing = false;
+        if (player.isSneaking()) {
+            res = tranferFromPlayerToBlock(player, world, pos, side);
+            swing = res;
+        } else {
+            res = tranferFromBlockToPlayer(player, world, pos, side);
+        }
+        if (res) {
+            sendXPUpdate(player, world, pos, swing);
+            return EnumActionResult.SUCCESS;
+        }
+        return EnumActionResult.PASS;
     }
-    return false;
-  }
 
-  public static boolean tranferFromPlayerToBlock(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
-    try {
-      if (player.experienceTotal <= 0) {
+    @Override
+    public boolean canDestroyBlockInCreative(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull ItemStack stack,
+                                             @Nonnull EntityPlayer player) {
         return false;
-      }
-
-      IFluidWrapper wrapper = FluidWrapper.wrap(world, pos, side);
-      if (wrapper != null) {
-        int fluidVolume = XpUtil.experienceToLiquid(XpUtil.getPlayerXP(player));
-        FluidStack fs = new FluidStack(Fluids.XP_JUICE.getFluid(), fluidVolume);
-        int takenVolume = wrapper.fill(fs);
-        if (takenVolume > 0) {
-          int xpToTake = XpUtil.liquidToExperience(takenVolume);
-          XpUtil.addPlayerXP(player, -xpToTake);
-          return true;
-        }
-      }
-    } catch (XpUtil.TooManyXPLevelsException e) {
-      player.sendStatusMessage(Lang.GUI_TOO_MANY_LEVELS.toChatServer(), true);
     }
-    return false;
-  }
 
-  @Override
-  public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack stack) {
-    return getTranslationKey();
-  }
+    public static void sendXPUpdate(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos,
+                                    boolean swing) {
+        PacketHandler.INSTANCE.sendTo(new PacketXpTransferEffects(swing, pos), (EntityPlayerMP) player);
+        world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP,
+                SoundCategory.PLAYERS, 0.1F,
+                0.5F * ((world.rand.nextFloat() - world.rand.nextFloat()) * 0.7F + 1.8F), false);
+    }
 
-  @Override
-  public boolean doesSneakBypassUse(@Nonnull ItemStack stack, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player) {
-    return false;
-  }
+    public static boolean tranferFromBlockToPlayer(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                   @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
+        try {
+            IFluidWrapper wrapper = FluidWrapper.wrap(world, pos, side);
+            if (wrapper != null) {
+                FluidStack availableFluid = wrapper.getAvailableFluid();
+                if (availableFluid != null && availableFluid.getFluid() == Fluids.XP_JUICE.getFluid() &&
+                        availableFluid.amount > 0) {
+                    int currentXP = XpUtil.getPlayerXP(player);
+                    int nextLevelXP = XpUtil.getExperienceForLevel(player.experienceLevel + 1);
+                    int requiredXP = nextLevelXP - currentXP;
+                    int fluidVolume = XpUtil.experienceToLiquid(requiredXP);
+                    FluidStack fs = new FluidStack(Fluids.XP_JUICE.getFluid(), fluidVolume);
+                    FluidStack res = wrapper.drain(fs);
+                    if (res != null && res.amount > 0) {
+                        int xpToGive = XpUtil.liquidToExperience(res.amount);
+                        XpUtil.addPlayerXP(player, xpToGive);
+                        return true;
+                    }
+                }
+            }
+        } catch (XpUtil.TooManyXPLevelsException e) {
+            player.sendStatusMessage(Lang.GUI_TOO_MANY_LEVELS.toChatServer(), true);
+        }
+        return false;
+    }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public boolean isFull3D() {
-    return true;
-  }
+    public static boolean tranferFromPlayerToBlock(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                   @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
+        try {
+            if (player.experienceTotal <= 0) {
+                return false;
+            }
 
+            IFluidWrapper wrapper = FluidWrapper.wrap(world, pos, side);
+            if (wrapper != null) {
+                int fluidVolume = XpUtil.experienceToLiquid(XpUtil.getPlayerXP(player));
+                FluidStack fs = new FluidStack(Fluids.XP_JUICE.getFluid(), fluidVolume);
+                int takenVolume = wrapper.fill(fs);
+                if (takenVolume > 0) {
+                    int xpToTake = XpUtil.liquidToExperience(takenVolume);
+                    XpUtil.addPlayerXP(player, -xpToTake);
+                    return true;
+                }
+            }
+        } catch (XpUtil.TooManyXPLevelsException e) {
+            player.sendStatusMessage(Lang.GUI_TOO_MANY_LEVELS.toChatServer(), true);
+        }
+        return false;
+    }
+
+    @Override
+    public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack stack) {
+        return getTranslationKey();
+    }
+
+    @Override
+    public boolean doesSneakBypassUse(@Nonnull ItemStack stack, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
+                                      @Nonnull EntityPlayer player) {
+        return false;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean isFull3D() {
+        return true;
+    }
 }

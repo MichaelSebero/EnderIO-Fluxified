@@ -6,12 +6,11 @@ import net.minecraft.item.ItemStack;
 
 public interface IInventoryDatabase<ItemEntry extends IItemEntry> {
 
-  int getGeneration();
+    int getGeneration();
 
-  ItemEntry lookupItem(@Nonnull ItemStack stack, ItemEntry hint, boolean create);
+    ItemEntry lookupItem(@Nonnull ItemStack stack, ItemEntry hint, boolean create);
 
-  ItemEntry getItem(int dbID);
+    ItemEntry getItem(int dbID);
 
-  ItemEntry getExistingItem(int dbID);
-
+    ItemEntry getExistingItem(int dbID);
 }

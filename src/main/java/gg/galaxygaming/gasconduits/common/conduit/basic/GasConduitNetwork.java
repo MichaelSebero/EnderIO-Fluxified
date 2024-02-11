@@ -1,5 +1,18 @@
 package gg.galaxygaming.gasconduits.common.conduit.basic;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.profiler.Profiler;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+
 import crazypants.enderio.base.conduit.ConduitUtil;
 import crazypants.enderio.base.conduit.ConduitUtil.UnloadedBlockException;
 import crazypants.enderio.base.diagnostics.Prof;
@@ -7,18 +20,8 @@ import gg.galaxygaming.gasconduits.common.conduit.AbstractGasTankConduit;
 import gg.galaxygaming.gasconduits.common.conduit.AbstractGasTankConduitNetwork;
 import gg.galaxygaming.gasconduits.common.conduit.ConduitGasTank;
 import gg.galaxygaming.gasconduits.common.conduit.IGasConduit;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import mekanism.api.gas.GasStack;
 import mekanism.api.gas.IGasHandler;
-import net.minecraft.profiler.Profiler;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 public class GasConduitNetwork extends AbstractGasTankConduitNetwork<GasConduit> {
 
@@ -75,11 +78,9 @@ public class GasConduitNetwork extends AbstractGasTankConduitNetwork<GasConduit>
         }
     }
 
-    void addedFromExternal(int res) {
-    }
+    void addedFromExternal(int res) {}
 
-    void outputedToExternal(int filled) {
-    }
+    void outputedToExternal(int filled) {}
 
     int getNextPushToken() {
         return ++lastPushToken;
@@ -120,7 +121,8 @@ public class GasConduitNetwork extends AbstractGasTankConduitNetwork<GasConduit>
                 if (con.canOutputToDir(dir)) {
                     IGasHandler externalTank = con.getExternalHandler(dir);
                     if (externalTank != null) {
-                        externals.add(new LocatedGasHandler(externalTank, con.getBundle().getLocation().offset(dir), dir.getOpposite()));
+                        externals.add(new LocatedGasHandler(externalTank, con.getBundle().getLocation().offset(dir),
+                                dir.getOpposite()));
                     }
                 }
             }
@@ -226,7 +228,8 @@ public class GasConduitNetwork extends AbstractGasTankConduitNetwork<GasConduit>
 
         try {
             BlockPos pos = con.getBundle().getLocation();
-            Collection<IGasConduit> connections = ConduitUtil.getConnectedConduits(con.getBundle().getEntity().getWorld(), pos.getX(), pos.getY(), pos.getZ(), IGasConduit.class);
+            Collection<IGasConduit> connections = ConduitUtil.getConnectedConduits(
+                    con.getBundle().getEntity().getWorld(), pos.getX(), pos.getY(), pos.getZ(), IGasConduit.class);
             for (IGasConduit n : connections) {
                 GasConduit neighbour = (GasConduit) n;
                 if (canFlowTo(con, neighbour)) { // can only flow within same network
@@ -246,7 +249,8 @@ public class GasConduitNetwork extends AbstractGasTankConduitNetwork<GasConduit>
             for (IGasConduit n : connections) {
                 GasConduit neighbour = (GasConduit) n;
                 if (canFlowTo(con, neighbour)) { // can only flow within same network
-                    flowVolume = (int) Math.floor((targetRatio - neighbour.getTank().getFilledRatio()) * neighbour.getTank().getMaxGas());
+                    flowVolume = (int) Math.floor(
+                            (targetRatio - neighbour.getTank().getFilledRatio()) * neighbour.getTank().getMaxGas());
                     if (flowVolume != 0) {
                         actions.add(new FlowAction(con, neighbour, flowVolume));
                     }

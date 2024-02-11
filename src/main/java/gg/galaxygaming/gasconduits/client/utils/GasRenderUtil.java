@@ -1,16 +1,20 @@
 package gg.galaxygaming.gasconduits.client.utils;
 
-import com.enderio.core.client.render.RenderUtil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import mekanism.api.gas.Gas;
-import mekanism.api.gas.GasStack;
+
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+
 import org.lwjgl.opengl.GL11;
+
+import com.enderio.core.client.render.RenderUtil;
+
+import mekanism.api.gas.Gas;
+import mekanism.api.gas.GasStack;
 
 public class GasRenderUtil {
 
@@ -26,7 +30,8 @@ public class GasRenderUtil {
         return textureEntry != null ? textureEntry : RenderUtil.getMissingSprite();
     }
 
-    public static void renderGuiTank(@Nullable GasStack gas, int capacity, int amount, double x, double y, double width, double height) {
+    public static void renderGuiTank(@Nullable GasStack gas, int capacity, int amount, double x, double y, double width,
+                                     double height) {
         if (gas == null || gas.getGas() == null || amount <= 0) {
             return;
         }

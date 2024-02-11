@@ -8,16 +8,16 @@ import crazypants.enderio.base.config.recipes.xml.AbstractConditional;
 
 public interface IRecipeRoot extends IRecipeGameRecipe {
 
-  public enum Overrides {
-    ALLOW,
-    DENY,
-    WARN;
-  }
+    public enum Overrides {
+        ALLOW,
+        DENY,
+        WARN;
+    }
 
-  @Nonnull
-  <T extends IRecipeRoot> T addRecipes(@Nonnull IRecipeRoot other, @Nonnull Overrides overrides) throws InvalidRecipeConfigException;
+    @Nonnull
+    <T extends IRecipeRoot> T addRecipes(@Nonnull IRecipeRoot other,
+                                         @Nonnull Overrides overrides) throws InvalidRecipeConfigException;
 
-  @Nonnull
-  List<AbstractConditional> getRecipes();
-
+    @Nonnull
+    List<AbstractConditional> getRecipes();
 }

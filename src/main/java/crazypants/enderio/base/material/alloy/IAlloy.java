@@ -6,41 +6,57 @@ import net.minecraft.item.ItemStack;
 
 public interface IAlloy {
 
-  @Nonnull String getBaseName();
+    @Nonnull
+    String getBaseName();
 
-  @Nonnull String getFluidName();
+    @Nonnull
+    String getFluidName();
 
-  float getHardness();
+    float getHardness();
 
-  int getColor();
+    int getColor();
 
-  int getMeltingPoint();
+    int getMeltingPoint();
 
-  @Nonnull ItemStack getStackNugget();
+    @Nonnull
+    ItemStack getStackNugget();
 
-  @Nonnull ItemStack getStackNugget(int size);
+    @Nonnull
+    ItemStack getStackNugget(int size);
 
-  @Nonnull ItemStack getStackIngot();
+    @Nonnull
+    ItemStack getStackIngot();
 
-  @Nonnull ItemStack getStackIngot(int size);
+    @Nonnull
+    ItemStack getStackIngot(int size);
 
-  @Nonnull ItemStack getStackBall();
+    @Nonnull
+    ItemStack getStackBall();
 
-  @Nonnull ItemStack getStackBall(int size);
+    @Nonnull
+    ItemStack getStackBall(int size);
 
-  @Nonnull ItemStack getStackBlock();
+    @Nonnull
+    ItemStack getStackBlock();
 
-  @Nonnull ItemStack getStackBlock(int size);
+    @Nonnull
+    ItemStack getStackBlock(int size);
 
-  @Nonnull String getOreName();
+    @Nonnull
+    String getOreName();
 
-  @Nonnull String getOreNugget();
+    @Nonnull
+    String getOreNugget();
 
-  @Nonnull String getOreIngot();
+    @Nonnull
+    String getOreIngot();
 
-  @Nonnull String getOreBall();
+    @Nonnull
+    String getOreBall();
 
-  @Nonnull String getOreBlock();
+    @Nonnull
+    String getOreBlock();
 
-  @Nonnull String getName();
+    @Nonnull
+    String getName();
 }

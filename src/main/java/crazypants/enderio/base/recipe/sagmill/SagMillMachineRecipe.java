@@ -14,29 +14,29 @@ import crazypants.enderio.util.FuncUtil;
 
 public class SagMillMachineRecipe extends AbstractMachineRecipe {
 
-  @Override
-  public @Nonnull String getUid() {
-    return "CrusherRecipe";
-  }
+    @Override
+    public @Nonnull String getUid() {
+        return "CrusherRecipe";
+    }
 
-  @Override
-  public IRecipe getRecipeForInputs(@Nonnull RecipeLevel machineLevel, @Nonnull NNList<MachineRecipeInput> inputs) {
-    return SagMillRecipeManager.instance.getRecipeForInput(machineLevel, inputs.get(0).item);
-  }
+    @Override
+    public IRecipe getRecipeForInputs(@Nonnull RecipeLevel machineLevel, @Nonnull NNList<MachineRecipeInput> inputs) {
+        return SagMillRecipeManager.instance.getRecipeForInput(machineLevel, inputs.get(0).item);
+    }
 
-  @Override
-  public boolean isValidInput(@Nonnull RecipeLevel machineLevel, @Nonnull MachineRecipeInput input) {
-    return SagMillRecipeManager.instance.isValidInput(machineLevel, input);
-  }
+    @Override
+    public boolean isValidInput(@Nonnull RecipeLevel machineLevel, @Nonnull MachineRecipeInput input) {
+        return SagMillRecipeManager.instance.isValidInput(machineLevel, input);
+    }
 
-  @Override
-  public @Nonnull String getMachineName() {
-    return MachineRecipeRegistry.SAGMILL;
-  }
+    @Override
+    public @Nonnull String getMachineName() {
+        return MachineRecipeRegistry.SAGMILL;
+    }
 
-  @Override
-  public @Nonnull RecipeBonusType getBonusType(@Nonnull NNList<MachineRecipeInput> inputs) {
-    return FuncUtil.runIfOrNN(getRecipeForInputs(RecipeLevel.IGNORE, inputs), recipe -> recipe.getBonusType(), RecipeBonusType.NONE);
-  }
-
+    @Override
+    public @Nonnull RecipeBonusType getBonusType(@Nonnull NNList<MachineRecipeInput> inputs) {
+        return FuncUtil.runIfOrNN(getRecipeForInputs(RecipeLevel.IGNORE, inputs), recipe -> recipe.getBonusType(),
+                RecipeBonusType.NONE);
+    }
 }

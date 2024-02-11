@@ -13,51 +13,51 @@ import mezz.jei.api.recipe.IRecipeCategory;
 
 public class SagMillRecipeLayout implements IRecipeLayout {
 
-  private final @Nonnull IRecipeLayout recipeLayout;
+    private final @Nonnull IRecipeLayout recipeLayout;
 
-  public SagMillRecipeLayout(@Nonnull IRecipeLayout recipeLayout) {
-    this.recipeLayout = recipeLayout;
-  }
+    public SagMillRecipeLayout(@Nonnull IRecipeLayout recipeLayout) {
+        this.recipeLayout = recipeLayout;
+    }
 
-  @Override
-  public @Nonnull IGuiItemStackGroup getItemStacks() {
-    return new SagMillGuiItemStackGroup(recipeLayout.getItemStacks());
-  }
+    @Override
+    public @Nonnull IGuiItemStackGroup getItemStacks() {
+        return new SagMillGuiItemStackGroup(recipeLayout.getItemStacks());
+    }
 
-  @Override
-  public @Nonnull IGuiFluidStackGroup getFluidStacks() {
-    return recipeLayout.getFluidStacks();
-  }
-  
-  @SuppressWarnings("deprecation")
-  @Override
-  public @Nonnull <T> IGuiIngredientGroup<T> getIngredientsGroup(@Nonnull Class<T> ingredientClass) {
-    return recipeLayout.getIngredientsGroup(ingredientClass);
-  }
+    @Override
+    public @Nonnull IGuiFluidStackGroup getFluidStacks() {
+        return recipeLayout.getFluidStacks();
+    }
 
-  @Override
-  public @Nonnull <T> IGuiIngredientGroup<T> getIngredientsGroup(@Nonnull IIngredientType<T> ingredientType) {
-    return recipeLayout.getIngredientsGroup(ingredientType);
-  }
+    @SuppressWarnings("deprecation")
+    @Override
+    public @Nonnull <T> IGuiIngredientGroup<T> getIngredientsGroup(@Nonnull Class<T> ingredientClass) {
+        return recipeLayout.getIngredientsGroup(ingredientClass);
+    }
 
-  @Override
-  @Nullable
-  public IFocus<?> getFocus() {
-    return recipeLayout.getFocus();
-  }
+    @Override
+    public @Nonnull <T> IGuiIngredientGroup<T> getIngredientsGroup(@Nonnull IIngredientType<T> ingredientType) {
+        return recipeLayout.getIngredientsGroup(ingredientType);
+    }
 
-  @Override
-  public void setRecipeTransferButton(int posX, int posY) {
-    recipeLayout.setRecipeTransferButton(posX, posY);
-  }
+    @Override
+    @Nullable
+    public IFocus<?> getFocus() {
+        return recipeLayout.getFocus();
+    }
 
-  @Override
-  public void setShapeless() {
-    recipeLayout.setShapeless();
-  }
+    @Override
+    public void setRecipeTransferButton(int posX, int posY) {
+        recipeLayout.setRecipeTransferButton(posX, posY);
+    }
 
-  @Override
-  public @Nonnull IRecipeCategory<?> getRecipeCategory() {
-    return recipeLayout.getRecipeCategory();
-  }
+    @Override
+    public void setShapeless() {
+        recipeLayout.setShapeless();
+    }
+
+    @Override
+    public @Nonnull IRecipeCategory<?> getRecipeCategory() {
+        return recipeLayout.getRecipeCategory();
+    }
 }

@@ -4,43 +4,42 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.enderio.core.common.util.NNList;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.enderio.core.common.util.NNList;
+
 public interface IRecipe {
 
-  boolean isValid();
+    boolean isValid();
 
-  int getEnergyRequired();
+    int getEnergyRequired();
 
-  @Nonnull
-  RecipeOutput[] getOutputs();
+    @Nonnull
+    RecipeOutput[] getOutputs();
 
-  @Nonnull
-  IRecipeInput[] getInputs();
+    @Nonnull
+    IRecipeInput[] getInputs();
 
-  @Nonnull
-  NNList<ItemStack> getInputStacks();
+    @Nonnull
+    NNList<ItemStack> getInputStacks();
 
-  NNList<FluidStack> getInputFluidStacks();
+    NNList<FluidStack> getInputFluidStacks();
 
-  @Nonnull
-  RecipeBonusType getBonusType();
+    @Nonnull
+    RecipeBonusType getBonusType();
 
-  boolean isInputForRecipe(NNList<MachineRecipeInput> inputs);
+    boolean isInputForRecipe(NNList<MachineRecipeInput> inputs);
 
-  boolean isValidInput(int slotNumber, @Nonnull ItemStack item);
+    boolean isValidInput(int slotNumber, @Nonnull ItemStack item);
 
-  boolean isValidInput(@Nonnull FluidStack fluid);
+    boolean isValidInput(@Nonnull FluidStack fluid);
 
-  @Nonnull
-  NNList<List<ItemStack>> getInputStackAlternatives();
+    @Nonnull
+    NNList<List<ItemStack>> getInputStackAlternatives();
 
-  boolean isSynthetic();
+    boolean isSynthetic();
 
-  @Nonnull
-  RecipeLevel getRecipeLevel();
-
+    @Nonnull
+    RecipeLevel getRecipeLevel();
 }

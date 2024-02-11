@@ -2,12 +2,6 @@ package crazypants.enderio.base.block.darksteel.ladder;
 
 import javax.annotation.Nonnull;
 
-import com.enderio.core.api.client.gui.IResourceTooltipProvider;
-
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.EnderIOTab;
-import crazypants.enderio.base.config.config.BlockConfig;
-import crazypants.enderio.base.render.IDefaultRenderers;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -19,56 +13,66 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockDarkSteelLadder extends BlockLadder implements IResourceTooltipProvider, IDefaultRenderers, IModObject.WithBlockItem {
+import com.enderio.core.api.client.gui.IResourceTooltipProvider;
 
-  public static BlockDarkSteelLadder create(@Nonnull IModObject modObject) {
-    return new BlockDarkSteelLadder(modObject);
-  }
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.EnderIOTab;
+import crazypants.enderio.base.config.config.BlockConfig;
+import crazypants.enderio.base.render.IDefaultRenderers;
 
-  protected BlockDarkSteelLadder(@Nonnull IModObject modObject) {
-    modObject.apply(this);
-    setSoundType(SoundType.METAL);
-    setCreativeTab(EnderIOTab.tabEnderIO);
-    setHardness(0.4F);
-  }
+public class BlockDarkSteelLadder extends BlockLadder
+                                  implements IResourceTooltipProvider, IDefaultRenderers, IModObject.WithBlockItem {
 
-  @Override
-  public @Nonnull Material getMaterial(@Nonnull IBlockState state) {
-    return Material.IRON;
-  }
+    public static BlockDarkSteelLadder create(@Nonnull IModObject modObject) {
+        return new BlockDarkSteelLadder(modObject);
+    }
 
-  private static class Data {
-    boolean isMoving = false;
-  }
+    protected BlockDarkSteelLadder(@Nonnull IModObject modObject) {
+        modObject.apply(this);
+        setSoundType(SoundType.METAL);
+        setCreativeTab(EnderIOTab.tabEnderIO);
+        setHardness(0.4F);
+    }
 
-  private static ThreadLocal<Data> DATA = new ThreadLocal<Data>() {
     @Override
-    protected Data initialValue() {
-      return new Data();
-    }
-  };
-
-  @Override
-  public void onEntityCollision(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull Entity entity) {
-    if (!(entity instanceof EntityPlayer) || entity.onGround || entity.collidedVertically || DATA.get().isMoving) {
-      return;
+    public @Nonnull Material getMaterial(@Nonnull IBlockState state) {
+        return Material.IRON;
     }
 
-    try {
-      DATA.get().isMoving = true;
-      if (entity.motionY >= 0.1) {
-        entity.move(MoverType.SELF, 0, BlockConfig.darkSteelLadderSpeedBoost.get(), 0);
-      } else if (entity.motionY <= -0.1) {
-        entity.move(MoverType.SELF, 0, -BlockConfig.darkSteelLadderSpeedBoost.get(), 0);
-      }
-    } finally {
-      DATA.get().isMoving = false;
+    private static class Data {
+
+        boolean isMoving = false;
     }
-  }
 
-  @Override
-  public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack itemStack) {
-    return getTranslationKey();
-  }
+    private static ThreadLocal<Data> DATA = new ThreadLocal<Data>() {
 
+        @Override
+        protected Data initialValue() {
+            return new Data();
+        }
+    };
+
+    @Override
+    public void onEntityCollision(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+                                  @Nonnull Entity entity) {
+        if (!(entity instanceof EntityPlayer) || entity.onGround || entity.collidedVertically || DATA.get().isMoving) {
+            return;
+        }
+
+        try {
+            DATA.get().isMoving = true;
+            if (entity.motionY >= 0.1) {
+                entity.move(MoverType.SELF, 0, BlockConfig.darkSteelLadderSpeedBoost.get(), 0);
+            } else if (entity.motionY <= -0.1) {
+                entity.move(MoverType.SELF, 0, -BlockConfig.darkSteelLadderSpeedBoost.get(), 0);
+            }
+        } finally {
+            DATA.get().isMoving = false;
+        }
+    }
+
+    @Override
+    public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack itemStack) {
+        return getTranslationKey();
+    }
 }

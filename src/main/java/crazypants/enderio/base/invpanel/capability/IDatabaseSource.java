@@ -8,14 +8,13 @@ import net.minecraft.util.math.BlockPos;
  * Represents a source for database information
  * 
  * @param <I>
- *          Type of capability of the source
+ *            Type of capability of the source
  */
 public interface IDatabaseSource<I> {
 
-  @Nonnull
-  BlockPos getPos();
+    @Nonnull
+    BlockPos getPos();
 
-  @Nonnull
-  I getSource();
-
+    @Nonnull
+    I getSource();
 }

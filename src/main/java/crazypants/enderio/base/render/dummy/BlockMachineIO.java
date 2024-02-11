@@ -2,8 +2,6 @@ package crazypants.enderio.base.render.dummy;
 
 import javax.annotation.Nonnull;
 
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.render.property.IOMode;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -19,50 +17,53 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.render.property.IOMode;
+
 public class BlockMachineIO extends Block {
 
-  public static BlockMachineIO create(IModObject modObject) {
-    return new BlockMachineIO(modObject);
-  }
+    public static BlockMachineIO create(IModObject modObject) {
+        return new BlockMachineIO(modObject);
+    }
 
-  @SuppressWarnings("null")
-  public BlockMachineIO(IModObject modObject) {
-    super(Material.CIRCUITS);
-    modObject.apply(this);
-    this.setDefaultState(getBlockState().getBaseState().withProperty(IOMode.IO, IOMode.get(EnumFacing.DOWN, IOMode.EnumIOMode.NONE)));
-    setCreativeTab(null);
-    disableStats();
-  }
+    @SuppressWarnings("null")
+    public BlockMachineIO(IModObject modObject) {
+        super(Material.CIRCUITS);
+        modObject.apply(this);
+        this.setDefaultState(getBlockState().getBaseState().withProperty(IOMode.IO,
+                IOMode.get(EnumFacing.DOWN, IOMode.EnumIOMode.NONE)));
+        setCreativeTab(null);
+        disableStats();
+    }
 
-  @Override
-  protected @Nonnull BlockStateContainer createBlockState() {
-    return new BlockStateContainer(this, new IProperty[] { IOMode.IO });
-  }
+    @Override
+    protected @Nonnull BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[] { IOMode.IO });
+    }
 
-  @Override
-  public @Nonnull IBlockState getStateFromMeta(int meta) {
-    return getDefaultState();
-  }
+    @Override
+    public @Nonnull IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
 
-  @Override
-  public int getMetaFromState(@Nonnull IBlockState state) {
-    return 0;
-  }
+    @Override
+    public int getMetaFromState(@Nonnull IBlockState state) {
+        return 0;
+    }
 
-  @Override
-  public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-    return getDefaultState();
-  }
+    @Override
+    public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn,
+                                               @Nonnull BlockPos pos) {
+        return getDefaultState();
+    }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public @Nonnull BlockRenderLayer getRenderLayer() {
-    return BlockRenderLayer.CUTOUT;
-  }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public @Nonnull BlockRenderLayer getRenderLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public void getSubBlocks(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-  }
-
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubBlocks(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {}
 }

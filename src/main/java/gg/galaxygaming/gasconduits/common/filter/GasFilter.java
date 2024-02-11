@@ -1,21 +1,25 @@
 package gg.galaxygaming.gasconduits.common.filter;
 
+import java.util.Arrays;
+import java.util.Objects;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+
 import com.enderio.core.client.gui.widget.GhostSlot;
 import com.enderio.core.common.network.NetworkUtil;
 import com.enderio.core.common.util.NNList;
+
 import crazypants.enderio.base.integration.jei.IHaveGhostTargets;
 import crazypants.enderio.util.NbtValue;
 import gg.galaxygaming.gasconduits.common.utils.GasUtil;
 import io.netty.buffer.ByteBuf;
-import java.util.Arrays;
-import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 
 public class GasFilter implements IGasFilter {
 
@@ -91,7 +95,6 @@ public class GasFilter implements IGasFilter {
             index++;
         }
         nbtRoot.setTag("gases", gasList);
-
     }
 
     @Override
@@ -101,7 +104,7 @@ public class GasFilter implements IGasFilter {
 
         NBTTagList tagList;
         if (nbtRoot.hasKey("gasses")) {
-            //Load legacy data that was saved with a typo
+            // Load legacy data that was saved with a typo
             tagList = nbtRoot.getTagList("gasses", nbtRoot.getId());
         } else {
             tagList = nbtRoot.getTagList("gases", nbtRoot.getId());
@@ -187,8 +190,7 @@ public class GasFilter implements IGasFilter {
         }
 
         @Override
-        public @Nonnull
-        ItemStack getStack() {
+        public @Nonnull ItemStack getStack() {
             return ItemStack.EMPTY;
         }
 
@@ -209,5 +211,4 @@ public class GasFilter implements IGasFilter {
             return ingredient instanceof GasStack || ingredient instanceof Gas;
         }
     }
-
 }

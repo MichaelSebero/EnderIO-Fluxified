@@ -21,50 +21,52 @@ import net.minecraft.world.World;
 
 public class NullModel implements IBakedModel {
 
-  private static final @Nonnull ItemOverrideList itemOverrideList = new ItemOverrideList(Collections.<ItemOverride> emptyList()) {
+    private static final @Nonnull ItemOverrideList itemOverrideList = new ItemOverrideList(
+            Collections.<ItemOverride>emptyList()) {
+
+        @Override
+        public @Nonnull IBakedModel handleItemState(@Nonnull IBakedModel originalModel, @Nonnull ItemStack stack,
+                                                    @Nullable World world,
+                                                    @Nullable EntityLivingBase entity) {
+            return originalModel;
+        }
+    };
+
+    public NullModel() {}
+
     @Override
-    public @Nonnull IBakedModel handleItemState(@Nonnull IBakedModel originalModel, @Nonnull ItemStack stack, @Nullable World world,
-        @Nullable EntityLivingBase entity) {
-      return originalModel;
+    public @Nonnull List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
+        return Collections.<BakedQuad>emptyList();
     }
-  };
 
-  public NullModel() {
-  }
+    @Override
+    public boolean isAmbientOcclusion() {
+        return true;
+    }
 
-  @Override
-  public @Nonnull List<BakedQuad> getQuads(@Nullable IBlockState state, @Nullable EnumFacing side, long rand) {
-    return Collections.<BakedQuad> emptyList();
-  }
+    @Override
+    public boolean isGui3d() {
+        return true;
+    }
 
-  @Override
-  public boolean isAmbientOcclusion() {
-    return true;
-  }
+    @Override
+    public boolean isBuiltInRenderer() {
+        return false;
+    }
 
-  @Override
-  public boolean isGui3d() {
-    return true;
-  }
+    @Override
+    public @Nonnull TextureAtlasSprite getParticleTexture() {
+        return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelManager()
+                .getMissingModel().getParticleTexture();
+    }
 
-  @Override
-  public boolean isBuiltInRenderer() {
-    return false;
-  }
+    @Override
+    public @Nonnull ItemCameraTransforms getItemCameraTransforms() {
+        return ItemCameraTransforms.DEFAULT;
+    }
 
-  @Override
-  public @Nonnull TextureAtlasSprite getParticleTexture() {
-    return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelManager().getMissingModel().getParticleTexture();
-  }
-
-  @Override
-  public @Nonnull ItemCameraTransforms getItemCameraTransforms() {
-    return ItemCameraTransforms.DEFAULT;
-  }
-
-  @Override
-  public @Nonnull ItemOverrideList getOverrides() {
-    return itemOverrideList;
-  }
-
+    @Override
+    public @Nonnull ItemOverrideList getOverrides() {
+        return itemOverrideList;
+    }
 }

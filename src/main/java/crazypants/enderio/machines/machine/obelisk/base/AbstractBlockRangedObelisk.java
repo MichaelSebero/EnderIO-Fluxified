@@ -3,7 +3,6 @@ package crazypants.enderio.machines.machine.obelisk.base;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import crazypants.enderio.api.IModObject;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -13,23 +12,27 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public abstract class AbstractBlockRangedObelisk<T extends AbstractRangedObeliskEntity> extends AbstractBlockObelisk<T> {
+import crazypants.enderio.api.IModObject;
 
-  protected AbstractBlockRangedObelisk(@Nonnull IModObject mo) {
-    super(mo);
-  }
+public abstract class AbstractBlockRangedObelisk<T extends AbstractRangedObeliskEntity>
+                                                extends AbstractBlockObelisk<T> {
 
-  @Override
-  public @Nullable Container getServerGuiElement(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nullable EnumFacing facing,
-      int param1, @Nonnull T te) {
-    return new ContainerRangedObelisk(player.inventory, te);
-  }
+    protected AbstractBlockRangedObelisk(@Nonnull IModObject mo) {
+        super(mo);
+    }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public @Nullable GuiScreen getClientGuiElement(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nullable EnumFacing facing,
-      int param1, @Nonnull T te) {
-    return new GuiRangedObelisk(player.inventory, te);
-  }
+    @Override
+    public @Nullable Container getServerGuiElement(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                   @Nonnull BlockPos pos, @Nullable EnumFacing facing,
+                                                   int param1, @Nonnull T te) {
+        return new ContainerRangedObelisk(player.inventory, te);
+    }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public @Nullable GuiScreen getClientGuiElement(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                   @Nonnull BlockPos pos, @Nullable EnumFacing facing,
+                                                   int param1, @Nonnull T te) {
+        return new GuiRangedObelisk(player.inventory, te);
+    }
 }

@@ -12,25 +12,24 @@ import com.enderio.core.common.util.stackable.Things;
 
 public class TiCQueues {
 
-  private static final @Nonnull List<CastQueue> castQueue = new ArrayList<>();
-  private static final @Nonnull List<BasinQueue> basinQueue = new ArrayList<>();
-  private static final @Nonnull List<SmeltQueue> smeltQueue = new ArrayList<>();
-  private static final @Nonnull List<Pair<Things, NNList<Things>>> alloyQueue = new ArrayList<>();
+    private static final @Nonnull List<CastQueue> castQueue = new ArrayList<>();
+    private static final @Nonnull List<BasinQueue> basinQueue = new ArrayList<>();
+    private static final @Nonnull List<SmeltQueue> smeltQueue = new ArrayList<>();
+    private static final @Nonnull List<Pair<Things, NNList<Things>>> alloyQueue = new ArrayList<>();
 
-  public static @Nonnull List<CastQueue> getCastQueue() {
-    return castQueue;
-  }
+    public static @Nonnull List<CastQueue> getCastQueue() {
+        return castQueue;
+    }
 
-  public static @Nonnull List<BasinQueue> getBasinQueue() {
-    return basinQueue;
-  }
+    public static @Nonnull List<BasinQueue> getBasinQueue() {
+        return basinQueue;
+    }
 
-  public static @Nonnull List<SmeltQueue> getSmeltQueue() {
-    return smeltQueue;
-  }
+    public static @Nonnull List<SmeltQueue> getSmeltQueue() {
+        return smeltQueue;
+    }
 
-  public static @Nonnull List<Pair<Things, NNList<Things>>> getAlloyQueue() {
-    return alloyQueue;
-  }
-
+    public static @Nonnull List<Pair<Things, NNList<Things>>> getAlloyQueue() {
+        return alloyQueue;
+    }
 }

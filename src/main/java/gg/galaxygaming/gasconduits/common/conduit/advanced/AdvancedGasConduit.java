@@ -1,7 +1,22 @@
 package gg.galaxygaming.gasconduits.common.conduit.advanced;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.enderio.core.client.render.BoundingBox;
 import com.enderio.core.client.render.IconUtil;
+
 import crazypants.enderio.base.conduit.ConnectionMode;
 import crazypants.enderio.base.conduit.IConduit;
 import crazypants.enderio.base.conduit.IConduitNetwork;
@@ -26,29 +41,22 @@ import gg.galaxygaming.gasconduits.common.conduit.GasOutput;
 import gg.galaxygaming.gasconduits.common.conduit.IGasConduit;
 import gg.galaxygaming.gasconduits.common.conduit.basic.GasConduitNetwork;
 import gg.galaxygaming.gasconduits.common.config.GasConduitConfig;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import mekanism.api.gas.GasStack;
 import mekanism.api.gas.GasTankInfo;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class AdvancedGasConduit extends AbstractGasTankConduit {
 
     public static final int CONDUIT_VOLUME = GasConduitsConstants.GAS_VOLUME;
 
-    public static final IConduitTexture ICON_KEY = new ConduitTexture(TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit", false), ConduitTexture.arm(1));
-    public static final IConduitTexture ICON_KEY_LOCKED = new ConduitTexture(TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit", false), ConduitTexture.arm(2));
-    public static final IConduitTexture ICON_CORE_KEY = new ConduitTexture(TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit_core", false), ConduitTexture.core(1));
+    public static final IConduitTexture ICON_KEY = new ConduitTexture(
+            TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit", false), ConduitTexture.arm(1));
+    public static final IConduitTexture ICON_KEY_LOCKED = new ConduitTexture(
+            TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit", false), ConduitTexture.arm(2));
+    public static final IConduitTexture ICON_CORE_KEY = new ConduitTexture(
+            TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit_core", false), ConduitTexture.core(1));
 
-    public static final TextureSupplier ICON_EMPTY_EDGE = TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit_advanced_edge", false);
+    public static final TextureSupplier ICON_EMPTY_EDGE = TextureRegistry
+            .registerTexture("gasconduits:blocks/gas_conduit_advanced_edge", false);
 
     private AdvancedGasConduitNetwork network;
 
@@ -109,8 +117,7 @@ public class AdvancedGasConduit extends AbstractGasTankConduit {
     }
 
     @Override
-    public @Nullable
-    AbstractConduitNetwork<?, ?> getNetwork() {
+    public @Nullable AbstractConduitNetwork<?, ?> getNetwork() {
         return network;
     }
 
@@ -207,7 +214,7 @@ public class AdvancedGasConduit extends AbstractGasTankConduit {
     @Nonnull
     @Override
     public GasTankInfo[] getTankInfo() {
-        return network == null ? new GasTankInfo[0] : new GasTankInfo[]{tank};
+        return network == null ? new GasTankInfo[0] : new GasTankInfo[] { tank };
     }
 
     @Override
@@ -261,7 +268,8 @@ public class AdvancedGasConduit extends AbstractGasTankConduit {
         }
 
         BoundingBox bb = ConduitGeometryUtil.getInstance().createBoundsForConnectionController(keyDir, key.offset);
-        CollidableComponent cc = new CollidableComponent(IGasConduit.class, bb, keyDir, IPowerConduit.COLOR_CONTROLLER_ID);
+        CollidableComponent cc = new CollidableComponent(IGasConduit.class, bb, keyDir,
+                IPowerConduit.COLOR_CONTROLLER_ID);
 
         List<CollidableComponent> result = new ArrayList<>(baseCollidables);
         result.add(cc);

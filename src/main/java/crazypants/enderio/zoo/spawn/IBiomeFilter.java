@@ -4,10 +4,9 @@ import net.minecraft.world.biome.Biome;
 
 public interface IBiomeFilter {
 
-  void addBiomeDescriptor(IBiomeDescriptor biome);
+    void addBiomeDescriptor(IBiomeDescriptor biome);
 
-  Biome[] getMatchedBiomes();
+    Biome[] getMatchedBiomes();
 
-  boolean isMatchingBiome(Biome bgb);
-
+    boolean isMatchingBiome(Biome bgb);
 }

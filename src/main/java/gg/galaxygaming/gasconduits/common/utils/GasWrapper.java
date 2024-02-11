@@ -1,12 +1,14 @@
 package gg.galaxygaming.gasconduits.common.utils;
 
 import javax.annotation.Nullable;
-import mekanism.api.gas.IGasHandler;
-import mekanism.common.capabilities.Capabilities;
+
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+
+import mekanism.api.gas.IGasHandler;
+import mekanism.common.capabilities.Capabilities;
 
 public class GasWrapper {
 

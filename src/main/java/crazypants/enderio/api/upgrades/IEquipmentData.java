@@ -7,32 +7,32 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 
 public interface IEquipmentData {
 
-  @Nonnull
-  ArmorMaterial getArmorMaterial();
+    @Nonnull
+    ArmorMaterial getArmorMaterial();
 
-  @Nonnull
-  ArmorMaterial getArmorMaterialEmpowered();
+    @Nonnull
+    ArmorMaterial getArmorMaterialEmpowered();
 
-  @Nonnull
-  ToolMaterial getToolMaterial();
+    @Nonnull
+    ToolMaterial getToolMaterial();
 
-  @Nonnull
-  String getRepairIngotOredict();
+    @Nonnull
+    String getRepairIngotOredict();
 
-  @Nonnull
-  String getBowRepairIngotOredict();
+    @Nonnull
+    String getBowRepairIngotOredict();
 
-  @Nonnull
-  String getTexture1();
+    @Nonnull
+    String getTexture1();
 
-  @Nonnull
-  String getTexture2();
+    @Nonnull
+    String getTexture2();
 
-  @Nonnull
-  Integer getTier();
+    @Nonnull
+    Integer getTier();
 
-  int getShieldDurability();
+    int getShieldDurability();
 
-  @Nonnull
-  String getTextureShieldBase();
+    @Nonnull
+    String getTextureShieldBase();
 }

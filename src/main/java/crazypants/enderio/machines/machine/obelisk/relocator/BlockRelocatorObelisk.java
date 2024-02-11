@@ -8,18 +8,17 @@ import crazypants.enderio.machines.machine.obelisk.base.SpawningObeliskControlle
 
 public class BlockRelocatorObelisk extends AbstractBlockRangedObelisk<TileRelocatorObelisk> {
 
-  public static BlockRelocatorObelisk create(@Nonnull IModObject modObject) {
-    BlockRelocatorObelisk res = new BlockRelocatorObelisk(modObject);
-    res.init();
+    public static BlockRelocatorObelisk create(@Nonnull IModObject modObject) {
+        BlockRelocatorObelisk res = new BlockRelocatorObelisk(modObject);
+        res.init();
 
-    // Just making sure its loaded
-    SpawningObeliskController.instance.toString();
+        // Just making sure its loaded
+        SpawningObeliskController.instance.toString();
 
-    return res;
-  }
+        return res;
+    }
 
-  protected BlockRelocatorObelisk(@Nonnull IModObject modObject) {
-    super(modObject);
-  }
-
+    protected BlockRelocatorObelisk(@Nonnull IModObject modObject) {
+        super(modObject);
+    }
 }

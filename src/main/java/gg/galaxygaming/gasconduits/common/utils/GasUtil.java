@@ -2,13 +2,15 @@ package gg.galaxygaming.gasconduits.common.utils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 import mekanism.api.gas.GasTankInfo;
 import mekanism.api.gas.IGasHandler;
 import mekanism.api.gas.IGasItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 
 public class GasUtil {
 
@@ -41,9 +43,10 @@ public class GasUtil {
         Gas type = null;
         for (GasTankInfo info : tankInfo) {
             GasStack gasStack = info.getGas();
-            //Require current found type to be null or the same as this tank's type
+            // Require current found type to be null or the same as this tank's type
             // and this gas type to be accessible from the side accessed
-            if (gasStack != null && (type == null || areGasesTheSame(type, gasStack.getGas())) && handler.canDrawGas(side, gasStack.getGas())) {
+            if (gasStack != null && (type == null || areGasesTheSame(type, gasStack.getGas())) &&
+                    handler.canDrawGas(side, gasStack.getGas())) {
                 stored += info.getStored();
                 type = gasStack.getGas();
             }

@@ -3,16 +3,6 @@ package crazypants.enderio.machines.machine.teleport.telepad;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.enderio.core.api.client.gui.IResourceTooltipProvider;
-
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.BlockEio;
-import crazypants.enderio.base.gui.handler.IEioGuiHandler;
-import crazypants.enderio.base.render.IHaveRenderers;
-import crazypants.enderio.machines.machine.teleport.telepad.gui.ContainerDialingDevice;
-import crazypants.enderio.machines.machine.teleport.telepad.gui.GuiDialingDevice;
-import crazypants.enderio.machines.machine.teleport.telepad.gui.GuiDialingDeviceNoTelepad;
-import crazypants.enderio.util.ClientUtil;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
@@ -30,102 +20,117 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.enderio.core.api.client.gui.IResourceTooltipProvider;
+
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.BlockEio;
+import crazypants.enderio.base.gui.handler.IEioGuiHandler;
+import crazypants.enderio.base.render.IHaveRenderers;
+import crazypants.enderio.machines.machine.teleport.telepad.gui.ContainerDialingDevice;
+import crazypants.enderio.machines.machine.teleport.telepad.gui.GuiDialingDevice;
+import crazypants.enderio.machines.machine.teleport.telepad.gui.GuiDialingDeviceNoTelepad;
+import crazypants.enderio.util.ClientUtil;
+
 public class BlockDialingDevice extends BlockEio<TileDialingDevice>
-    implements IEioGuiHandler.WithPos, ITileEntityProvider, IResourceTooltipProvider, IHaveRenderers {
+                                implements IEioGuiHandler.WithPos, ITileEntityProvider, IResourceTooltipProvider,
+                                IHaveRenderers {
 
-  public static BlockDialingDevice create(@Nonnull IModObject modObject) {
-    BlockDialingDevice ret = new BlockDialingDevice(modObject);
-    ret.init();
-    return ret;
-  }
-
-  public static final @Nonnull PropertyEnum<DialerFacing> FACING = PropertyEnum.create("facing", DialerFacing.class);
-
-  public BlockDialingDevice(@Nonnull IModObject modObject) {
-    super(modObject);
-    setLightOpacity(255);
-    useNeighborBrightness = true;
-    setDefaultState(getBlockState().getBaseState().withProperty(FACING, DialerFacing.UP_TONORTH));
-    setShape(mkShape(BlockFaceShape.UNDEFINED)); // TODO 'bottom' side SOLID
-  }
-
-  @Override
-  public BlockItemDialingDevice createBlockItem(@Nonnull IModObject mo) {
-    return mo.apply(new BlockItemDialingDevice(this));
-  }
-
-  @Override
-  public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
-    return new TileDialingDevice();
-  }
-
-  @Override
-  public @Nullable Container getServerGuiElement(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nullable EnumFacing facing,
-      int param1) {
-    TileDialingDevice te = getTileEntity(world, pos);
-    if (te == null) {
-      return null;
+    public static BlockDialingDevice create(@Nonnull IModObject modObject) {
+        BlockDialingDevice ret = new BlockDialingDevice(modObject);
+        ret.init();
+        return ret;
     }
-    return new ContainerDialingDevice(player.inventory, te);
-  }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public @Nullable GuiScreen getClientGuiElement(@Nonnull EntityPlayer player, @Nonnull World world, @Nonnull BlockPos pos, @Nullable EnumFacing facing,
-      int param1) {
-    TileDialingDevice te = getTileEntity(world, pos);
-    if (te == null) {
-      return null;
+    public static final @Nonnull PropertyEnum<DialerFacing> FACING = PropertyEnum.create("facing", DialerFacing.class);
+
+    public BlockDialingDevice(@Nonnull IModObject modObject) {
+        super(modObject);
+        setLightOpacity(255);
+        useNeighborBrightness = true;
+        setDefaultState(getBlockState().getBaseState().withProperty(FACING, DialerFacing.UP_TONORTH));
+        setShape(mkShape(BlockFaceShape.UNDEFINED)); // TODO 'bottom' side SOLID
     }
-    TileTelePad telepad = te.findTelepad();
-    return telepad == null ? new GuiDialingDeviceNoTelepad(player.inventory, te) : new GuiDialingDevice(player.inventory, te, telepad);
-  }
 
-  @Override
-  public @Nonnull IBlockState getStateFromMeta(int meta) {
-    return getDefaultState();
-  }
-
-  @Override
-  public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-    TileDialingDevice tile = getTileEntitySafe(worldIn, pos);
-    if (tile != null) {
-      DialerFacing facing = tile.getDialerFacing();
-      return state.withProperty(FACING, facing);
-    } else {
-      return state;
+    @Override
+    public BlockItemDialingDevice createBlockItem(@Nonnull IModObject mo) {
+        return mo.apply(new BlockItemDialingDevice(this));
     }
-  }
 
-  @Override
-  public int getMetaFromState(@Nonnull IBlockState state) {
-    return 0;
-  }
+    @Override
+    public TileEntity createNewTileEntity(@Nonnull World worldIn, int meta) {
+        return new TileDialingDevice();
+    }
 
-  @Override
-  protected @Nonnull BlockStateContainer createBlockState() {
-    return new BlockStateContainer(this, FACING);
-  }
+    @Override
+    public @Nullable Container getServerGuiElement(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                   @Nonnull BlockPos pos, @Nullable EnumFacing facing,
+                                                   int param1) {
+        TileDialingDevice te = getTileEntity(world, pos);
+        if (te == null) {
+            return null;
+        }
+        return new ContainerDialingDevice(player.inventory, te);
+    }
 
-  @Override
-  public boolean isOpaqueCube(@Nonnull IBlockState bs) {
-    return false;
-  }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public @Nullable GuiScreen getClientGuiElement(@Nonnull EntityPlayer player, @Nonnull World world,
+                                                   @Nonnull BlockPos pos, @Nullable EnumFacing facing,
+                                                   int param1) {
+        TileDialingDevice te = getTileEntity(world, pos);
+        if (te == null) {
+            return null;
+        }
+        TileTelePad telepad = te.findTelepad();
+        return telepad == null ? new GuiDialingDeviceNoTelepad(player.inventory, te) :
+                new GuiDialingDevice(player.inventory, te, telepad);
+    }
 
-  @Override
-  public boolean isFullCube(@Nonnull IBlockState bs) {
-    return false;
-  }
+    @Override
+    public @Nonnull IBlockState getStateFromMeta(int meta) {
+        return getDefaultState();
+    }
 
-  @Override
-  public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack itemStack) {
-    return getTranslationKey();
-  }
+    @Override
+    public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn,
+                                               @Nonnull BlockPos pos) {
+        TileDialingDevice tile = getTileEntitySafe(worldIn, pos);
+        if (tile != null) {
+            DialerFacing facing = tile.getDialerFacing();
+            return state.withProperty(FACING, facing);
+        } else {
+            return state;
+        }
+    }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public void registerRenderers(@Nonnull IModObject mo) {
-    ClientUtil.registerDefaultItemRenderer(mo);
-  }
+    @Override
+    public int getMetaFromState(@Nonnull IBlockState state) {
+        return 0;
+    }
 
+    @Override
+    protected @Nonnull BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public boolean isOpaqueCube(@Nonnull IBlockState bs) {
+        return false;
+    }
+
+    @Override
+    public boolean isFullCube(@Nonnull IBlockState bs) {
+        return false;
+    }
+
+    @Override
+    public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack itemStack) {
+        return getTranslationKey();
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerRenderers(@Nonnull IModObject mo) {
+        ClientUtil.registerDefaultItemRenderer(mo);
+    }
 }

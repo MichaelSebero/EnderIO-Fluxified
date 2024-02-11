@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 
 public interface IItemOutputFilterUpgrade {
 
-  @Nullable
-  IOutputSignalFilter createOutputSignalFilterFromStack(@Nonnull ItemStack stack);
-
+    @Nullable
+    IOutputSignalFilter createOutputSignalFilterFromStack(@Nonnull ItemStack stack);
 }

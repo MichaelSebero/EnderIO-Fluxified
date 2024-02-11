@@ -5,12 +5,6 @@ import java.util.Random;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.BlockEio;
-import crazypants.enderio.base.ItemEIO;
-import crazypants.enderio.base.TileEntityEio;
-import crazypants.enderio.base.machine.interfaces.ITEProxy;
-import crazypants.enderio.util.Prep;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
@@ -34,171 +28,191 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.BlockEio;
+import crazypants.enderio.base.ItemEIO;
+import crazypants.enderio.base.TileEntityEio;
+import crazypants.enderio.base.machine.interfaces.ITEProxy;
+import crazypants.enderio.util.Prep;
+
 /**
- * This is a dummy block that is automatically placed on top of (e.g.) the enhanced combustion generator to block that space. It doesn't have a render (the
+ * This is a dummy block that is automatically placed on top of (e.g.) the enhanced combustion generator to block that
+ * space. It doesn't have a render (the
  * generator's render is oversized), and it relays all interactions to the generator.
  *
  */
 public class BlockMachineExtension extends BlockEio<TileEntityEio> implements ITEProxy {
 
-  private final @Nonnull AxisAlignedBB AABB;
-  private final @Nonnull IModObject parent;
-  private final @Nonnull EnumFacing parentOffset;
+    private final @Nonnull AxisAlignedBB AABB;
+    private final @Nonnull IModObject parent;
+    private final @Nonnull EnumFacing parentOffset;
 
-  public BlockMachineExtension(@Nonnull IModObject modObject, @Nonnull IModObject parent, @Nonnull AxisAlignedBB AABB) {
-    super(modObject);
-    setCreativeTab(null);
-    setHardness(2f);
-    setSoundType(SoundType.METAL);
-    setHarvestLevel("pickaxe", 0);
-    this.parent = parent;
-    this.AABB = AABB;
-    parentOffset = EnumFacing.DOWN;
-    setShape(mkShape(BlockFaceShape.UNDEFINED));
-  }
-
-  @Override
-  public @Nullable ItemEIO createBlockItem(@Nonnull IModObject modObject) {
-    return null;
-  };
-
-  protected @Nonnull IModObject getParent() {
-    return parent;
-  }
-
-  protected @Nonnull EnumFacing getParentOffset() {
-    return parentOffset;
-  }
-
-  protected @Nonnull BlockPos getParentPos(@Nonnull BlockPos pos) {
-    return pos.offset(getParentOffset());
-  }
-
-  protected @Nonnull IBlockState getParentBlockState(@Nonnull World world, @Nonnull BlockPos pos) {
-    return world.getBlockState(getParentPos(pos));
-  }
-
-  protected @Nonnull Block getParentBlock(@Nonnull World world, @Nonnull BlockPos pos) {
-    return getParentBlockState(world, pos).getBlock();
-  }
-
-  @Override
-  public @Nonnull AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source, @Nonnull BlockPos pos) {
-    return AABB;
-  }
-
-  protected boolean checkParent(@Nonnull World world, @Nonnull BlockPos pos) {
-    if (getParentBlock(world, pos) == getParent().getBlockNN()) {
-      return true;
-    } else {
-      world.setBlockToAir(pos);
-      return false;
+    public BlockMachineExtension(@Nonnull IModObject modObject, @Nonnull IModObject parent,
+                                 @Nonnull AxisAlignedBB AABB) {
+        super(modObject);
+        setCreativeTab(null);
+        setHardness(2f);
+        setSoundType(SoundType.METAL);
+        setHarvestLevel("pickaxe", 0);
+        this.parent = parent;
+        this.AABB = AABB;
+        parentOffset = EnumFacing.DOWN;
+        setShape(mkShape(BlockFaceShape.UNDEFINED));
     }
-  }
 
-  @Override
-  public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nonnull EntityPlayer entityPlayer,
-      @Nonnull EnumHand hand, @Nonnull EnumFacing side, float hitX, float hitY, float hitZ) {
-    if (checkParent(world, pos)) {
-      return getParentBlock(world, pos).onBlockActivated(world, getParentPos(pos), getParentBlockState(world, pos), entityPlayer, hand, side, hitX, hitY, hitZ);
-    } else {
-      return false;
+    @Override
+    public @Nullable ItemEIO createBlockItem(@Nonnull IModObject modObject) {
+        return null;
+    };
+
+    protected @Nonnull IModObject getParent() {
+        return parent;
     }
-  }
 
-  @Override
-  public boolean canBeWrenched() {
-    return true;
-  }
-
-  @Override
-  public boolean removedByPlayer(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull EntityPlayer player, boolean willHarvest) {
-    if (checkParent(world, pos)) {
-      return getParentBlock(world, pos).removedByPlayer(getParentBlockState(world, pos), world, getParentPos(pos), player, willHarvest);
-    } else {
-      return true;
+    protected @Nonnull EnumFacing getParentOffset() {
+        return parentOffset;
     }
-  }
 
-  @Override
-  public void harvestBlock(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos, @Nonnull IBlockState state, @Nullable TileEntity te,
-      @Nonnull ItemStack stack) {
-    if (checkParent(world, pos)) {
-      getParentBlock(world, pos).harvestBlock(world, player, getParentPos(pos), getParentBlockState(world, pos), world.getTileEntity(getParentPos(pos)), stack);
+    protected @Nonnull BlockPos getParentPos(@Nonnull BlockPos pos) {
+        return pos.offset(getParentOffset());
     }
-    world.setBlockToAir(pos);
-  }
 
-  @Override
-  protected @Nonnull ItemStack processPickBlock(@Nonnull IBlockState state, @Nonnull RayTraceResult target, @Nonnull World world, @Nonnull BlockPos pos,
-      @Nonnull EntityPlayer player, @Nonnull ItemStack pickBlock) {
-    if (checkParent(world, pos)) {
-      return getParentBlock(world, pos).getPickBlock(getParentBlockState(world, pos), target, world, getParentPos(pos), player);
-    } else {
-      return Prep.getEmpty();
+    protected @Nonnull IBlockState getParentBlockState(@Nonnull World world, @Nonnull BlockPos pos) {
+        return world.getBlockState(getParentPos(pos));
     }
-  }
 
-  @Override
-  public @Nullable ItemStack getNBTDrop(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state, int fortune,
-      @Nullable TileEntityEio te) {
-    return null;
-  }
+    protected @Nonnull Block getParentBlock(@Nonnull World world, @Nonnull BlockPos pos) {
+        return getParentBlockState(world, pos).getBlock();
+    }
 
-  @Override
-  public @Nonnull Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune) {
-    return Items.AIR;
-  }
+    @Override
+    public @Nonnull AxisAlignedBB getBoundingBox(@Nonnull IBlockState state, @Nonnull IBlockAccess source,
+                                                 @Nonnull BlockPos pos) {
+        return AABB;
+    }
 
-  @Override
-  public @Nonnull EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
-    return EnumPushReaction.BLOCK;
-  }
+    protected boolean checkParent(@Nonnull World world, @Nonnull BlockPos pos) {
+        if (getParentBlock(world, pos) == getParent().getBlockNN()) {
+            return true;
+        } else {
+            world.setBlockToAir(pos);
+            return false;
+        }
+    }
 
-  @Override
-  public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
-    return false;
-  }
+    @Override
+    public boolean onBlockActivated(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull IBlockState state,
+                                    @Nonnull EntityPlayer entityPlayer,
+                                    @Nonnull EnumHand hand, @Nonnull EnumFacing side, float hitX, float hitY,
+                                    float hitZ) {
+        if (checkParent(world, pos)) {
+            return getParentBlock(world, pos).onBlockActivated(world, getParentPos(pos),
+                    getParentBlockState(world, pos), entityPlayer, hand, side, hitX, hitY, hitZ);
+        } else {
+            return false;
+        }
+    }
 
-  @Override
-  public @Nonnull EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
-    return EnumBlockRenderType.INVISIBLE;
-  }
+    @Override
+    public boolean canBeWrenched() {
+        return true;
+    }
 
-  @Override
-  public float getExplosionResistance(@Nonnull Entity exploder) {
-    return 99999F;
-  }
+    @Override
+    public boolean removedByPlayer(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos,
+                                   @Nonnull EntityPlayer player, boolean willHarvest) {
+        if (checkParent(world, pos)) {
+            return getParentBlock(world, pos).removedByPlayer(getParentBlockState(world, pos), world, getParentPos(pos),
+                    player, willHarvest);
+        } else {
+            return true;
+        }
+    }
 
-  @Override
-  public @Nonnull String getLocalizedName() {
-    return getParent().getBlockNN().getLocalizedName();
-  }
+    @Override
+    public void harvestBlock(@Nonnull World world, @Nonnull EntityPlayer player, @Nonnull BlockPos pos,
+                             @Nonnull IBlockState state, @Nullable TileEntity te,
+                             @Nonnull ItemStack stack) {
+        if (checkParent(world, pos)) {
+            getParentBlock(world, pos).harvestBlock(world, player, getParentPos(pos), getParentBlockState(world, pos),
+                    world.getTileEntity(getParentPos(pos)), stack);
+        }
+        world.setBlockToAir(pos);
+    }
 
-  @Override
-  public boolean isFullCube(@Nonnull IBlockState state) {
-    return false;
-  }
+    @Override
+    protected @Nonnull ItemStack processPickBlock(@Nonnull IBlockState state, @Nonnull RayTraceResult target,
+                                                  @Nonnull World world, @Nonnull BlockPos pos,
+                                                  @Nonnull EntityPlayer player, @Nonnull ItemStack pickBlock) {
+        if (checkParent(world, pos)) {
+            return getParentBlock(world, pos).getPickBlock(getParentBlockState(world, pos), target, world,
+                    getParentPos(pos), player);
+        } else {
+            return Prep.getEmpty();
+        }
+    }
 
-  @Override
-  public boolean isOpaqueCube(@Nonnull IBlockState state) {
-    return false;
-  }
+    @Override
+    public @Nullable ItemStack getNBTDrop(@Nonnull IBlockAccess world, @Nonnull BlockPos pos,
+                                          @Nonnull IBlockState state, int fortune,
+                                          @Nullable TileEntityEio te) {
+        return null;
+    }
 
-  @Override
-  public void neighborChanged(@Nonnull IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Block blockIn, @Nonnull BlockPos fromPos) {
-    checkParent(worldIn, pos);
-  }
+    @Override
+    public @Nonnull Item getItemDropped(@Nonnull IBlockState state, @Nonnull Random rand, int fortune) {
+        return Items.AIR;
+    }
 
-  @Override
-  public void getSubBlocks(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
-    // none
-  }
+    @Override
+    public @Nonnull EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
+        return EnumPushReaction.BLOCK;
+    }
 
-  @Override
-  @Nullable
-  public TileEntity getParent(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
-    return world.getTileEntity(getParentPos(pos));
-  }
+    @Override
+    public boolean canRenderInLayer(@Nonnull IBlockState state, @Nonnull BlockRenderLayer layer) {
+        return false;
+    }
 
+    @Override
+    public @Nonnull EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
+        return EnumBlockRenderType.INVISIBLE;
+    }
+
+    @Override
+    public float getExplosionResistance(@Nonnull Entity exploder) {
+        return 99999F;
+    }
+
+    @Override
+    public @Nonnull String getLocalizedName() {
+        return getParent().getBlockNN().getLocalizedName();
+    }
+
+    @Override
+    public boolean isFullCube(@Nonnull IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public boolean isOpaqueCube(@Nonnull IBlockState state) {
+        return false;
+    }
+
+    @Override
+    public void neighborChanged(@Nonnull IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos,
+                                @Nonnull Block blockIn, @Nonnull BlockPos fromPos) {
+        checkParent(worldIn, pos);
+    }
+
+    @Override
+    public void getSubBlocks(@Nonnull CreativeTabs tab, @Nonnull NonNullList<ItemStack> list) {
+        // none
+    }
+
+    @Override
+    @Nullable
+    public TileEntity getParent(@Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        return world.getTileEntity(getParentPos(pos));
+    }
 }

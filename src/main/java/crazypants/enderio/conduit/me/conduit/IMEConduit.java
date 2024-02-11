@@ -2,21 +2,21 @@ package crazypants.enderio.conduit.me.conduit;
 
 import java.util.EnumSet;
 
+import net.minecraft.util.EnumFacing;
+
 import appeng.api.networking.IGridNode;
 import crazypants.enderio.base.conduit.IClientConduit;
 import crazypants.enderio.base.conduit.IServerConduit;
-import net.minecraft.util.EnumFacing;
 
 public interface IMEConduit extends IServerConduit, IClientConduit {
 
-  MEConduitGrid getGrid();
+    MEConduitGrid getGrid();
 
-  EnumSet<EnumFacing> getConnections();
+    EnumSet<EnumFacing> getConnections();
 
-  boolean isDense();
+    boolean isDense();
 
-  int getChannelsInUse();
+    int getChannelsInUse();
 
-  IGridNode getGridNode();
-
+    IGridNode getGridNode();
 }

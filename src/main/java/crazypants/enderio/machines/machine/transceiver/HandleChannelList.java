@@ -18,33 +18,36 @@ import info.loenwind.autosave.handlers.util.DelegatingHandler;
 
 public class HandleChannelList extends DelegatingHandler<ChannelList, EnumMap<ChannelType, Set<Channel>>> {
 
-  public HandleChannelList() {
-    super(ChannelList.class, getDelegate(), channels -> channels,
-        map -> {
-          ChannelList ret = new ChannelList();
-          ret.putAll(map);
-          // Error recorvery code
-          for (Entry<ChannelType, Set<Channel>> entry : ret.entrySet()) {
-            Iterator<Channel> iterator = entry.getValue().iterator();
-            while (iterator.hasNext()) {
-              if (iterator.next() == null) {
-                iterator.remove();
-              }
-            }
-          }
-          return ret;
-        });
-  }
-  
-  @SuppressWarnings({ "unchecked", "serial" })
-  private static IHandler<EnumMap<ChannelType, Set<Channel>>> getDelegate() {
-    try {
-      return BaseHandlers.REGISTRY.findHandlers(NullHelper.notnull(new TypeToken<EnumMap<ChannelType, Set<Channel>>>(){}.getType(), "TypeToken#getType")).stream()
-          .filter(Objects::nonNull)
-          .findFirst()
-          .orElseThrow(() -> new IllegalStateException("Could not find delegate handler for ChannelList"));
-    } catch (IllegalAccessException | InstantiationException e) {
-      throw new RuntimeException(e);
+    public HandleChannelList() {
+        super(ChannelList.class, getDelegate(), channels -> channels,
+                map -> {
+                    ChannelList ret = new ChannelList();
+                    ret.putAll(map);
+                    // Error recorvery code
+                    for (Entry<ChannelType, Set<Channel>> entry : ret.entrySet()) {
+                        Iterator<Channel> iterator = entry.getValue().iterator();
+                        while (iterator.hasNext()) {
+                            if (iterator.next() == null) {
+                                iterator.remove();
+                            }
+                        }
+                    }
+                    return ret;
+                });
     }
-  }
+
+    @SuppressWarnings({ "unchecked", "serial" })
+    private static IHandler<EnumMap<ChannelType, Set<Channel>>> getDelegate() {
+        try {
+            return BaseHandlers.REGISTRY
+                    .findHandlers(NullHelper.notnull(new TypeToken<EnumMap<ChannelType, Set<Channel>>>() {}.getType(),
+                            "TypeToken#getType"))
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalStateException("Could not find delegate handler for ChannelList"));
+        } catch (IllegalAccessException | InstantiationException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -1,5 +1,9 @@
 package crazypants.enderio.invpanel.integration.jei;
 
+import static crazypants.enderio.invpanel.init.InvpanelObject.blockInventoryPanel;
+import static crazypants.enderio.invpanel.invpanel.InventoryPanelContainer.FIRST_INVENTORY_SLOT;
+import static crazypants.enderio.invpanel.invpanel.InventoryPanelContainer.NUM_INVENTORY_SLOT;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -7,12 +11,17 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+
 import com.enderio.core.common.util.NNList;
+
 import crazypants.enderio.base.EnderIO;
 import crazypants.enderio.invpanel.client.CraftingHelper;
 import crazypants.enderio.invpanel.client.InventoryDatabaseClient;
 import crazypants.enderio.invpanel.client.ItemEntry;
-import crazypants.enderio.invpanel.init.InvpanelObject;
 import crazypants.enderio.invpanel.invpanel.InventoryPanelContainer;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.gui.IGuiIngredient;
@@ -23,15 +32,6 @@ import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-
-import static crazypants.enderio.invpanel.init.InvpanelObject.blockInventoryPanel;
-import static crazypants.enderio.invpanel.invpanel.InventoryPanelContainer.FIRST_INVENTORY_SLOT;
-import static crazypants.enderio.invpanel.invpanel.InventoryPanelContainer.NUM_INVENTORY_SLOT;
-
 
 /**
  * Notes:
@@ -44,10 +44,10 @@ import static crazypants.enderio.invpanel.invpanel.InventoryPanelContainer.NUM_I
  */
 public class InventoryPanelRecipeTransferHandler implements IRecipeTransferHandler {
 
-
     public static void register(IModRegistry registry) {
         IRecipeTransferRegistry recipeTransferRegistry = registry.getRecipeTransferRegistry();
-        recipeTransferRegistry.addRecipeTransferHandler(new InventoryPanelRecipeTransferHandler(registry), VanillaRecipeCategoryUid.CRAFTING);
+        recipeTransferRegistry.addRecipeTransferHandler(new InventoryPanelRecipeTransferHandler(registry),
+                VanillaRecipeCategoryUid.CRAFTING);
         registry.addRecipeCatalyst(new ItemStack(blockInventoryPanel.getBlockNN()), VanillaRecipeCategoryUid.CRAFTING);
     }
 
@@ -64,22 +64,22 @@ public class InventoryPanelRecipeTransferHandler implements IRecipeTransferHandl
 
     @Override
     @Nullable
-    public IRecipeTransferError transferRecipe(@Nonnull Container container, @Nonnull IRecipeLayout recipeLayout, @Nonnull EntityPlayer player,
+    public IRecipeTransferError transferRecipe(@Nonnull Container container, @Nonnull IRecipeLayout recipeLayout,
+                                               @Nonnull EntityPlayer player,
                                                boolean maxTransfer, boolean doTransfer) {
-
         if (!(container instanceof InventoryPanelContainer)) {
             return registry.getJeiHelpers().recipeTransferHandlerHelper().createInternalError();
         }
 
-
         InventoryPanelContainer invPanelContainer = (InventoryPanelContainer) container;
-        if(doTransfer) {
+        if (doTransfer) {
             if (!invPanelContainer.clearCraftingGrid()) {
-                return registry.getJeiHelpers().recipeTransferHandlerHelper().createUserErrorWithTooltip("Could not clear crafting grid");
+                return registry.getJeiHelpers().recipeTransferHandlerHelper()
+                        .createUserErrorWithTooltip("Could not clear crafting grid");
             }
         }
 
-        //do we have what we need?
+        // do we have what we need?
         InventoryDatabaseClient db = invPanelContainer.getTe().getDatabaseClient();
         if (db == null) {
             return registry.getJeiHelpers().recipeTransferHandlerHelper().createInternalError();
@@ -105,14 +105,15 @@ public class InventoryPanelRecipeTransferHandler implements IRecipeTransferHandl
 
         }
 
-        if(missingItemSlots.isEmpty()) {
-            if(doTransfer) {
+        if (missingItemSlots.isEmpty()) {
+            if (doTransfer) {
                 new CraftingHelper(ingredients).refill(invPanelContainer, maxTransfer ? 64 : 1);
             }
             return null;
         }
 
-        return registry.getJeiHelpers().recipeTransferHandlerHelper().createUserErrorForSlots(EnderIO.lang.localizeExact("jei.tooltip.error.recipe.transfer.missing"), missingItemSlots);
+        return registry.getJeiHelpers().recipeTransferHandlerHelper().createUserErrorForSlots(
+                EnderIO.lang.localizeExact("jei.tooltip.error.recipe.transfer.missing"), missingItemSlots);
     }
 
     private static List<Slot> getInventorySlots(InventoryPanelContainer invPanelContainer) {
@@ -125,7 +126,6 @@ public class InventoryPanelRecipeTransferHandler implements IRecipeTransferHandl
     }
 
     private boolean containerContainsIngredient(InventoryPanelContainer invPanelContainer, List<ItemStack> allIng) {
-
         List<Slot> slots = getInventorySlots(invPanelContainer);
         List<ItemStack> available = new ArrayList<ItemStack>();
         for (Slot slot : slots) {
@@ -141,13 +141,11 @@ public class InventoryPanelRecipeTransferHandler implements IRecipeTransferHandl
     private boolean dbContainsIngredient(InventoryDatabaseClient db, List<ItemStack> allIng) {
         for (ItemStack ing : allIng) {
             ItemEntry lookup = db.lookupItem(ing, null, false);
-            //System.out.println(ing.getMaxStackSize());
+            // System.out.println(ing.getMaxStackSize());
             if (lookup != null && lookup.getCount() >= ing.getCount()) {
                 return true;
             }
         }
         return false;
     }
-
-
 }

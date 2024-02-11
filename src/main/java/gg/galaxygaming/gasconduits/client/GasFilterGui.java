@@ -1,6 +1,19 @@
 package gg.galaxygaming.gasconduits.client;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.text.TextComponentTranslation;
+
 import com.enderio.core.client.gui.button.IconButton;
+
 import crazypants.enderio.base.filter.gui.AbstractFilterGui;
 import crazypants.enderio.base.filter.gui.ContainerFilter;
 import crazypants.enderio.base.filter.gui.FilterGuiUtil;
@@ -9,16 +22,7 @@ import crazypants.enderio.base.lang.Lang;
 import gg.galaxygaming.gasconduits.client.utils.GasRenderUtil;
 import gg.galaxygaming.gasconduits.common.filter.GasFilter;
 import gg.galaxygaming.gasconduits.common.filter.IGasFilter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nonnull;
 import mekanism.api.gas.GasStack;
-import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.TextComponentTranslation;
 
 public class GasFilterGui extends AbstractFilterGui {
 
@@ -31,7 +35,8 @@ public class GasFilterGui extends AbstractFilterGui {
     private int xOffset;
     private int yOffset;
 
-    public GasFilterGui(@Nonnull InventoryPlayer playerInv, @Nonnull ContainerFilter filterContainer, TileEntity te, @Nonnull IGasFilter filterIn) {
+    public GasFilterGui(@Nonnull InventoryPlayer playerInv, @Nonnull ContainerFilter filterContainer, TileEntity te,
+                        @Nonnull IGasFilter filterIn) {
         super(playerInv, filterContainer, te, filterIn, "gas_filter");
 
         xOffset = 13;
@@ -50,7 +55,8 @@ public class GasFilterGui extends AbstractFilterGui {
     }
 
     public void createFilterSlots() {
-        filter.createGhostSlots(getGhostSlotHandler().getGhostSlots(), xOffset + 1, yOffset + 1, this::sendFilterChange);
+        filter.createGhostSlots(getGhostSlotHandler().getGhostSlots(), xOffset + 1, yOffset + 1,
+                this::sendFilterChange);
     }
 
     @Override
@@ -93,7 +99,7 @@ public class GasFilterGui extends AbstractFilterGui {
 
     private void renderGas(GasStack g, int x, int y) {
         if (g.getGas().getSprite() != null) {
-            //Should this just be allowed to run
+            // Should this just be allowed to run
             GasRenderUtil.renderGuiTank(g, 1000, 1000, x + 1, y + 1, 16, 16);
         }
     }

@@ -6,7 +6,6 @@ import com.enderio.core.common.util.NNList;
 
 public interface IRecipeNode<REC, LOB, LID> {
 
-  @Nonnull
-  NNList<REC> getRecipes(@Nonnull LOB key);
-
+    @Nonnull
+    NNList<REC> getRecipes(@Nonnull LOB key);
 }

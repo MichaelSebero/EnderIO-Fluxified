@@ -5,15 +5,14 @@ import crazypants.enderio.base.recipe.RecipeLevel;
 
 public abstract class RecipeWrapperIMachineRecipe<E extends IMachineRecipe> extends RecipeWrapperBase {
 
-  protected final E recipe;
+    protected final E recipe;
 
-  public RecipeWrapperIMachineRecipe(E recipe) {
-    this.recipe = recipe;
-  }
+    public RecipeWrapperIMachineRecipe(E recipe) {
+        this.recipe = recipe;
+    }
 
-  @Override
-  protected RecipeLevel getRecipeLevel() {
-    return recipe.getRecipeLevel();
-  }
-
+    @Override
+    protected RecipeLevel getRecipeLevel() {
+        return recipe.getRecipeLevel();
+    }
 }

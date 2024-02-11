@@ -7,20 +7,20 @@ import crazypants.enderio.base.config.recipes.StaxFactory;
 
 public class FluidMultiplier extends Fluid {
 
-  protected float multiplier = 1f;
+    protected float multiplier = 1f;
 
-  @Override
-  public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("multiplier".equals(name)) {
-      try {
-        this.multiplier = Float.parseFloat(value);
-      } catch (NumberFormatException e) {
-        throw new InvalidRecipeConfigException("Invalid value in 'multiplier': Not a number");
-      }
-      return true;
+    @Override
+    public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException,
+                                                                                XMLStreamException {
+        if ("multiplier".equals(name)) {
+            try {
+                this.multiplier = Float.parseFloat(value);
+            } catch (NumberFormatException e) {
+                throw new InvalidRecipeConfigException("Invalid value in 'multiplier': Not a number");
+            }
+            return true;
+        }
+
+        return super.setAttribute(factory, name, value);
     }
-
-    return super.setAttribute(factory, name, value);
-  }
-
 }

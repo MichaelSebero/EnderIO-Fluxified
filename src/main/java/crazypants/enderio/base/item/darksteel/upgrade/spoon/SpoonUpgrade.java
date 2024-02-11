@@ -4,6 +4,11 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import com.enderio.core.common.util.NNList;
 
 import crazypants.enderio.api.upgrades.IDarkSteelItem;
@@ -16,37 +21,34 @@ import crazypants.enderio.base.handler.darksteel.Rules;
 import crazypants.enderio.base.item.darksteel.upgrade.energy.EnergyUpgrade;
 import crazypants.enderio.base.item.darksteel.upgrade.energy.EnergyUpgradeManager;
 import crazypants.enderio.base.lang.Lang;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @EventBusSubscriber(modid = EnderIO.MODID)
 public class SpoonUpgrade extends AbstractUpgrade {
 
-  private static final @Nonnull String UPGRADE_NAME = "spoon";
+    private static final @Nonnull String UPGRADE_NAME = "spoon";
 
-  public static final @Nonnull SpoonUpgrade INSTANCE = new SpoonUpgrade();
+    public static final @Nonnull SpoonUpgrade INSTANCE = new SpoonUpgrade();
 
-  @SubscribeEvent
-  public static void registerDarkSteelUpgrades(@Nonnull RegistryEvent.Register<IDarkSteelUpgrade> event) {
-    event.getRegistry().register(INSTANCE);
-  }
+    @SubscribeEvent
+    public static void registerDarkSteelUpgrades(@Nonnull RegistryEvent.Register<IDarkSteelUpgrade> event) {
+        event.getRegistry().register(INSTANCE);
+    }
 
-  public SpoonUpgrade() {
-    super(UPGRADE_NAME, "enderio.darksteel.upgrade.spoon", DarkSteelConfig.spoonCost);
-  }
+    public SpoonUpgrade() {
+        super(UPGRADE_NAME, "enderio.darksteel.upgrade.spoon", DarkSteelConfig.spoonCost);
+    }
 
-  @Override
-  @Nonnull
-  public List<IRule> getRules() {
-    return new NNList<>(Rules.callbacksFor(this), Rules.staticCheck(item -> item.isPickaxe()), EnergyUpgrade.HAS_ANY,
-        Rules.itemTypeTooltip(Lang.DSU_CLASS_TOOLS_PICKAXE));
-  }
+    @Override
+    @Nonnull
+    public List<IRule> getRules() {
+        return new NNList<>(Rules.callbacksFor(this), Rules.staticCheck(item -> item.isPickaxe()),
+                EnergyUpgrade.HAS_ANY,
+                Rules.itemTypeTooltip(Lang.DSU_CLASS_TOOLS_PICKAXE));
+    }
 
-  @Override
-  public boolean canOtherBeRemoved(@Nonnull ItemStack stack, @Nonnull IDarkSteelItem item, @Nonnull IDarkSteelUpgrade other) {
-    return !EnergyUpgradeManager.isLowestPowerUpgrade(other);
-  }
-
+    @Override
+    public boolean canOtherBeRemoved(@Nonnull ItemStack stack, @Nonnull IDarkSteelItem item,
+                                     @Nonnull IDarkSteelUpgrade other) {
+        return !EnergyUpgradeManager.isLowestPowerUpgrade(other);
+    }
 }

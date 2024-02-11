@@ -7,17 +7,16 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 
 public abstract class AbstractFarmerJoe extends IForgeRegistryEntry.Impl<IFarmerJoe> implements IFarmerJoe {
 
-  private @Nonnull EventPriority priority = EventPriority.NORMAL;
+    private @Nonnull EventPriority priority = EventPriority.NORMAL;
 
-  public AbstractFarmerJoe setPriority(@Nonnull EventPriority priority) {
-    this.priority = priority;
-    return this;
-  }
+    public AbstractFarmerJoe setPriority(@Nonnull EventPriority priority) {
+        this.priority = priority;
+        return this;
+    }
 
-  @Override
-  @Nonnull
-  public EventPriority getPriority() {
-    return priority;
-  }
-
+    @Override
+    @Nonnull
+    public EventPriority getPriority() {
+        return priority;
+    }
 }

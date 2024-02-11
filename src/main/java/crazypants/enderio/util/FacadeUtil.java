@@ -11,33 +11,33 @@ import net.minecraftforge.fml.common.Optional.Method;
 
 public class FacadeUtil {
 
-  public static final FacadeUtil instance = new InnerFacadeUtil();
+    public static final FacadeUtil instance = new InnerFacadeUtil();
 
-  private FacadeUtil() {
-  }
+    private FacadeUtil() {}
 
-  private static class InnerFacadeUtil extends FacadeUtil {
+    private static class InnerFacadeUtil extends FacadeUtil {
 
-    @Override
-    @Method(modid = "ctm-api")
+        @Override
+        @Method(modid = "ctm-api")
+        public boolean isFacaded(@Nullable IBlockState state) {
+            return state != null && state.getBlock() instanceof team.chisel.ctm.api.IFacade;
+        }
+
+        @Override
+        @Method(modid = "ctm-api")
+        public @Nullable IBlockState getFacade(@Nullable IBlockState state, @Nonnull IBlockAccess world,
+                                               @Nonnull BlockPos pos, @Nullable EnumFacing side) {
+            return state != null && isFacaded(state) ?
+                    ((team.chisel.ctm.api.IFacade) state.getBlock()).getFacade(world, pos, side) : null;
+        }
+    }
+
     public boolean isFacaded(@Nullable IBlockState state) {
-      return state != null && state.getBlock() instanceof team.chisel.ctm.api.IFacade;
+        return false;
     }
 
-    @Override
-    @Method(modid = "ctm-api")
-    public @Nullable IBlockState getFacade(@Nullable IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nullable EnumFacing side) {
-      return state != null && isFacaded(state) ? ((team.chisel.ctm.api.IFacade) state.getBlock()).getFacade(world, pos, side) : null;
+    public @Nullable IBlockState getFacade(@Nullable IBlockState state, @Nonnull IBlockAccess world,
+                                           @Nonnull BlockPos pos, @Nullable EnumFacing side) {
+        return null;
     }
-
-  }
-
-  public boolean isFacaded(@Nullable IBlockState state) {
-    return false;
-  }
-
-  public @Nullable IBlockState getFacade(@Nullable IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nullable EnumFacing side) {
-    return null;
-  }
-
 }

@@ -1,6 +1,22 @@
 package gg.galaxygaming.gasconduits.common.conduit;
 
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.enderio.core.common.vecmath.Vector4f;
+
 import crazypants.enderio.base.conduit.ConduitUtil;
 import crazypants.enderio.base.conduit.ConnectionMode;
 import crazypants.enderio.base.conduit.IConduitNetwork;
@@ -13,20 +29,8 @@ import crazypants.enderio.conduits.render.ConduitTextureWrapper;
 import gg.galaxygaming.gasconduits.client.utils.GasRenderUtil;
 import gg.galaxygaming.gasconduits.common.conduit.basic.GasConduitNetwork;
 import gg.galaxygaming.gasconduits.common.utils.GasUtil;
-import java.util.List;
-import javax.annotation.Nonnull;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class AbstractGasTankConduit extends AbstractGasConduit {
 
@@ -37,7 +41,8 @@ public abstract class AbstractGasTankConduit extends AbstractGasConduit {
     protected boolean gasTypeLocked = false;
 
     @Override
-    public boolean onBlockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull RaytraceResult res, @Nonnull List<RaytraceResult> all) {
+    public boolean onBlockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull RaytraceResult res,
+                                    @Nonnull List<RaytraceResult> all) {
         ItemStack heldItem = player.getHeldItem(hand);
         if (heldItem.isEmpty()) {
             return false;
@@ -55,7 +60,8 @@ public abstract class AbstractGasTankConduit extends AbstractGasConduit {
                         }
                         // Attempt to join networks
                         BlockPos pos = getBundle().getLocation().offset(faceHit);
-                        IGasConduit gasConduit = ConduitUtil.getConduit(getBundle().getEntity().getWorld(), pos.getX(), pos.getY(), pos.getZ(), IGasConduit.class);
+                        IGasConduit gasConduit = ConduitUtil.getConduit(getBundle().getEntity().getWorld(), pos.getX(),
+                                pos.getY(), pos.getZ(), IGasConduit.class);
                         if (!(gasConduit instanceof AbstractGasTankConduit) || !canJoinNeighbour(gasConduit)) {
                             return false;
                         }
@@ -97,7 +103,7 @@ public abstract class AbstractGasTankConduit extends AbstractGasConduit {
                         network.setGasTypeLocked(false);
                         numEmptyEvents = 0;
                         player.sendStatusMessage(
-                              new TextComponentTranslation("gasconduits.item_gas_conduit.unlocked_type"), true);
+                                new TextComponentTranslation("gasconduits.item_gas_conduit.unlocked_type"), true);
                     }
                 } else if (network != null) {
                     network.setGasType(null);
@@ -109,10 +115,12 @@ public abstract class AbstractGasTankConduit extends AbstractGasConduit {
             GasStack gas = GasUtil.getGasTypeFromItem(heldItem);
             if (gas != null) {
                 if (!getBundle().getEntity().getWorld().isRemote) {
-                    if (network != null && (network.getGasType() == null || network.getTotalVolume() < 500 || GasConduitNetwork.areGasesCompatible(getGasType(), gas))) {
+                    if (network != null && (network.getGasType() == null || network.getTotalVolume() < 500 ||
+                            GasConduitNetwork.areGasesCompatible(getGasType(), gas))) {
                         network.setGasType(gas);
                         network.setGasTypeLocked(true);
-                        player.sendStatusMessage(new TextComponentTranslation("gasconduits.item_gas_conduit.locked_type", gas.getGas().getLocalizedName()), true);
+                        player.sendStatusMessage(new TextComponentTranslation(
+                                "gasconduits.item_gas_conduit.locked_type", gas.getGas().getLocalizedName()), true);
                     }
                 }
                 return true;
@@ -239,7 +247,8 @@ public abstract class AbstractGasTankConduit extends AbstractGasConduit {
     public Vector4f getTransmitionTextureColorForState(@Nonnull CollidableComponent component) {
         if (tank.getGasType() != null && tank.getFilledRatio() > 0.01F) {
             int color = tank.getGasType().getTint();
-            return new Vector4f((color >> 16 & 0xFF) / 255d, (color >> 8 & 0xFF) / 255d, (color & 0xFF) / 255d, tank.getFilledRatio());
+            return new Vector4f((color >> 16 & 0xFF) / 255d, (color >> 8 & 0xFF) / 255d, (color & 0xFF) / 255d,
+                    tank.getFilledRatio());
         }
         return null;
     }

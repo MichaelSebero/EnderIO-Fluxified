@@ -6,8 +6,7 @@ import info.loenwind.autoconfig.factory.IFactory;
 
 public interface IFactoryEIO extends IFactory {
 
-  @Override
-  @Nonnull
-  IValueFactoryEIO section(@Nonnull String section);
-
+    @Override
+    @Nonnull
+    IValueFactoryEIO section(@Nonnull String section);
 }

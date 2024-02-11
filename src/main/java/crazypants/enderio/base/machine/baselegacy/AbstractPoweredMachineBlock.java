@@ -2,17 +2,18 @@ package crazypants.enderio.base.machine.baselegacy;
 
 import javax.annotation.Nonnull;
 
-import crazypants.enderio.api.IModObject;
 import net.minecraft.block.material.Material;
 
-public abstract class AbstractPoweredMachineBlock<T extends AbstractPoweredMachineEntity> extends AbstractInventoryMachineBlock<T> {
+import crazypants.enderio.api.IModObject;
 
-  AbstractPoweredMachineBlock(@Nonnull IModObject mo, @Nonnull Material mat) {
-    super(mo, mat);
-  }
+public abstract class AbstractPoweredMachineBlock<T extends AbstractPoweredMachineEntity>
+                                                 extends AbstractInventoryMachineBlock<T> {
 
-  AbstractPoweredMachineBlock(@Nonnull IModObject mo) {
-    super(mo);
-  }
+    AbstractPoweredMachineBlock(@Nonnull IModObject mo, @Nonnull Material mat) {
+        super(mo, mat);
+    }
 
+    AbstractPoweredMachineBlock(@Nonnull IModObject mo) {
+        super(mo);
+    }
 }

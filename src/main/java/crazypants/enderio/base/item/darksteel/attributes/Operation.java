@@ -5,7 +5,8 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 /**
  * Values for the <code>operation</code> parameter of the {@link AttributeModifier} (use {@link #ordinal()}).
  * <p>
- * It will first add all {@link #ADD} modifiers. Then all {@link #PERCENT_OF_BASE} modifiers will be calculated based on that value and then added. At last, the
+ * It will first add all {@link #ADD} modifiers. Then all {@link #PERCENT_OF_BASE} modifiers will be calculated based on
+ * that value and then added. At last, the
  * value will be multiplied with all {@link #PERCENT_MULTIPLIER} modifiers. So:
  * <ol>
  * <li><code>v1 = v0 + ADD1 + ADD2 + ADD3</code>
@@ -17,7 +18,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
  *
  */
 enum Operation {
-  ADD,
-  PERCENT_OF_BASE,
-  PERCENT_MULTIPLIER;
+    ADD,
+    PERCENT_OF_BASE,
+    PERCENT_MULTIPLIER;
 }

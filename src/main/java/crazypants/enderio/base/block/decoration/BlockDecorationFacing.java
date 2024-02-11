@@ -4,13 +4,6 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 
-import com.enderio.core.common.util.NNList;
-import com.enderio.core.common.util.NNList.NNIterator;
-
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.machine.base.te.AbstractMachineEntity;
-import crazypants.enderio.base.paint.render.PaintedBlockAccessWrapper;
-import crazypants.enderio.base.render.property.EnumDecoBlock;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -27,70 +20,81 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.enderio.core.common.util.NNList;
+import com.enderio.core.common.util.NNList.NNIterator;
+
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.machine.base.te.AbstractMachineEntity;
+import crazypants.enderio.base.paint.render.PaintedBlockAccessWrapper;
+import crazypants.enderio.base.render.property.EnumDecoBlock;
+
 public class BlockDecorationFacing extends BlockDecoration {
 
-  public static BlockDecoration create(@Nonnull IModObject modObject) {
-    return new BlockDecorationFacing(modObject, EnumDecoBlock.TYPE15);
-  }
-
-  public static BlockDecoration create2(@Nonnull IModObject modObject) {
-    return new BlockDecorationFacing(modObject, EnumDecoBlock.TYPE04);
-  }
-
-  public static final @Nonnull PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
-  public static final @Nonnull PropertyBool ACTIVE = PropertyBool.create("active");
-
-  protected BlockDecorationFacing(@Nonnull IModObject modObject, @Nonnull EnumDecoBlock maxMeta) {
-    super(modObject, maxMeta);
-  }
-
-  @Override
-  protected void initDefaultState() {
-    setDefaultState(getBlockState().getBaseState().withProperty(FACING, EnumFacing.SOUTH).withProperty(ACTIVE, false));
-  }
-
-  @Override
-  protected @Nonnull BlockStateContainer createBlockState() {
-    return new BlockStateContainer(this, new IProperty[] { EnumDecoBlock.TYPE, FACING, ACTIVE });
-  }
-
-  @Override
-  public @Nonnull IBlockState getStateFromMeta(int meta) {
-    return super.getStateFromMeta(meta).withProperty(FACING, EnumFacing.SOUTH).withProperty(ACTIVE, false);
-  }
-
-  @Override
-  public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
-    if (worldIn instanceof PaintedBlockAccessWrapper) {
-      TileEntity tileEntity = ((PaintedBlockAccessWrapper) worldIn).getRealTileEntity(pos);
-      if (tileEntity instanceof AbstractMachineEntity) {
-        return state.withProperty(FACING, ((AbstractMachineEntity) tileEntity).getFacing()).withProperty(ACTIVE,
-            ((AbstractMachineEntity) tileEntity).isActive());
-      }
+    public static BlockDecoration create(@Nonnull IModObject modObject) {
+        return new BlockDecorationFacing(modObject, EnumDecoBlock.TYPE15);
     }
-    return state.withProperty(FACING, EnumFacing.SOUTH).withProperty(ACTIVE, false);
-  }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public void registerRenderers(@Nonnull IModObject modObject) {
-    Item item = Item.getItemFromBlock(this);
-    Map<IBlockState, ModelResourceLocation> locations = new DefaultStateMapper().putStateModelLocations(this);
-    NNIterator<EnumDecoBlock> iterator = NNList.of(EnumDecoBlock.class).iterator();
-    while (iterator.hasNext()) {
-      EnumDecoBlock type = iterator.next();
-      IBlockState state = getDefaultState().withProperty(EnumDecoBlock.TYPE, type).withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false);
-      ModelResourceLocation mrl = locations.get(state);
-      if (mrl != null) {
-        ModelLoader.setCustomModelResourceLocation(item, EnumDecoBlock.getMetaFromType(type), mrl);
-      }
+    public static BlockDecoration create2(@Nonnull IModObject modObject) {
+        return new BlockDecorationFacing(modObject, EnumDecoBlock.TYPE04);
     }
-  }
 
-  @Override
-  public boolean isOpaqueCube(@Nonnull IBlockState state) {
-    EnumDecoBlock type = state.getValue(EnumDecoBlock.TYPE);
-    return type != EnumDecoBlock.TYPE11 && type != EnumDecoBlock.TYPE12;
-  }
+    public static final @Nonnull PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class,
+            EnumFacing.HORIZONTALS);
+    public static final @Nonnull PropertyBool ACTIVE = PropertyBool.create("active");
 
+    protected BlockDecorationFacing(@Nonnull IModObject modObject, @Nonnull EnumDecoBlock maxMeta) {
+        super(modObject, maxMeta);
+    }
+
+    @Override
+    protected void initDefaultState() {
+        setDefaultState(
+                getBlockState().getBaseState().withProperty(FACING, EnumFacing.SOUTH).withProperty(ACTIVE, false));
+    }
+
+    @Override
+    protected @Nonnull BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[] { EnumDecoBlock.TYPE, FACING, ACTIVE });
+    }
+
+    @Override
+    public @Nonnull IBlockState getStateFromMeta(int meta) {
+        return super.getStateFromMeta(meta).withProperty(FACING, EnumFacing.SOUTH).withProperty(ACTIVE, false);
+    }
+
+    @Override
+    public @Nonnull IBlockState getActualState(@Nonnull IBlockState state, @Nonnull IBlockAccess worldIn,
+                                               @Nonnull BlockPos pos) {
+        if (worldIn instanceof PaintedBlockAccessWrapper) {
+            TileEntity tileEntity = ((PaintedBlockAccessWrapper) worldIn).getRealTileEntity(pos);
+            if (tileEntity instanceof AbstractMachineEntity) {
+                return state.withProperty(FACING, ((AbstractMachineEntity) tileEntity).getFacing()).withProperty(ACTIVE,
+                        ((AbstractMachineEntity) tileEntity).isActive());
+            }
+        }
+        return state.withProperty(FACING, EnumFacing.SOUTH).withProperty(ACTIVE, false);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerRenderers(@Nonnull IModObject modObject) {
+        Item item = Item.getItemFromBlock(this);
+        Map<IBlockState, ModelResourceLocation> locations = new DefaultStateMapper().putStateModelLocations(this);
+        NNIterator<EnumDecoBlock> iterator = NNList.of(EnumDecoBlock.class).iterator();
+        while (iterator.hasNext()) {
+            EnumDecoBlock type = iterator.next();
+            IBlockState state = getDefaultState().withProperty(EnumDecoBlock.TYPE, type)
+                    .withProperty(FACING, EnumFacing.NORTH).withProperty(ACTIVE, false);
+            ModelResourceLocation mrl = locations.get(state);
+            if (mrl != null) {
+                ModelLoader.setCustomModelResourceLocation(item, EnumDecoBlock.getMetaFromType(type), mrl);
+            }
+        }
+    }
+
+    @Override
+    public boolean isOpaqueCube(@Nonnull IBlockState state) {
+        EnumDecoBlock type = state.getValue(EnumDecoBlock.TYPE);
+        return type != EnumDecoBlock.TYPE11 && type != EnumDecoBlock.TYPE12;
+    }
 }

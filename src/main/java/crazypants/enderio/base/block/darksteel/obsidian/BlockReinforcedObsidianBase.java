@@ -4,14 +4,6 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import com.enderio.core.api.client.gui.IResourceTooltipProvider;
-
-import crazypants.enderio.api.IModObject;
-import crazypants.enderio.base.BlockEio;
-import crazypants.enderio.base.EnderIOTab;
-import crazypants.enderio.base.TileEntityEio;
-import crazypants.enderio.base.config.config.PersonalConfig;
-import crazypants.enderio.util.EnumReader;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
@@ -31,68 +23,78 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.enderio.core.api.client.gui.IResourceTooltipProvider;
+
+import crazypants.enderio.api.IModObject;
+import crazypants.enderio.base.BlockEio;
+import crazypants.enderio.base.EnderIOTab;
+import crazypants.enderio.base.TileEntityEio;
+import crazypants.enderio.base.config.config.PersonalConfig;
+import crazypants.enderio.util.EnumReader;
+
 public abstract class BlockReinforcedObsidianBase extends BlockEio<TileEntityEio> implements IResourceTooltipProvider {
 
-  protected BlockReinforcedObsidianBase(@Nonnull IModObject modObject) {
-    super(modObject, Material.ROCK, MapColor.OBSIDIAN);
-    setHardness(50.0F);
-    setResistance(2000.0F);
-    setSoundType(SoundType.STONE);
-    setCreativeTab(EnderIOTab.tabEnderIO);
-    setShape(mkShape(BlockFaceShape.SOLID));
-  }
-
-  private static final int[] COLS = { 0x3c3056, 0x241e31, 0x1e182b, 0x0e0e15, 0x07070b };
-
-  @Override
-  @SideOnly(Side.CLIENT)
-  public void randomDisplayTick(@Nonnull IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull Random rand) {
-    if (PersonalConfig.machineParticlesEnabled.get() && rand.nextFloat() < .25f) {
-      EnumFacing face = EnumReader.get(EnumFacing.class, rand.nextInt(EnumFacing.values().length));
-      if (!worldIn.isBlockNormalCube(pos.offset(face), false)) {
-        double xd = face.getXOffset() == 0 ? rand.nextDouble() : face.getXOffset() < 0 ? -0.05 : 1.05;
-        double yd = face.getYOffset() == 0 ? rand.nextDouble() : face.getYOffset() < 0 ? -0.05 : 1.05;
-        double zd = face.getZOffset() == 0 ? rand.nextDouble() : face.getZOffset() < 0 ? -0.05 : 1.05;
-
-        double x = pos.getX() + xd;
-        double y = pos.getY() + yd;
-        double z = pos.getZ() + zd;
-
-        int col = COLS[rand.nextInt(COLS.length)];
-
-        worldIn.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, (col >> 16 & 255) / 255d, (col >> 8 & 255) / 255d, (col & 255) / 255d, new int[0]);
-      }
+    protected BlockReinforcedObsidianBase(@Nonnull IModObject modObject) {
+        super(modObject, Material.ROCK, MapColor.OBSIDIAN);
+        setHardness(50.0F);
+        setResistance(2000.0F);
+        setSoundType(SoundType.STONE);
+        setCreativeTab(EnderIOTab.tabEnderIO);
+        setShape(mkShape(BlockFaceShape.SOLID));
     }
-  }
 
-  @Override
-  public boolean canEntityDestroy(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull Entity entity) {
-    return !(entity instanceof EntityWither) && !(entity instanceof EntityWitherSkull);
-  }
+    private static final int[] COLS = { 0x3c3056, 0x241e31, 0x1e182b, 0x0e0e15, 0x07070b };
 
-  @Override
-  public void onBlockExploded(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Explosion explosion) {
-  }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(@Nonnull IBlockState state, @Nonnull World worldIn, @Nonnull BlockPos pos,
+                                  @Nonnull Random rand) {
+        if (PersonalConfig.machineParticlesEnabled.get() && rand.nextFloat() < .25f) {
+            EnumFacing face = EnumReader.get(EnumFacing.class, rand.nextInt(EnumFacing.values().length));
+            if (!worldIn.isBlockNormalCube(pos.offset(face), false)) {
+                double xd = face.getXOffset() == 0 ? rand.nextDouble() : face.getXOffset() < 0 ? -0.05 : 1.05;
+                double yd = face.getYOffset() == 0 ? rand.nextDouble() : face.getYOffset() < 0 ? -0.05 : 1.05;
+                double zd = face.getZOffset() == 0 ? rand.nextDouble() : face.getZOffset() < 0 ? -0.05 : 1.05;
 
-  @Override
-  public boolean canDropFromExplosion(@Nonnull Explosion p_149659_1_) {
-    return false;
-  }
+                double x = pos.getX() + xd;
+                double y = pos.getY() + yd;
+                double z = pos.getZ() + zd;
 
-  @Override
-  public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack itemStack) {
-    return getTranslationKey();
-  }
+                int col = COLS[rand.nextInt(COLS.length)];
 
-  @Override
-  public boolean canBeWrenched() {
-    return false;
-  }
+                worldIn.spawnParticle(EnumParticleTypes.REDSTONE, x, y, z, (col >> 16 & 255) / 255d,
+                        (col >> 8 & 255) / 255d, (col & 255) / 255d, new int[0]);
+            }
+        }
+    }
 
-  @Override
-  public @Nonnull EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
-    // moving reinforced obsidian with a mere piston? nope, I don't think so...
-    return EnumPushReaction.BLOCK;
-  }
+    @Override
+    public boolean canEntityDestroy(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos,
+                                    @Nonnull Entity entity) {
+        return !(entity instanceof EntityWither) && !(entity instanceof EntityWitherSkull);
+    }
 
+    @Override
+    public void onBlockExploded(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Explosion explosion) {}
+
+    @Override
+    public boolean canDropFromExplosion(@Nonnull Explosion p_149659_1_) {
+        return false;
+    }
+
+    @Override
+    public @Nonnull String getUnlocalizedNameForTooltip(@Nonnull ItemStack itemStack) {
+        return getTranslationKey();
+    }
+
+    @Override
+    public boolean canBeWrenched() {
+        return false;
+    }
+
+    @Override
+    public @Nonnull EnumPushReaction getPushReaction(@Nonnull IBlockState state) {
+        // moving reinforced obsidian with a mere piston? nope, I don't think so...
+        return EnumPushReaction.BLOCK;
+    }
 }

@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 public interface IFilterContainer<I extends IFilter> {
 
-  @Nonnull
-  I getFilter(int filterIndex);
-
+    @Nonnull
+    I getFilter(int filterIndex);
 }

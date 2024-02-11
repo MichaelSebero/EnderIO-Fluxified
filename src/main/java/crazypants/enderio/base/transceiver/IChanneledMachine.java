@@ -6,10 +6,9 @@ import javax.annotation.Nonnull;
 
 public interface IChanneledMachine {
 
-  @Nonnull
-  Set<Channel> getSendChannels(@Nonnull ChannelType type);
+    @Nonnull
+    Set<Channel> getSendChannels(@Nonnull ChannelType type);
 
-  @Nonnull
-  Set<Channel> getRecieveChannels(@Nonnull ChannelType type);
-
+    @Nonnull
+    Set<Channel> getRecieveChannels(@Nonnull ChannelType type);
 }

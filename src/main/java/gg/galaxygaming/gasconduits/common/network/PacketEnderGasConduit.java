@@ -1,6 +1,15 @@
 package gg.galaxygaming.gasconduits.common.network;
 
+import javax.annotation.Nonnull;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
 import com.enderio.core.common.util.DyeColor;
+
 import crazypants.enderio.base.conduit.IConduit;
 import crazypants.enderio.base.filter.IFilter;
 import crazypants.enderio.base.filter.capability.CapabilityFilterHolder;
@@ -9,12 +18,6 @@ import crazypants.enderio.conduits.network.PacketConduitFilter;
 import crazypants.enderio.util.EnumReader;
 import gg.galaxygaming.gasconduits.common.conduit.ender.EnderGasConduit;
 import io.netty.buffer.ByteBuf;
-import javax.annotation.Nonnull;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class PacketEnderGasConduit extends PacketConduitFilter<EnderGasConduit> {
 
@@ -24,8 +27,7 @@ public class PacketEnderGasConduit extends PacketConduitFilter<EnderGasConduit> 
     private boolean roundRobin;
     private boolean selfFeed;
 
-    public PacketEnderGasConduit() {
-    }
+    public PacketEnderGasConduit() {}
 
     public PacketEnderGasConduit(@Nonnull EnderGasConduit con, @Nonnull EnumFacing dir) {
         super(con, dir);
@@ -78,9 +80,12 @@ public class PacketEnderGasConduit extends PacketConduitFilter<EnderGasConduit> 
 
         private void applyFilter(EnumFacing dir, IConduit conduit, IFilter filter, boolean isInput) {
             if (conduit.hasInternalCapability(CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY, dir)) {
-                IFilterHolder<IFilter> filterHolder = CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY.cast(conduit.getInternalCapability(CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY, dir));
+                IFilterHolder<IFilter> filterHolder = CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY
+                        .cast(conduit.getInternalCapability(CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY, dir));
                 if (filterHolder != null) {
-                    filterHolder.setFilter(isInput ? filterHolder.getInputFilterIndex() : filterHolder.getOutputFilterIndex(), dir, filter);
+                    filterHolder.setFilter(
+                            isInput ? filterHolder.getInputFilterIndex() : filterHolder.getOutputFilterIndex(), dir,
+                            filter);
                 }
             }
         }

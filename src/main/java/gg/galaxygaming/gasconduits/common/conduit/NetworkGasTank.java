@@ -1,12 +1,15 @@
 package gg.galaxygaming.gasconduits.common.conduit;
 
-import com.enderio.core.common.util.DyeColor;
-import crazypants.enderio.base.conduit.ConnectionMode;
-import gg.galaxygaming.gasconduits.common.conduit.ender.EnderGasConduit;
 import javax.annotation.Nonnull;
-import mekanism.api.gas.IGasHandler;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import com.enderio.core.common.util.DyeColor;
+
+import crazypants.enderio.base.conduit.ConnectionMode;
+import gg.galaxygaming.gasconduits.common.conduit.ender.EnderGasConduit;
+import mekanism.api.gas.IGasHandler;
 
 public class NetworkGasTank {
 
@@ -31,7 +34,8 @@ public class NetworkGasTank {
         this.conDir = conDir;
         conduitLoc = con.getBundle().getLocation();
         tankDir = conDir.getOpposite();
-        externalTank = AbstractGasConduit.getExternalGasHandler(con.getBundle().getBundleworld(), conduitLoc.offset(conDir), tankDir);
+        externalTank = AbstractGasConduit.getExternalGasHandler(con.getBundle().getBundleworld(),
+                conduitLoc.offset(conDir), tankDir);
         acceptsOutput = con.getConnectionMode(conDir).acceptsOutput();
         inputColor = con.getOutputColor(conDir);
         outputColor = con.getInputColor(conDir);

@@ -1,5 +1,25 @@
 package gg.galaxygaming.gasconduits.common.conduit.ender;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.enderio.core.client.render.BoundingBox;
 import com.enderio.core.client.render.IconUtil;
 import com.enderio.core.common.util.DyeColor;
@@ -7,6 +27,7 @@ import com.enderio.core.common.util.NNList;
 import com.enderio.core.common.util.NNList.NNIterator;
 import com.enderio.core.common.util.NullHelper;
 import com.enderio.core.common.vecmath.Vector4f;
+
 import crazypants.enderio.base.conduit.ConduitUtil;
 import crazypants.enderio.base.conduit.ConnectionMode;
 import crazypants.enderio.base.conduit.IConduit;
@@ -46,31 +67,17 @@ import gg.galaxygaming.gasconduits.common.config.GasConduitConfig;
 import gg.galaxygaming.gasconduits.common.filter.GasFilter;
 import gg.galaxygaming.gasconduits.common.filter.IGasFilter;
 import gg.galaxygaming.gasconduits.common.filter.IItemFilterGasUpgrade;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 import mekanism.api.gas.GasTankInfo;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder<IGasFilter>, IUpgradeHolder, IEnderConduit {
+public class EnderGasConduit extends AbstractGasConduit
+                             implements IFilterHolder<IGasFilter>, IUpgradeHolder, IEnderConduit {
 
-    public static final IConduitTexture ICON_KEY = new ConduitTexture(TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit", false), ConduitTexture.arm(3));
-    public static final IConduitTexture ICON_CORE_KEY = new ConduitTexture(TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit_core", false), ConduitTexture.core(2));
+    public static final IConduitTexture ICON_KEY = new ConduitTexture(
+            TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit", false), ConduitTexture.arm(3));
+    public static final IConduitTexture ICON_CORE_KEY = new ConduitTexture(
+            TextureRegistry.registerTexture("gasconduits:blocks/gas_conduit_core", false), ConduitTexture.core(2));
 
     private EnderGasConduitNetwork network;
     private int ticksSinceFailedExtract;
@@ -103,7 +110,7 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
 
     public EnderGasConduit() {
         super();
-        for (NNIterator<EnumFacing> itr = NNList.FACING.fastIterator(); itr.hasNext(); ) {
+        for (NNIterator<EnumFacing> itr = NNList.FACING.fastIterator(); itr.hasNext();) {
             EnumFacing dir = itr.next();
             outputFilterUpgrades.put(dir, ItemStack.EMPTY);
             inputFilterUpgrades.put(dir, ItemStack.EMPTY);
@@ -129,7 +136,8 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
     }
 
     @Override
-    public boolean onBlockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull RaytraceResult res, @Nonnull List<RaytraceResult> all) {
+    public boolean onBlockActivated(@Nonnull EntityPlayer player, @Nonnull EnumHand hand, @Nonnull RaytraceResult res,
+                                    @Nonnull List<RaytraceResult> all) {
         if (Prep.isInvalid(player.getHeldItem(hand)) || !ToolUtil.isToolEquipped(player, hand)) {
             return false;
         }
@@ -179,7 +187,8 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
 
     @Nonnull
     public ItemStack getFilterStack(@Nonnull EnumFacing dir, boolean isInput) {
-        return NullHelper.first(isInput ? inputFilterUpgrades.get(dir) : outputFilterUpgrades.get(dir), Prep.getEmpty());
+        return NullHelper.first(isInput ? inputFilterUpgrades.get(dir) : outputFilterUpgrades.get(dir),
+                Prep.getEmpty());
     }
 
     public void setFilterStack(@Nonnull EnumFacing dir, @Nonnull ItemStack stack, boolean isInput) {
@@ -346,7 +355,8 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
         super.readTypeSettings(dir, dataRoot);
         setConnectionMode(dir, EnumReader.get(ConnectionMode.class, dataRoot.getShort("connectionMode")));
         setExtractionSignalColor(dir, EnumReader.get(DyeColor.class, dataRoot.getShort("extractionSignalColor")));
-        setExtractionRedstoneMode(EnumReader.get(RedstoneControlMode.class, dataRoot.getShort("extractionRedstoneMode")), dir);
+        setExtractionRedstoneMode(
+                EnumReader.get(RedstoneControlMode.class, dataRoot.getShort("extractionRedstoneMode")), dir);
         setInputColor(dir, EnumReader.get(DyeColor.class, dataRoot.getShort("inputColor")));
         setOutputColor(dir, EnumReader.get(DyeColor.class, dataRoot.getShort("outputColor")));
         setSelfFeedEnabled(dir, dataRoot.getBoolean("selfFeed"));
@@ -546,8 +556,9 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
 
     @Override
     public boolean hasInternalCapability(@Nonnull Capability<?> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY || capability == CapabilityUpgradeHolder.UPGRADE_HOLDER_CAPABILITY && facing != null
-                                                                                && containsExternalConnection(facing);
+        return capability == CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY ||
+                capability == CapabilityUpgradeHolder.UPGRADE_HOLDER_CAPABILITY && facing != null &&
+                        containsExternalConnection(facing);
     }
 
     // FILTERS
@@ -681,23 +692,27 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
 
     @Override
     public int getUpgradeSlotLimit(@Nonnull ItemStack stack) {
-        return stack.getItem() instanceof ItemFunctionUpgrade ? ((ItemFunctionUpgrade) stack.getItem()).getUpgradeSlotLimit()
-                                                              : IUpgradeHolder.super.getUpgradeSlotLimit(stack);
+        return stack.getItem() instanceof ItemFunctionUpgrade ?
+                ((ItemFunctionUpgrade) stack.getItem()).getUpgradeSlotLimit() :
+                IUpgradeHolder.super.getUpgradeSlotLimit(stack);
     }
 
     @Override
     @Nonnull
     public List<String> getFunctionUpgradeToolTipText(@Nonnull EnumFacing dir) {
-        //TODO: At some point it may make sense to make this use custom lang entries
-        return new NNList<>(Lang.GUI_LIQUID_FUNCTION_UPGRADE_DETAILS.get(), Lang.GUI_LIQUID_FUNCTION_UPGRADE_DETAILS2.get((int) (100 * getExtractSpeedMultiplier(dir)),
-                    LangFluid.MB((int) (GasConduitConfig.tier3_extractRate.get() * getExtractSpeedMultiplier(dir)))));
+        // TODO: At some point it may make sense to make this use custom lang entries
+        return new NNList<>(Lang.GUI_LIQUID_FUNCTION_UPGRADE_DETAILS.get(),
+                Lang.GUI_LIQUID_FUNCTION_UPGRADE_DETAILS2.get((int) (100 * getExtractSpeedMultiplier(dir)),
+                        LangFluid.MB(
+                                (int) (GasConduitConfig.tier3_extractRate.get() * getExtractSpeedMultiplier(dir)))));
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
     public <T> T getInternalCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
-        return capability == CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY || capability == CapabilityUpgradeHolder.UPGRADE_HOLDER_CAPABILITY ? (T) this : null;
+        return capability == CapabilityFilterHolder.FILTER_HOLDER_CAPABILITY ||
+                capability == CapabilityUpgradeHolder.UPGRADE_HOLDER_CAPABILITY ? (T) this : null;
     }
 
     @SuppressWarnings("unchecked")
@@ -715,7 +730,8 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
 
         @Override
         public int receiveGas(EnumFacing facing, GasStack resource, boolean doFill) {
-            return canReceiveGas(facing, resource.getGas()) ? network == null ? 0 : network.fillFrom(EnderGasConduit.this, facing, resource, doFill) : 0;
+            return canReceiveGas(facing, resource.getGas()) ?
+                    network == null ? 0 : network.fillFrom(EnderGasConduit.this, facing, resource, doFill) : 0;
         }
 
         @Override
@@ -735,7 +751,8 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
         }
 
         BoundingBox bb = ConduitGeometryUtil.getInstance().createBoundsForConnectionController(keydir, key.offset);
-        CollidableComponent cc = new CollidableComponent(IGasConduit.class, bb, keydir, IPowerConduit.COLOR_CONTROLLER_ID);
+        CollidableComponent cc = new CollidableComponent(IGasConduit.class, bb, keydir,
+                IPowerConduit.COLOR_CONTROLLER_ID);
 
         List<CollidableComponent> result = new ArrayList<>(baseCollidables);
         result.add(cc);
@@ -749,7 +766,8 @@ public class EnderGasConduit extends AbstractGasConduit implements IFilterHolder
         if (!upgradeStack.isEmpty()) {
             FunctionUpgrade upgrade = ItemFunctionUpgrade.getFunctionUpgrade(upgradeStack);
             if (upgrade == FunctionUpgrade.EXTRACT_SPEED_UPGRADE) {
-                extractSpeedMultiplier += GasConduitsConstants.GAS_MAX_EXTRACTED_SCALER * Math.min(upgrade.getMaxStackSize(), upgradeStack.getCount());
+                extractSpeedMultiplier += GasConduitsConstants.GAS_MAX_EXTRACTED_SCALER *
+                        Math.min(upgrade.getMaxStackSize(), upgradeStack.getCount());
             } else if (upgrade == FunctionUpgrade.EXTRACT_SPEED_DOWNGRADE) {
                 extractSpeedMultiplier = 1;
             }

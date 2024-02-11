@@ -4,27 +4,27 @@ import java.awt.Point;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.player.InventoryPlayer;
+
 import com.enderio.core.common.ContainerEnderCap;
 import com.enderio.core.common.inventory.EnderInventory;
 import com.enderio.core.common.inventory.EnderInventory.Type;
 import com.enderio.core.common.inventory.EnderSlot;
 
-import net.minecraft.entity.player.InventoryPlayer;
-
 public class ContainerCreativeSpawnerUser extends ContainerEnderCap<EnderInventory, TileCreativeSpawner> {
 
-  public ContainerCreativeSpawnerUser(@Nonnull InventoryPlayer playerInv, @Nonnull TileCreativeSpawner te) {
-    super(playerInv, te.getInventory(), te);
-  }
+    public ContainerCreativeSpawnerUser(@Nonnull InventoryPlayer playerInv, @Nonnull TileCreativeSpawner te) {
+        super(playerInv, te.getInventory(), te);
+    }
 
-  @Override
-  protected void addSlots() {
-    addSlotToContainer(new EnderSlot(getItemHandler().getView(Type.INPUT), TileCreativeSpawner.SLOT.OFFERING, 26, 30));
-  }
+    @Override
+    protected void addSlots() {
+        addSlotToContainer(
+                new EnderSlot(getItemHandler().getView(Type.INPUT), TileCreativeSpawner.SLOT.OFFERING, 26, 30));
+    }
 
-  @Override
-  public @Nonnull Point getPlayerInventoryOffset() {
-    return new Point(8, 84);
-  }
-
+    @Override
+    public @Nonnull Point getPlayerInventoryOffset() {
+        return new Point(8, 84);
+    }
 }

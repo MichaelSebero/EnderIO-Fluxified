@@ -5,13 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import crazypants.enderio.base.render.IBlockStateWrapper;
-import crazypants.enderio.base.render.IRenderMapper;
-import crazypants.enderio.base.render.property.EnumRenderMode;
-import crazypants.enderio.base.render.util.ItemQuadCollector;
-import crazypants.enderio.base.render.util.QuadCollector;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -23,47 +16,59 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class XPRenderMapper implements IRenderMapper.IBlockRenderMapper, IRenderMapper.IItemRenderMapper.IItemStateMapper {
+import org.apache.commons.lang3.tuple.Pair;
 
-  public static final @Nonnull XPRenderMapper instance = new XPRenderMapper();
+import crazypants.enderio.base.render.IBlockStateWrapper;
+import crazypants.enderio.base.render.IRenderMapper;
+import crazypants.enderio.base.render.property.EnumRenderMode;
+import crazypants.enderio.base.render.util.ItemQuadCollector;
+import crazypants.enderio.base.render.util.QuadCollector;
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public List<IBlockState> mapBlockRender(@Nonnull IBlockStateWrapper state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, BlockRenderLayer blockLayer,
-      @Nonnull QuadCollector quadCollector) {
-    TileEntity tileEntity = state.getTileEntity();
-    Block block = state.getBlock();
+public class XPRenderMapper implements IRenderMapper.IBlockRenderMapper,
+                            IRenderMapper.IItemRenderMapper.IItemStateMapper {
 
-    if ((tileEntity instanceof TileXPVacuum) && (block instanceof BlockXPVacuum)) {
-      return render(state.getState(), world, pos, blockLayer, (TileXPVacuum) tileEntity, (BlockXPVacuum) block);
-    }
-    return null;
-  }
+    public static final @Nonnull XPRenderMapper instance = new XPRenderMapper();
 
-  @SideOnly(Side.CLIENT)
-  protected List<IBlockState> render(IBlockState state, IBlockAccess world, BlockPos pos, BlockRenderLayer blockLayer, TileXPVacuum tileEntity,
-      BlockXPVacuum block) {
-    List<IBlockState> states = new ArrayList<IBlockState>();
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<IBlockState> mapBlockRender(@Nonnull IBlockStateWrapper state, @Nonnull IBlockAccess world,
+                                            @Nonnull BlockPos pos, BlockRenderLayer blockLayer,
+                                            @Nonnull QuadCollector quadCollector) {
+        TileEntity tileEntity = state.getTileEntity();
+        Block block = state.getBlock();
 
-    EnumFacing facing = EnumFacing.NORTH;
-
-    boolean formed = tileEntity.isFormed();
-
-    if (formed) {
-      states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT_ON.rotate(facing)));
-    } else {
-      states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT.rotate(facing)));
+        if ((tileEntity instanceof TileXPVacuum) && (block instanceof BlockXPVacuum)) {
+            return render(state.getState(), world, pos, blockLayer, (TileXPVacuum) tileEntity, (BlockXPVacuum) block);
+        }
+        return null;
     }
 
-    return states;
-  }
+    @SideOnly(Side.CLIENT)
+    protected List<IBlockState> render(IBlockState state, IBlockAccess world, BlockPos pos, BlockRenderLayer blockLayer,
+                                       TileXPVacuum tileEntity,
+                                       BlockXPVacuum block) {
+        List<IBlockState> states = new ArrayList<IBlockState>();
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public List<Pair<IBlockState, ItemStack>> mapItemRender(@Nonnull Block block, @Nonnull ItemStack stack, @Nonnull ItemQuadCollector itemQuadCollector) {
-    List<Pair<IBlockState, ItemStack>> states = new ArrayList<Pair<IBlockState, ItemStack>>();
-    states.add(Pair.of(block.getStateFromMeta(stack.getMetadata()).withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT_ON_SOUTH), stack));
-    return states;
-  }
+        EnumFacing facing = EnumFacing.NORTH;
 
+        boolean formed = tileEntity.isFormed();
+
+        if (formed) {
+            states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT_ON.rotate(facing)));
+        } else {
+            states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT.rotate(facing)));
+        }
+
+        return states;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<Pair<IBlockState, ItemStack>> mapItemRender(@Nonnull Block block, @Nonnull ItemStack stack,
+                                                            @Nonnull ItemQuadCollector itemQuadCollector) {
+        List<Pair<IBlockState, ItemStack>> states = new ArrayList<Pair<IBlockState, ItemStack>>();
+        states.add(Pair.of(block.getStateFromMeta(stack.getMetadata()).withProperty(EnumRenderMode.RENDER,
+                EnumRenderMode.FRONT_ON_SOUTH), stack));
+        return states;
+    }
 }

@@ -4,24 +4,24 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import crazypants.enderio.base.item.conduitprobe.PacketConduitProbe.IHasConduitProbeData;
 import net.minecraft.util.math.BlockPos;
+
+import crazypants.enderio.base.item.conduitprobe.PacketConduitProbe.IHasConduitProbeData;
 
 public interface ISolarPanelNetwork extends IHasConduitProbeData {
 
-  boolean isValid();
+    boolean isValid();
 
-  void extractEnergy(int maxExtract);
+    void extractEnergy(int maxExtract);
 
-  int getEnergyAvailableThisTick();
+    int getEnergyAvailableThisTick();
 
-  int getEnergyAvailablePerTick();
+    int getEnergyAvailablePerTick();
 
-  int getEnergyMaxPerTick();
+    int getEnergyMaxPerTick();
 
-  void destroyNetwork();
+    void destroyNetwork();
 
-  @Nonnull
-  Set<BlockPos> getPanels();
-
+    @Nonnull
+    Set<BlockPos> getPanels();
 }

@@ -5,9 +5,8 @@ import javax.annotation.Nullable;
 
 public interface ICacheKey {
 
-  @Nonnull
-  ICacheKey addCacheKey(@Nullable Object addlCacheKey);
+    @Nonnull
+    ICacheKey addCacheKey(@Nullable Object addlCacheKey);
 
-  long getCacheKey();
-
+    long getCacheKey();
 }

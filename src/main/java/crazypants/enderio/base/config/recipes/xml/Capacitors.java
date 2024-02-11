@@ -8,15 +8,15 @@ import crazypants.enderio.base.config.recipes.StaxFactory;
 
 public class Capacitors extends Recipes {
 
-  @Override
-  public boolean setElement(StaxFactory factory, String name, StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("capacitor".equals(name)) {
-      addRecipe(new Capacitor(), factory, startElement);
-      return true;
-    } else {
-      factory.skip(startElement);
-      return true;
+    @Override
+    public boolean setElement(StaxFactory factory, String name,
+                              StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
+        if ("capacitor".equals(name)) {
+            addRecipe(new Capacitor(), factory, startElement);
+            return true;
+        } else {
+            factory.skip(startElement);
+            return true;
+        }
     }
-  }
-
 }

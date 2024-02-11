@@ -10,43 +10,43 @@ import net.minecraft.util.math.BlockPos;
 
 public interface IInventoryDatabaseServer extends IInventoryDatabase<IServerItemEntry> {
 
-  boolean isCurrent();
+    boolean isCurrent();
 
-  void addChangeLog(IChangeLog cl);
+    void addChangeLog(IChangeLog cl);
 
-  void removeChangeLog(IChangeLog cl);
+    void removeChangeLog(IChangeLog cl);
 
-  List<? extends IServerItemEntry> decompressMissingItems(byte[] compressed) throws IOException;
+    List<? extends IServerItemEntry> decompressMissingItems(byte[] compressed) throws IOException;
 
-  byte[] compressItemInfo(List<? extends IServerItemEntry> items) throws IOException;
+    byte[] compressItemInfo(List<? extends IServerItemEntry> items) throws IOException;
 
-  byte[] compressItemList() throws IOException;
+    byte[] compressItemList() throws IOException;
 
-  byte[] compressChangedItems(Collection<? extends IServerItemEntry> items) throws IOException;
+    byte[] compressChangedItems(Collection<? extends IServerItemEntry> items) throws IOException;
 
-  void resetDatabase();
+    void resetDatabase();
 
-  int getNumInventories();
+    int getNumInventories();
 
-  boolean isOperational(IInventoryPanel te);
+    boolean isOperational(IInventoryPanel te);
 
-  int extractItems(IServerItemEntry entry, int count, @Nonnull IInventoryPanel te);
+    int extractItems(IServerItemEntry entry, int count, @Nonnull IInventoryPanel te);
 
-  void tick(IInventoryPanel te);
+    void tick(IInventoryPanel te);
 
-  void sendChangeLogs();
+    void sendChangeLogs();
 
-  /**
-   * Called when a conduit that has an awareness upgrade is notified by one of its neighbors about a TE change. This will try to find a matching inventory and
-   * mark it to be scanned for changes.
-   * 
-   * @param neighborPos
-   *          The BlockPos of the neighbor
-   */
-  void onNeighborChange(@Nonnull BlockPos neighborPos);
+    /**
+     * Called when a conduit that has an awareness upgrade is notified by one of its neighbors about a TE change. This
+     * will try to find a matching inventory and
+     * mark it to be scanned for changes.
+     * 
+     * @param neighborPos
+     *                    The BlockPos of the neighbor
+     */
+    void onNeighborChange(@Nonnull BlockPos neighborPos);
 
-  void entryChanged(IServerItemEntry entry);
+    void entryChanged(IServerItemEntry entry);
 
-  void updateNetworkSources();
-
+    void updateNetworkSources();
 }

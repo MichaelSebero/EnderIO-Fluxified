@@ -6,16 +6,13 @@ import crazypants.enderio.api.teleport.ITravelAccessable;
 
 public interface ICoordinateAware {
 
-  public interface SingleTarget extends ICoordinateAware, ITravelAccessable {
+    public interface SingleTarget extends ICoordinateAware, ITravelAccessable {
 
-    void setTarget(@Nonnull TelepadTarget target);
+        void setTarget(@Nonnull TelepadTarget target);
+    }
 
-  }
+    public interface MultipleTargets extends ICoordinateAware {
 
-  public interface MultipleTargets extends ICoordinateAware {
-
-    void addTarget(@Nonnull TelepadTarget target);
-
-  }
-
+        void addTarget(@Nonnull TelepadTarget target);
+    }
 }

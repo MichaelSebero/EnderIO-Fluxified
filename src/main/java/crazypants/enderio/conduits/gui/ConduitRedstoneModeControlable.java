@@ -13,42 +13,41 @@ import crazypants.enderio.conduits.network.PacketExtractMode;
 
 public class ConduitRedstoneModeControlable implements IRedstoneModeControlable {
 
-  private final IExtractor con;
-  private final IGuiExternalConnection gui;
-  private final ColorButton colorB;
+    private final IExtractor con;
+    private final IGuiExternalConnection gui;
+    private final ColorButton colorB;
 
-  public ConduitRedstoneModeControlable(@Nonnull IExtractor con, @Nonnull IGuiExternalConnection gui, @Nonnull ColorButton colorB) {
-    this.con = con;
-    this.gui = gui;
-    this.colorB = colorB;
-  }
-
-  @Override
-  public void setRedstoneControlMode(@Nonnull RedstoneControlMode mode) {
-    RedstoneControlMode curMode = getRedstoneControlMode();
-    con.setExtractionRedstoneMode(mode, gui.getDir());
-    colorB.onGuiInit();
-    colorB.setColorIndex(con.getExtractionSignalColor(gui.getDir()).ordinal());
-    if (mode == RedstoneControlMode.OFF || mode == RedstoneControlMode.ON) {
-      colorB.setIsVisible(true);
-    } else {
-      colorB.setIsVisible(false);
-    }
-    if (curMode != mode) {
-      PacketHandler.INSTANCE.sendToServer(new PacketExtractMode(con, gui.getDir()));
+    public ConduitRedstoneModeControlable(@Nonnull IExtractor con, @Nonnull IGuiExternalConnection gui,
+                                          @Nonnull ColorButton colorB) {
+        this.con = con;
+        this.gui = gui;
+        this.colorB = colorB;
     }
 
-  }
+    @Override
+    public void setRedstoneControlMode(@Nonnull RedstoneControlMode mode) {
+        RedstoneControlMode curMode = getRedstoneControlMode();
+        con.setExtractionRedstoneMode(mode, gui.getDir());
+        colorB.onGuiInit();
+        colorB.setColorIndex(con.getExtractionSignalColor(gui.getDir()).ordinal());
+        if (mode == RedstoneControlMode.OFF || mode == RedstoneControlMode.ON) {
+            colorB.setIsVisible(true);
+        } else {
+            colorB.setIsVisible(false);
+        }
+        if (curMode != mode) {
+            PacketHandler.INSTANCE.sendToServer(new PacketExtractMode(con, gui.getDir()));
+        }
+    }
 
-  @Override
-  @Nonnull
-  public RedstoneControlMode getRedstoneControlMode() {
-    return con.getExtractionRedstoneMode(gui.getDir());
-  }
+    @Override
+    @Nonnull
+    public RedstoneControlMode getRedstoneControlMode() {
+        return con.getExtractionRedstoneMode(gui.getDir());
+    }
 
-  @Override
-  public boolean getRedstoneControlStatus() {
-    return false;
-  }
-
+    @Override
+    public boolean getRedstoneControlStatus() {
+        return false;
+    }
 }

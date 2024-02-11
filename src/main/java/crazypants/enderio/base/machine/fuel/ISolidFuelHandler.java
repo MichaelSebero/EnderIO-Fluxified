@@ -6,24 +6,22 @@ import net.minecraft.item.ItemStack;
 
 public interface ISolidFuelHandler {
 
-  /**
-   * True if the current GUI belongs to this handler.
-   */
-  default boolean isInGUI() {
-    return false;
-  }
+    /**
+     * True if the current GUI belongs to this handler.
+     */
+    default boolean isInGUI() {
+        return false;
+    }
 
-  default int getPowerUsePerTick() {
-    return 0;
-  }
+    default int getPowerUsePerTick() {
+        return 0;
+    }
 
-  long getBurnTime(@Nonnull ItemStack itemstack);
+    long getBurnTime(@Nonnull ItemStack itemstack);
 
-  public static interface Provider {
+    public static interface Provider {
 
-    @Nonnull
-    ISolidFuelHandler getSolidFuelHandler();
-
-  }
-
+        @Nonnull
+        ISolidFuelHandler getSolidFuelHandler();
+    }
 }

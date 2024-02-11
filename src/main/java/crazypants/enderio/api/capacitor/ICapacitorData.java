@@ -4,12 +4,11 @@ import javax.annotation.Nonnull;
 
 public interface ICapacitorData {
 
-  float getUnscaledValue(@Nonnull ICapacitorKey key);
+    float getUnscaledValue(@Nonnull ICapacitorKey key);
 
-  @Nonnull
-  String getUnlocalizedName();
+    @Nonnull
+    String getUnlocalizedName();
 
-  @Nonnull
-  String getLocalizedName();
-
+    @Nonnull
+    String getLocalizedName();
 }

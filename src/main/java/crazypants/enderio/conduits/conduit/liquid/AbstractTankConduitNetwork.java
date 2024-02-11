@@ -2,74 +2,75 @@ package crazypants.enderio.conduits.conduit.liquid;
 
 import javax.annotation.Nonnull;
 
-import crazypants.enderio.conduits.conduit.AbstractConduitNetwork;
 import net.minecraftforge.fluids.FluidStack;
 
-public class AbstractTankConduitNetwork<T extends AbstractTankConduit> extends AbstractConduitNetwork<ILiquidConduit, T> {
+import crazypants.enderio.conduits.conduit.AbstractConduitNetwork;
 
-  protected FluidStack liquidType;
-  protected boolean fluidTypeLocked = false;
+public class AbstractTankConduitNetwork<T extends AbstractTankConduit>
+                                       extends AbstractConduitNetwork<ILiquidConduit, T> {
 
-  protected AbstractTankConduitNetwork(@Nonnull Class<T> cl) {
-    super(cl, ILiquidConduit.class);
-  }
+    protected FluidStack liquidType;
+    protected boolean fluidTypeLocked = false;
 
-  public FluidStack getFluidType() {
-    return liquidType;
-  }
-
-  @Override
-  public void addConduit(@Nonnull T con) {
-    super.addConduit(con);
-    con.setFluidType(liquidType);
-    if (con.fluidTypeLocked && !fluidTypeLocked) {
-      setFluidTypeLocked(true);
+    protected AbstractTankConduitNetwork(@Nonnull Class<T> cl) {
+        super(cl, ILiquidConduit.class);
     }
-  }
 
-  public boolean setFluidType(FluidStack newType) {
-    if (liquidType != null && liquidType.isFluidEqual(newType)) {
-      return false;
+    public FluidStack getFluidType() {
+        return liquidType;
     }
-    if (newType != null) {
-      liquidType = newType.copy();
-      liquidType.amount = 0;
-    } else {
-      liquidType = null;
-    }
-    for (AbstractTankConduit conduit : getConduits()) {
-      conduit.setFluidType(liquidType);
-    }
-    return true;
-  }
 
-  public void setFluidTypeLocked(boolean fluidTypeLocked) {
-    if (this.fluidTypeLocked == fluidTypeLocked) {
-      return;
+    @Override
+    public void addConduit(@Nonnull T con) {
+        super.addConduit(con);
+        con.setFluidType(liquidType);
+        if (con.fluidTypeLocked && !fluidTypeLocked) {
+            setFluidTypeLocked(true);
+        }
     }
-    this.fluidTypeLocked = fluidTypeLocked;
-    for (AbstractTankConduit conduit : getConduits()) {
-      conduit.setFluidTypeLocked(fluidTypeLocked);
+
+    public boolean setFluidType(FluidStack newType) {
+        if (liquidType != null && liquidType.isFluidEqual(newType)) {
+            return false;
+        }
+        if (newType != null) {
+            liquidType = newType.copy();
+            liquidType.amount = 0;
+        } else {
+            liquidType = null;
+        }
+        for (AbstractTankConduit conduit : getConduits()) {
+            conduit.setFluidType(liquidType);
+        }
+        return true;
     }
-  }
 
-  public boolean canAcceptLiquid(FluidStack acceptable) {
-    return areFluidsCompatable(liquidType, acceptable);
-  }
-
-  public static boolean areFluidsCompatable(FluidStack a, FluidStack b) {
-    if (a == null || b == null) {
-      return true;
+    public void setFluidTypeLocked(boolean fluidTypeLocked) {
+        if (this.fluidTypeLocked == fluidTypeLocked) {
+            return;
+        }
+        this.fluidTypeLocked = fluidTypeLocked;
+        for (AbstractTankConduit conduit : getConduits()) {
+            conduit.setFluidTypeLocked(fluidTypeLocked);
+        }
     }
-    return a.isFluidEqual(b);
-  }
 
-  public int getTotalVolume() {
-    int totalVolume = 0;
-    for (T con : getConduits()) {
-      totalVolume += con.getTank().getFluidAmount();
+    public boolean canAcceptLiquid(FluidStack acceptable) {
+        return areFluidsCompatable(liquidType, acceptable);
     }
-    return totalVolume;
-  }
 
+    public static boolean areFluidsCompatable(FluidStack a, FluidStack b) {
+        if (a == null || b == null) {
+            return true;
+        }
+        return a.isFluidEqual(b);
+    }
+
+    public int getTotalVolume() {
+        int totalVolume = 0;
+        for (T con : getConduits()) {
+            totalVolume += con.getTank().getFluidAmount();
+        }
+        return totalVolume;
+    }
 }

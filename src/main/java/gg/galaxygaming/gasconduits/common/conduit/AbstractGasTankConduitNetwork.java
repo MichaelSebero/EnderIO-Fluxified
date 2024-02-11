@@ -1,11 +1,13 @@
 package gg.galaxygaming.gasconduits.common.conduit;
 
-import crazypants.enderio.conduits.conduit.AbstractConduitNetwork;
 import javax.annotation.Nonnull;
+
+import crazypants.enderio.conduits.conduit.AbstractConduitNetwork;
 import mekanism.api.gas.Gas;
 import mekanism.api.gas.GasStack;
 
-public class AbstractGasTankConduitNetwork<T extends AbstractGasTankConduit> extends AbstractConduitNetwork<IGasConduit, T> {
+public class AbstractGasTankConduitNetwork<T extends AbstractGasTankConduit>
+                                          extends AbstractConduitNetwork<IGasConduit, T> {
 
     protected GasStack gasType;
     protected boolean gasTypeLocked = false;

@@ -4,6 +4,9 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.ProgressManager;
+
 import com.enderio.core.common.util.NNList;
 
 import crazypants.enderio.base.Log;
@@ -25,94 +28,94 @@ import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.ProgressManager;
 
 @JEIPlugin
 public class JeiPlugin implements IModPlugin {
 
-  private static IJeiRuntime jeiRuntime = null;
+    private static IJeiRuntime jeiRuntime = null;
 
-  @Override
-  public void registerItemSubtypes(@Nonnull ISubtypeRegistry subtypeRegistry) {
-    MobContainerSubtypeInterpreter.registerSubtypes(subtypeRegistry);
-    UpgradeItemSubtypeInterpreter.registerSubtypes(subtypeRegistry);
-  }
-
-  @Override
-  public void registerCategories(@Nonnull IRecipeCategoryRegistration registry) {
-    IJeiHelpers jeiHelpers = registry.getJeiHelpers();
-    IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
-
-    if (InfinityConfig.inWorldCraftingEnabled.get()) {
-      registry.addRecipeCategories(new InfinityRecipeCategory(guiHelper));
-    }
-  }
-
-  @Override
-  public void register(@Nonnull IModRegistry registry) {
-    ProgressManager.ProgressBar bar = ProgressManager.push("Ender IO", 6, true);
-
-    bar.step("Dark Steel Identities");
-    DescriptionRecipeCategory.register(registry);
-
-    bar.step("Grains of Infinity");
-    if (InfinityConfig.inWorldCraftingEnabled.get()) {
-      InfinityRecipeCategory.registerExtras(registry);
+    @Override
+    public void registerItemSubtypes(@Nonnull ISubtypeRegistry subtypeRegistry) {
+        MobContainerSubtypeInterpreter.registerSubtypes(subtypeRegistry);
+        UpgradeItemSubtypeInterpreter.registerSubtypes(subtypeRegistry);
     }
 
-    bar.step("GUI Handlers");
-    registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerEnderIO());
+    @Override
+    public void registerCategories(@Nonnull IRecipeCategoryRegistration registry) {
+        IJeiHelpers jeiHelpers = registry.getJeiHelpers();
+        IGuiHelper guiHelper = jeiHelpers.getGuiHelper();
 
-    bar.step("Ghost Handlers");
-    registry.addGhostIngredientHandler(GuiContainerBaseEIO.class, new GhostIngredientHandlerEnderIO());
-
-    bar.step("Fake Recipes");
-    if (!JeiAccessor.ALTERNATIVES.isEmpty()) {
-      // These are lookups for the outputs, the real recipes with the same input create a different oredicted variant of the output item.
-      registry.addRecipes(JeiAccessor.ALTERNATIVES, VanillaRecipeCategoryUid.CRAFTING);
-      Log.debug("Provided " + JeiAccessor.ALTERNATIVES.size() + " synthetic crafting recipes to JEI");
+        if (InfinityConfig.inWorldCraftingEnabled.get()) {
+            registry.addRecipeCategories(new InfinityRecipeCategory(guiHelper));
+        }
     }
 
-    bar.step("Hiding Items");
-    registry.getJeiHelpers().getIngredientBlacklist().addIngredientToBlacklist(new ItemStack(ModObject.itemEnderface.getItemNN()));
-    hide(registry.getJeiHelpers().getIngredientBlacklist());
+    @Override
+    public void register(@Nonnull IModRegistry registry) {
+        ProgressManager.ProgressBar bar = ProgressManager.push("Ender IO", 6, true);
 
-    ProgressManager.pop(bar);
-  }
+        bar.step("Dark Steel Identities");
+        DescriptionRecipeCategory.register(registry);
 
-  private void hide(@Nonnull IIngredientBlacklist blacklist) {
-    if (!PersonalConfig.disableHiding.get()) {
-      // Note: Need the cast for OpenJDK
-      JeiHidingRegistry.getObjectsToHide().apply((NNList.Callback<Object>) e -> {
-        blacklist.addIngredientToBlacklist(e);
-        Log.debug("Hiding ingredient in JEI: ", e);
-      });
+        bar.step("Grains of Infinity");
+        if (InfinityConfig.inWorldCraftingEnabled.get()) {
+            InfinityRecipeCategory.registerExtras(registry);
+        }
+
+        bar.step("GUI Handlers");
+        registry.addAdvancedGuiHandlers(new AdvancedGuiHandlerEnderIO());
+
+        bar.step("Ghost Handlers");
+        registry.addGhostIngredientHandler(GuiContainerBaseEIO.class, new GhostIngredientHandlerEnderIO());
+
+        bar.step("Fake Recipes");
+        if (!JeiAccessor.ALTERNATIVES.isEmpty()) {
+            // These are lookups for the outputs, the real recipes with the same input create a different oredicted
+            // variant of the output item.
+            registry.addRecipes(JeiAccessor.ALTERNATIVES, VanillaRecipeCategoryUid.CRAFTING);
+            Log.debug("Provided " + JeiAccessor.ALTERNATIVES.size() + " synthetic crafting recipes to JEI");
+        }
+
+        bar.step("Hiding Items");
+        registry.getJeiHelpers().getIngredientBlacklist()
+                .addIngredientToBlacklist(new ItemStack(ModObject.itemEnderface.getItemNN()));
+        hide(registry.getJeiHelpers().getIngredientBlacklist());
+
+        ProgressManager.pop(bar);
     }
-  }
 
-  @Override
-  public void onRuntimeAvailable(@Nonnull IJeiRuntime jeiRuntimeIn) {
-    JeiPlugin.jeiRuntime = jeiRuntimeIn;
-    JeiAccessor.jeiRuntimeAvailable = true;
-  }
+    private void hide(@Nonnull IIngredientBlacklist blacklist) {
+        if (!PersonalConfig.disableHiding.get()) {
+            // Note: Need the cast for OpenJDK
+            JeiHidingRegistry.getObjectsToHide().apply((NNList.Callback<Object>) e -> {
+                blacklist.addIngredientToBlacklist(e);
+                Log.debug("Hiding ingredient in JEI: ", e);
+            });
+        }
+    }
 
-  public static void setFilterText(@Nonnull String filterText) {
-    jeiRuntime.getIngredientFilter().setFilterText(filterText);
-  }
+    @Override
+    public void onRuntimeAvailable(@Nonnull IJeiRuntime jeiRuntimeIn) {
+        JeiPlugin.jeiRuntime = jeiRuntimeIn;
+        JeiAccessor.jeiRuntimeAvailable = true;
+    }
 
-  public static @Nonnull String getFilterText() {
-    return jeiRuntime.getIngredientFilter().getFilterText();
-  }
+    public static void setFilterText(@Nonnull String filterText) {
+        jeiRuntime.getIngredientFilter().setFilterText(filterText);
+    }
 
-  public static void showCraftingRecipes() {
-    jeiRuntime.getRecipesGui().showCategories(new NNList<>(VanillaRecipeCategoryUid.CRAFTING));
-  }
+    public static @Nonnull String getFilterText() {
+        return jeiRuntime.getIngredientFilter().getFilterText();
+    }
 
-  @Override
-  public void registerIngredients(@Nonnull IModIngredientRegistration ingredientRegistration) {
-    ingredientRegistration.register(EnergyIngredient.ENERGY, Collections.singletonList(new EnergyIngredient()), new EnergyIngredientHelper(),
-        EnergyIngredientRenderer.INSTANCE);
-  }
+    public static void showCraftingRecipes() {
+        jeiRuntime.getRecipesGui().showCategories(new NNList<>(VanillaRecipeCategoryUid.CRAFTING));
+    }
 
+    @Override
+    public void registerIngredients(@Nonnull IModIngredientRegistration ingredientRegistration) {
+        ingredientRegistration.register(EnergyIngredient.ENERGY, Collections.singletonList(new EnergyIngredient()),
+                new EnergyIngredientHelper(),
+                EnergyIngredientRenderer.INSTANCE);
+    }
 }

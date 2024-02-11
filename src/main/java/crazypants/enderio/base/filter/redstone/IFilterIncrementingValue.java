@@ -4,14 +4,13 @@ import javax.annotation.Nonnull;
 
 public interface IFilterIncrementingValue {
 
-  int getIncrementingValue();
+    int getIncrementingValue();
 
-  void setIncrementingValue(int value);
+    void setIncrementingValue(int value);
 
-  @Nonnull
-  String getFilterHeading();
+    @Nonnull
+    String getFilterHeading();
 
-  @Nonnull
-  String getIncrementingValueName();
-
+    @Nonnull
+    String getIncrementingValueName();
 }

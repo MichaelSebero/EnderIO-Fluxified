@@ -8,34 +8,33 @@ import net.minecraft.item.EnumDyeColor;
 
 public interface IFusedBlockstate {
 
-  static @Nonnull IFusedBlockstate get(@Nonnull IBlockState state) {
-    return ((BlockFusedQuartzBase<?>) state.getBlock()).getFusedBlockstate(state);
-  }
+    static @Nonnull IFusedBlockstate get(@Nonnull IBlockState state) {
+        return ((BlockFusedQuartzBase<?>) state.getBlock()).getFusedBlockstate(state);
+    }
 
-  @Nonnull
-  EnumDyeColor getColor();
+    @Nonnull
+    EnumDyeColor getColor();
 
-  @Nonnull
-  FusedQuartzType getType();
+    @Nonnull
+    FusedQuartzType getType();
 
-  default boolean isEnlightened() {
-    return getType().isEnlightened();
-  }
+    default boolean isEnlightened() {
+        return getType().isEnlightened();
+    }
 
-  default boolean isDarkened() {
-    return getType().isDarkened();
-  }
+    default boolean isDarkened() {
+        return getType().isDarkened();
+    }
 
-  default boolean isBlastResistant() {
-    return getType().isBlastResistant();
-  }
+    default boolean isBlastResistant() {
+        return getType().isBlastResistant();
+    }
 
-  default int getLightOpacity() {
-    return getType().getLightOpacity();
-  }
+    default int getLightOpacity() {
+        return getType().getLightOpacity();
+    }
 
-  default boolean canPass(@Nonnull Entity entity) {
-    return getType().canPass(entity);
-  }
-
+    default boolean canPass(@Nonnull Entity entity) {
+        return getType().canPass(entity);
+    }
 }

@@ -11,21 +11,18 @@ import mezz.jei.api.gui.IGhostIngredientHandler;
 
 public class GhostIngredientHandlerEnderIO implements IGhostIngredientHandler<GuiContainerBaseEIO> {
 
-  public GhostIngredientHandlerEnderIO() {
-  }
+    public GhostIngredientHandlerEnderIO() {}
 
-  @SuppressWarnings("unchecked")
-  @Override
-  @Nonnull
-  public <I> List<Target<I>> getTargets(@Nonnull GuiContainerBaseEIO gui, @Nonnull I ingredient, boolean doStart) {
-    if (gui instanceof IHaveGhostTargets<?>) {
-      return (List<Target<I>>) ((IHaveGhostTargets<?>) gui).getGhostTargets();
+    @SuppressWarnings("unchecked")
+    @Override
+    @Nonnull
+    public <I> List<Target<I>> getTargets(@Nonnull GuiContainerBaseEIO gui, @Nonnull I ingredient, boolean doStart) {
+        if (gui instanceof IHaveGhostTargets<?>) {
+            return (List<Target<I>>) ((IHaveGhostTargets<?>) gui).getGhostTargets();
+        }
+        return NNList.emptyList();
     }
-    return NNList.emptyList();
-  }
 
-  @Override
-  public void onComplete() {
-  }
-
+    @Override
+    public void onComplete() {}
 }

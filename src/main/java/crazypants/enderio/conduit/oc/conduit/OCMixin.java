@@ -1,5 +1,9 @@
 package crazypants.enderio.conduit.oc.conduit;
 
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import com.enderio.core.common.mixin.SimpleMixin;
 
 import crazypants.enderio.base.conduit.IConduitBundle;
@@ -8,69 +12,66 @@ import li.cil.oc.api.network.Environment;
 import li.cil.oc.api.network.Message;
 import li.cil.oc.api.network.Node;
 import li.cil.oc.api.network.SidedEnvironment;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SimpleMixin(value = TileConduitBundle.class, dependencies = "opencomputersapi|network")
 public interface OCMixin extends IConduitBundle, Environment, SidedEnvironment {
-  
-  // == Environment == //
 
-  @Override
-  default Node node() {
-    IOCConduit cond = getConduit(IOCConduit.class);
-    if (cond != null) {
-      return cond.node();
-    } else {
-      return null;
-    }
-  }
+    // == Environment == //
 
-  @Override
-  default void onConnect(Node node) {
-    IOCConduit cond = getConduit(IOCConduit.class);
-    if (cond != null) {
-      cond.onConnect(node);
+    @Override
+    default Node node() {
+        IOCConduit cond = getConduit(IOCConduit.class);
+        if (cond != null) {
+            return cond.node();
+        } else {
+            return null;
+        }
     }
-  }
 
-  @Override
-  default void onDisconnect(Node node) {
-    IOCConduit cond = getConduit(IOCConduit.class);
-    if (cond != null) {
-      cond.onDisconnect(node);
+    @Override
+    default void onConnect(Node node) {
+        IOCConduit cond = getConduit(IOCConduit.class);
+        if (cond != null) {
+            cond.onConnect(node);
+        }
     }
-  }
 
-  @Override
-  default void onMessage(Message message) {
-    IOCConduit cond = getConduit(IOCConduit.class);
-    if (cond != null) {
-      cond.onMessage(message);
+    @Override
+    default void onDisconnect(Node node) {
+        IOCConduit cond = getConduit(IOCConduit.class);
+        if (cond != null) {
+            cond.onDisconnect(node);
+        }
     }
-  }
-  
-  // == SidedEnvironment == //
 
-  @Override
-  default Node sidedNode(EnumFacing side) {
-    IOCConduit cond = getConduit(IOCConduit.class);
-    if (cond != null) {
-      return cond.sidedNode(side);
-    } else {
-      return null;
+    @Override
+    default void onMessage(Message message) {
+        IOCConduit cond = getConduit(IOCConduit.class);
+        if (cond != null) {
+            cond.onMessage(message);
+        }
     }
-  }
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  default boolean canConnect(EnumFacing side) {
-    IOCConduit cond = getConduit(IOCConduit.class);
-    if (cond != null) {
-      return cond.canConnect(side);
-    } else {
-      return false;
+    // == SidedEnvironment == //
+
+    @Override
+    default Node sidedNode(EnumFacing side) {
+        IOCConduit cond = getConduit(IOCConduit.class);
+        if (cond != null) {
+            return cond.sidedNode(side);
+        } else {
+            return null;
+        }
     }
-  }  
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    default boolean canConnect(EnumFacing side) {
+        IOCConduit cond = getConduit(IOCConduit.class);
+        if (cond != null) {
+            return cond.canConnect(side);
+        } else {
+            return false;
+        }
+    }
 }

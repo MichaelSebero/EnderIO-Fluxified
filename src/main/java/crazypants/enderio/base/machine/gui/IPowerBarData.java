@@ -6,17 +6,16 @@ import crazypants.enderio.api.capacitor.ICapacitorData;
 
 public interface IPowerBarData {
 
-  int getMaxEnergyStored();
+    int getMaxEnergyStored();
 
-  @Nonnull
-  ICapacitorData getCapacitorData();
+    @Nonnull
+    ICapacitorData getCapacitorData();
 
-  int getEnergyStored();
+    int getEnergyStored();
 
-  int getMaxUsage();
+    int getMaxUsage();
 
-  default float getPowerLossPerTick() {
-    return 0;
-  }
-
+    default float getPowerLossPerTick() {
+        return 0;
+    }
 }

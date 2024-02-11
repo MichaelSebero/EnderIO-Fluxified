@@ -1,10 +1,12 @@
 package gg.galaxygaming.gasconduits.common.filter;
 
-import crazypants.enderio.base.filter.IFilter;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import mekanism.api.gas.GasStack;
+
 import net.minecraft.item.ItemStack;
+
+import crazypants.enderio.base.filter.IFilter;
+import mekanism.api.gas.GasStack;
 
 public interface IGasFilter extends IFilter {
 

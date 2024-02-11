@@ -11,12 +11,14 @@ import info.loenwind.autosave.annotations.Storable;
 @Storable
 public abstract class AbstractCapabilityGeneratorEntity extends AbstractCapabilityMachineEntity {
 
-  protected AbstractCapabilityGeneratorEntity(EnderInventory subclassInventory, @Nonnull ICapacitorKey maxEnergyStored, @Nonnull ICapacitorKey maxEnergyUsed) {
-    super(subclassInventory, CapacitorKey.NO_POWER, maxEnergyStored, maxEnergyUsed);
-  }
+    protected AbstractCapabilityGeneratorEntity(EnderInventory subclassInventory,
+                                                @Nonnull ICapacitorKey maxEnergyStored,
+                                                @Nonnull ICapacitorKey maxEnergyUsed) {
+        super(subclassInventory, CapacitorKey.NO_POWER, maxEnergyStored, maxEnergyUsed);
+    }
 
-  protected AbstractCapabilityGeneratorEntity(@Nonnull ICapacitorKey maxEnergyStored, @Nonnull ICapacitorKey maxEnergyUsed) {
-    super(CapacitorKey.NO_POWER, maxEnergyStored, maxEnergyUsed);
-  }
-
+    protected AbstractCapabilityGeneratorEntity(@Nonnull ICapacitorKey maxEnergyStored,
+                                                @Nonnull ICapacitorKey maxEnergyUsed) {
+        super(CapacitorKey.NO_POWER, maxEnergyStored, maxEnergyUsed);
+    }
 }

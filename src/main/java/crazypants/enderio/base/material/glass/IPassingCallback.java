@@ -5,10 +5,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.enderio.core.api.client.render.IWidgetIcon;
-
-import crazypants.enderio.base.gui.IconEIO;
-import crazypants.enderio.base.lang.Lang;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.IMob;
@@ -19,181 +15,183 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import com.enderio.core.api.client.render.IWidgetIcon;
+
+import crazypants.enderio.base.gui.IconEIO;
+import crazypants.enderio.base.lang.Lang;
+
 public interface IPassingCallback {
 
-  boolean canPass(@Nonnull Entity entity);
+    boolean canPass(@Nonnull Entity entity);
 
-  @SideOnly(Side.CLIENT)
-  default void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-
-  }
-
-  default @Nullable IWidgetIcon getIcon1() {
-    return null;
-  }
-
-  default @Nullable IWidgetIcon getIcon2() {
-    return null;
-  }
-
-  @Nonnull
-  IPassingCallback NONE = new IPassingCallback() {
-
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return false;
-    }
-
-  };
-
-  @Nonnull
-  IPassingCallback PLAYER = new IPassingCallback() {
-
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return entity instanceof EntityPlayer;
-    }
-
-    @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-      tooltip.add(Lang.BLOCK_ALLOW_PLAYERS.get());
+    default void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                @Nonnull ITooltipFlag flagIn) {}
+
+    default @Nullable IWidgetIcon getIcon1() {
+        return null;
     }
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon1() {
-      return IconEIO.GLASS_PLAYER;
+    default @Nullable IWidgetIcon getIcon2() {
+        return null;
     }
 
-  };
+    @Nonnull
+    IPassingCallback NONE = new IPassingCallback() {
 
-  @Nonnull
-  IPassingCallback MOB = new IPassingCallback() {
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return false;
+        }
+    };
 
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return entity instanceof IMob;
-    }
+    @Nonnull
+    IPassingCallback PLAYER = new IPassingCallback() {
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-      tooltip.add(Lang.BLOCK_ALLOW_MONSTERS.get());
-    }
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return entity instanceof EntityPlayer;
+        }
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon1() {
-      return IconEIO.GLASS_MONSTER;
-    }
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                   @Nonnull ITooltipFlag flagIn) {
+            tooltip.add(Lang.BLOCK_ALLOW_PLAYERS.get());
+        }
 
-  };
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon1() {
+            return IconEIO.GLASS_PLAYER;
+        }
+    };
 
-  @Nonnull
-  IPassingCallback ANIMAL = new IPassingCallback() {
+    @Nonnull
+    IPassingCallback MOB = new IPassingCallback() {
 
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return (entity instanceof IAnimals) && !(entity instanceof IMob);
-    }
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return entity instanceof IMob;
+        }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-      tooltip.add(Lang.BLOCK_ALLOW_ANIMALS.get());
-    }
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                   @Nonnull ITooltipFlag flagIn) {
+            tooltip.add(Lang.BLOCK_ALLOW_MONSTERS.get());
+        }
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon1() {
-      return IconEIO.GLASS_ANIMAL;
-    }
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon1() {
+            return IconEIO.GLASS_MONSTER;
+        }
+    };
 
-  };
+    @Nonnull
+    IPassingCallback ANIMAL = new IPassingCallback() {
 
-  @Nonnull
-  IPassingCallback NON_PLAYER = new IPassingCallback() {
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return (entity instanceof IAnimals) && !(entity instanceof IMob);
+        }
 
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return !(entity instanceof EntityPlayer);
-    }
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                   @Nonnull ITooltipFlag flagIn) {
+            tooltip.add(Lang.BLOCK_ALLOW_ANIMALS.get());
+        }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-      tooltip.add(Lang.BLOCK_DISALLOW_PLAYERS.get());
-    }
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon1() {
+            return IconEIO.GLASS_ANIMAL;
+        }
+    };
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon1() {
-      return IconEIO.GLASS_PLAYER;
-    }
+    @Nonnull
+    IPassingCallback NON_PLAYER = new IPassingCallback() {
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon2() {
-      return IconEIO.GLASS_NOT;
-    }
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return !(entity instanceof EntityPlayer);
+        }
 
-  };
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                   @Nonnull ITooltipFlag flagIn) {
+            tooltip.add(Lang.BLOCK_DISALLOW_PLAYERS.get());
+        }
 
-  @Nonnull
-  IPassingCallback NON_MOB = new IPassingCallback() {
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon1() {
+            return IconEIO.GLASS_PLAYER;
+        }
 
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return !(entity instanceof IMob);
-    }
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon2() {
+            return IconEIO.GLASS_NOT;
+        }
+    };
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-      tooltip.add(Lang.BLOCK_DISALLOW_MONSTERS.get());
-    }
+    @Nonnull
+    IPassingCallback NON_MOB = new IPassingCallback() {
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon1() {
-      return IconEIO.GLASS_MONSTER;
-    }
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return !(entity instanceof IMob);
+        }
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon2() {
-      return IconEIO.GLASS_NOT;
-    }
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                   @Nonnull ITooltipFlag flagIn) {
+            tooltip.add(Lang.BLOCK_DISALLOW_MONSTERS.get());
+        }
 
-  };
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon1() {
+            return IconEIO.GLASS_MONSTER;
+        }
 
-  @Nonnull
-  IPassingCallback NON_ANIMAL = new IPassingCallback() {
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon2() {
+            return IconEIO.GLASS_NOT;
+        }
+    };
 
-    @Override
-    public boolean canPass(@Nonnull Entity entity) {
-      return !((entity instanceof IAnimals) && !(entity instanceof IMob));
-    }
+    @Nonnull
+    IPassingCallback NON_ANIMAL = new IPassingCallback() {
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip, @Nonnull ITooltipFlag flagIn) {
-      tooltip.add(Lang.BLOCK_DISALLOW_ANIMALS.get());
-    }
+        @Override
+        public boolean canPass(@Nonnull Entity entity) {
+            return !((entity instanceof IAnimals) && !(entity instanceof IMob));
+        }
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon1() {
-      return IconEIO.GLASS_ANIMAL;
-    }
+        @Override
+        @SideOnly(Side.CLIENT)
+        public void addInformation(@Nonnull ItemStack stack, @Nullable World worldIn, @Nonnull List<String> tooltip,
+                                   @Nonnull ITooltipFlag flagIn) {
+            tooltip.add(Lang.BLOCK_DISALLOW_ANIMALS.get());
+        }
 
-    @Override
-    @Nullable
-    public IWidgetIcon getIcon2() {
-      return IconEIO.GLASS_NOT;
-    }
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon1() {
+            return IconEIO.GLASS_ANIMAL;
+        }
 
-  };
-
+        @Override
+        @Nullable
+        public IWidgetIcon getIcon2() {
+            return IconEIO.GLASS_NOT;
+        }
+    };
 }

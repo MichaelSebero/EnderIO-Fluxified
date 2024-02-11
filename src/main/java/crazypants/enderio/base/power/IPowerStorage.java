@@ -12,41 +12,41 @@ import net.minecraft.util.EnumFacing;
  */
 public interface IPowerStorage {
 
-  @Nullable
-  IPowerStorage getController();
+    @Nullable
+    IPowerStorage getController();
 
-  long getEnergyStoredL();
+    long getEnergyStoredL();
 
-  long getMaxEnergyStoredL();
+    long getMaxEnergyStoredL();
 
-  /**
-   * If false this connection will be treated the same a regular powered block. No power will be drawn over the connection and it will not be used to balance
-   * capacitor bank levels
-   * 
-   * @param direction
-   * @return
-   */
-  boolean isNetworkControlledIo(@Nonnull EnumFacing direction);
+    /**
+     * If false this connection will be treated the same a regular powered block. No power will be drawn over the
+     * connection and it will not be used to balance
+     * capacitor bank levels
+     * 
+     * @param direction
+     * @return
+     */
+    boolean isNetworkControlledIo(@Nonnull EnumFacing direction);
 
-  boolean isOutputEnabled(@Nonnull EnumFacing direction);
+    boolean isOutputEnabled(@Nonnull EnumFacing direction);
 
-  boolean isInputEnabled(@Nonnull EnumFacing direction);
+    boolean isInputEnabled(@Nonnull EnumFacing direction);
 
-  int getMaxOutput();
+    int getMaxOutput();
 
-  int getMaxInput();
+    int getMaxInput();
 
-  int getAverageIOPerTick();
+    int getAverageIOPerTick();
 
-  /**
-   * Adds energy to the cap bank's storage
-   * 
-   * @param amount
-   *          to add
-   * @return amount remaining (not added)
-   */
-  int addEnergy(int amount);
+    /**
+     * Adds energy to the cap bank's storage
+     * 
+     * @param amount
+     *               to add
+     * @return amount remaining (not added)
+     */
+    int addEnergy(int amount);
 
-  boolean isCreative();
-
+    boolean isCreative();
 }

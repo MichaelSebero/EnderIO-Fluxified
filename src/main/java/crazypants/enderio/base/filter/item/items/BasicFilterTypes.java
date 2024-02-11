@@ -4,60 +4,62 @@ import java.util.Locale;
 
 import javax.annotation.Nonnull;
 
-import crazypants.enderio.base.init.ModObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 
+import crazypants.enderio.base.init.ModObject;
+
 public enum BasicFilterTypes implements IStringSerializable {
-  filterUpgradeBasic("basic", false, 5, false, false),
-  filterUpgradeAdvanced("advanced", true, 10, false, false),
-  filterUpgradeLimited("limited", true, 10, true, false),
-  filterUpgradeBig("big", false, 36, false, true),
-  filterUpgradeBigAdvanced("big_advanced", true, 36, false, true),
 
-  ;
+    filterUpgradeBasic("basic", false, 5, false, false),
+    filterUpgradeAdvanced("advanced", true, 10, false, false),
+    filterUpgradeLimited("limited", true, 10, true, false),
+    filterUpgradeBig("big", false, 36, false, true),
+    filterUpgradeBigAdvanced("big_advanced", true, 36, false, true),
 
-  private final @Nonnull String baseName;
-  private final boolean isAdvanced;
-  private final int slots;
-  private final boolean isLimited;
-  private final boolean isBig;
+    ;
 
-  private BasicFilterTypes(@Nonnull String baseName, boolean isAdvanced, int slots, boolean isLimited, boolean isBig) {
-    this.baseName = name().replaceAll("([A-Z])", "_$0").toLowerCase(Locale.ENGLISH);
-    this.isAdvanced = isAdvanced;
-    this.slots = slots;
-    this.isLimited = isLimited;
-    this.isBig = isBig;
-  }
+    private final @Nonnull String baseName;
+    private final boolean isAdvanced;
+    private final int slots;
+    private final boolean isLimited;
+    private final boolean isBig;
 
-  public @Nonnull String getBaseName() {
-    return baseName;
-  }
+    private BasicFilterTypes(@Nonnull String baseName, boolean isAdvanced, int slots, boolean isLimited,
+                             boolean isBig) {
+        this.baseName = name().replaceAll("([A-Z])", "_$0").toLowerCase(Locale.ENGLISH);
+        this.isAdvanced = isAdvanced;
+        this.slots = slots;
+        this.isLimited = isLimited;
+        this.isBig = isBig;
+    }
 
-  public @Nonnull ItemStack getBasicFilterStack() {
-    return new ItemStack(ModObject.itemBasicItemFilter.getItemNN(), 1);
-  }
+    public @Nonnull String getBaseName() {
+        return baseName;
+    }
 
-  @Override
-  public @Nonnull String getName() {
-    return baseName;
-  }
+    public @Nonnull ItemStack getBasicFilterStack() {
+        return new ItemStack(ModObject.itemBasicItemFilter.getItemNN(), 1);
+    }
 
-  public boolean isAdvanced() {
-    return isAdvanced;
-  }
+    @Override
+    public @Nonnull String getName() {
+        return baseName;
+    }
 
-  public int getSlots() {
-    return slots;
-  }
+    public boolean isAdvanced() {
+        return isAdvanced;
+    }
 
-  public boolean isLimited() {
-    return isLimited;
-  }
+    public int getSlots() {
+        return slots;
+    }
 
-  public boolean isBig() {
-    return isBig;
-  }
+    public boolean isLimited() {
+        return isLimited;
+    }
 
+    public boolean isBig() {
+        return isBig;
+    }
 }

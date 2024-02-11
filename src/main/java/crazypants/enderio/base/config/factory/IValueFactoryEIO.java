@@ -9,11 +9,10 @@ import info.loenwind.autoconfig.factory.IValueFactory;
 
 public interface IValueFactoryEIO extends IValueFactory {
 
-  @Nonnull
-  IValue<Things> make(@Nonnull String keyname, @Nonnull Things defaultValue, @Nonnull String text);
+    @Nonnull
+    IValue<Things> make(@Nonnull String keyname, @Nonnull Things defaultValue, @Nonnull String text);
 
-  @Override
-  @Nonnull
-  IValueFactoryEIO section(@Nonnull String section);
-
+    @Override
+    @Nonnull
+    IValueFactoryEIO section(@Nonnull String section);
 }

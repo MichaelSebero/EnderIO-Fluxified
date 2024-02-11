@@ -21,182 +21,186 @@ import info.loenwind.autoconfig.util.NullHelper;
 
 public class Recipe extends AbstractConditional {
 
-  private Optional<String> name = empty();
+    private Optional<String> name = empty();
 
-  private boolean required;
+    private boolean required;
 
-  private boolean disabled;
+    private boolean disabled;
 
-  private final NNList<AbstractConditional> craftings = new NNList<AbstractConditional>();
+    private final NNList<AbstractConditional> craftings = new NNList<AbstractConditional>();
 
-  private Optional<String> levelName = empty();
-  private Optional<RecipeLevel> level = empty();
+    private Optional<String> levelName = empty();
+    private Optional<RecipeLevel> level = empty();
 
-  private volatile @Nullable AbstractConditional registered = null;
+    private volatile @Nullable AbstractConditional registered = null;
 
-  @Override
-  public Object readResolve() throws InvalidRecipeConfigException {
-    if (disabled) {
-      return this;
-    }
-    try {
-      super.readResolve();
-      if (craftings.isEmpty()) {
-        throw new InvalidRecipeConfigException("No recipe elements");
-      }
-      if (levelName.isPresent()) {
-        level = ofNullable(RecipeLevel.valueOf(get(levelName)));
-        if (!level.isPresent()) {
-          throw new InvalidRecipeConfigException("'level' '" + levelName.get() + "' is invalid");
+    @Override
+    public Object readResolve() throws InvalidRecipeConfigException {
+        if (disabled) {
+            return this;
         }
-      }
-    } catch (InvalidRecipeConfigException e) {
-      throw new InvalidRecipeConfigException(e, "in <recipe> '" + getName() + "'");
-    }
-    return this;
-  }
-
-  @Override
-  public void enforceValidity() throws InvalidRecipeConfigException {
-    if (disabled || !active) {
-      return;
-    }
-    try {
-      int count = 0;
-      for (AbstractConditional crafting : craftings) {
-        if (required) {
-          if (crafting.isActive()) {
-            crafting.enforceValidity();
-            if (crafting.isValid()) {
-              count++;
+        try {
+            super.readResolve();
+            if (craftings.isEmpty()) {
+                throw new InvalidRecipeConfigException("No recipe elements");
             }
-          }
+            if (levelName.isPresent()) {
+                level = ofNullable(RecipeLevel.valueOf(get(levelName)));
+                if (!level.isPresent()) {
+                    throw new InvalidRecipeConfigException("'level' '" + levelName.get() + "' is invalid");
+                }
+            }
+        } catch (InvalidRecipeConfigException e) {
+            throw new InvalidRecipeConfigException(e, "in <recipe> '" + getName() + "'");
+        }
+        return this;
+    }
+
+    @Override
+    public void enforceValidity() throws InvalidRecipeConfigException {
+        if (disabled || !active) {
+            return;
+        }
+        try {
+            int count = 0;
+            for (AbstractConditional crafting : craftings) {
+                if (required) {
+                    if (crafting.isActive()) {
+                        crafting.enforceValidity();
+                        if (crafting.isValid()) {
+                            count++;
+                        }
+                    }
+                } else {
+                    if (crafting.isActive() && crafting.isValid()) {
+                        count++;
+                    }
+                }
+            }
+            if (count > 1) {
+                throw new InvalidRecipeConfigException("Multiple active recipe elements");
+            } else if (count < 1) {
+                if (required) {
+                    throw new InvalidRecipeConfigException("No valid recipe elements");
+                } else {
+                    valid = false;
+                }
+            } else {
+                valid = true;
+            }
+        } catch (InvalidRecipeConfigException e) {
+            throw new InvalidRecipeConfigException(e, "in <recipe> '" + getName() + "'");
+        }
+    }
+
+    @Override
+    public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
+        if (!disabled && valid && active) {
+            Log.debug("Registering XML recipe '" + getName() + "'");
+            for (AbstractConditional crafting : craftings) {
+                if (crafting.isValid() && crafting.isActive()) {
+                    crafting.register(recipeName, level.isPresent() ? get(level) : recipeLevel);
+                    registered = crafting;
+                    return;
+                }
+            }
         } else {
-          if (crafting.isActive() && crafting.isValid()) {
-            count++;
-          }
+            Log.debug("Skipping XML recipe '" + getName() + "' (valid=" + valid + ", active=" + active + ", required=" +
+                    required + ", disabled=" + disabled + ")");
         }
-      }
-      if (count > 1) {
-        throw new InvalidRecipeConfigException("Multiple active recipe elements");
-      } else if (count < 1) {
-        if (required) {
-          throw new InvalidRecipeConfigException("No valid recipe elements");
-        } else {
-          valid = false;
+    }
+
+    @Override
+    public void unregister() {
+        Log.debug("Unregistering XML recipe '" + getName() + "'");
+        FuncUtil.doIf(registered, AbstractConditional::unregister);
+        registered = null;
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public @Nonnull String getName() {
+        return name.orElse("unnamed recipe");
+    }
+
+    @Override
+    public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException,
+                                                                                XMLStreamException {
+        if ("name".equals(name)) {
+            this.name = ofString(value);
+            return true;
         }
-      } else {
-        valid = true;
-      }
-    } catch (InvalidRecipeConfigException e) {
-      throw new InvalidRecipeConfigException(e, "in <recipe> '" + getName() + "'");
-    }
-  }
-
-  @Override
-  public void register(@Nonnull String recipeName, @Nonnull RecipeLevel recipeLevel) {
-    if (!disabled && valid && active) {
-      Log.debug("Registering XML recipe '" + getName() + "'");
-      for (AbstractConditional crafting : craftings) {
-        if (crafting.isValid() && crafting.isActive()) {
-          crafting.register(recipeName, level.isPresent() ? get(level) : recipeLevel);
-          registered = crafting;
-          return;
+        if ("required".equals(name)) {
+            this.required = Boolean.parseBoolean(value);
+            return true;
         }
-      }
-    } else {
-      Log.debug("Skipping XML recipe '" + getName() + "' (valid=" + valid + ", active=" + active + ", required=" + required + ", disabled=" + disabled + ")");
-    }
-  }
+        if ("disabled".equals(name)) {
+            this.disabled = Boolean.parseBoolean(value);
+            return true;
+        }
+        if ("level".equals(name)) {
+            this.levelName = ofString(value);
+            return true;
+        }
 
-  @Override
-  public void unregister() {
-    Log.debug("Unregistering XML recipe '" + getName() + "'");
-    FuncUtil.doIf(registered, AbstractConditional::unregister);
-    registered = null;
-  }
-
-  @SuppressWarnings("null")
-  @Override
-  public @Nonnull String getName() {
-    return name.orElse("unnamed recipe");
-  }
-
-  @Override
-  public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("name".equals(name)) {
-      this.name = ofString(value);
-      return true;
-    }
-    if ("required".equals(name)) {
-      this.required = Boolean.parseBoolean(value);
-      return true;
-    }
-    if ("disabled".equals(name)) {
-      this.disabled = Boolean.parseBoolean(value);
-      return true;
-    }
-    if ("level".equals(name)) {
-      this.levelName = ofString(value);
-      return true;
+        return super.setAttribute(factory, name, value);
     }
 
-    return super.setAttribute(factory, name, value);
-  }
+    @Override
+    public boolean setElement(StaxFactory factory, String name,
+                              StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
+        try {
+            AbstractConditional element = get(NullHelper.first(name, ""));
+            if (element != null) {
+                craftings.add(factory.read(element, startElement));
+                return true;
+            }
+        } catch (InvalidRecipeConfigException e) {
+            throw new InvalidRecipeConfigException(e, "in <" + name + "> in <recipe name=\"" + getName() + "\"");
+        }
 
-  @Override
-  public boolean setElement(StaxFactory factory, String name, StartElement startElement) throws InvalidRecipeConfigException, XMLStreamException {
-    try {
-      AbstractConditional element = get(NullHelper.first(name, ""));
-      if (element != null) {
-        craftings.add(factory.read(element, startElement));
-        return true;
-      }
-    } catch (InvalidRecipeConfigException e) {
-      throw new InvalidRecipeConfigException(e, "in <" + name + "> in <recipe name=\"" + getName() + "\"");
+        return super.setElement(factory, name, startElement);
     }
 
-    return super.setElement(factory, name, startElement);
-  }
-
-  @Override
-  public boolean isValid() {
-    return disabled || super.isValid();
-  }
-
-  @Override
-  public boolean isActive() {
-    return !disabled && super.isActive();
-  }
-
-  private static final Map<String, Class<? extends AbstractConditional>> MAPPING = new HashMap<>();
-
-  static {
-    register(Alloying.class, Casting.class, Crafting.class, Brewing.class, Enchanting.class, Fermenting.class, Sagmilling.class, Slicing.class, Smelting.class,
-        Soulbinding.class, Spawning.class, Tanking.class, Hiding.class, Fuel.class, Coolant.class, Disabled.class);
-  }
-
-  public static void register(String tagname, Class<? extends AbstractConditional> clazz) {
-    MAPPING.put(tagname, clazz);
-  }
-
-  @SafeVarargs
-  public static void register(Class<? extends AbstractConditional>... clazzes) {
-    for (Class<? extends AbstractConditional> clazz : clazzes) {
-      MAPPING.put(clazz.getSimpleName().toLowerCase(Locale.ENGLISH), clazz);
+    @Override
+    public boolean isValid() {
+        return disabled || super.isValid();
     }
-  }
 
-  public static @Nullable AbstractConditional get(String tagname) {
-    Class<? extends AbstractConditional> clazz = MAPPING.get(tagname);
-    if (clazz != null) {
-      try {
-        return NullHelper.notnullJ(clazz.newInstance(), "Class.newInstance()");
-      } catch (InstantiationException | IllegalAccessException e) {
-        throw new RuntimeException(e);
-      }
+    @Override
+    public boolean isActive() {
+        return !disabled && super.isActive();
     }
-    return null;
-  }
 
+    private static final Map<String, Class<? extends AbstractConditional>> MAPPING = new HashMap<>();
+
+    static {
+        register(Alloying.class, Casting.class, Crafting.class, Brewing.class, Enchanting.class, Fermenting.class,
+                Sagmilling.class, Slicing.class, Smelting.class,
+                Soulbinding.class, Spawning.class, Tanking.class, Hiding.class, Fuel.class, Coolant.class,
+                Disabled.class);
+    }
+
+    public static void register(String tagname, Class<? extends AbstractConditional> clazz) {
+        MAPPING.put(tagname, clazz);
+    }
+
+    @SafeVarargs
+    public static void register(Class<? extends AbstractConditional>... clazzes) {
+        for (Class<? extends AbstractConditional> clazz : clazzes) {
+            MAPPING.put(clazz.getSimpleName().toLowerCase(Locale.ENGLISH), clazz);
+        }
+    }
+
+    public static @Nullable AbstractConditional get(String tagname) {
+        Class<? extends AbstractConditional> clazz = MAPPING.get(tagname);
+        if (clazz != null) {
+            try {
+                return NullHelper.notnullJ(clazz.newInstance(), "Class.newInstance()");
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
 }

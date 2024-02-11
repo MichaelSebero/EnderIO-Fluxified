@@ -7,24 +7,24 @@ import crazypants.enderio.base.config.recipes.StaxFactory;
 
 public class ItemIntegerAmount extends Item {
 
-  private int amount = 1;
+    private int amount = 1;
 
-  @Override
-  public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException, XMLStreamException {
-    if ("amount".equals(name)) {
-      try {
-        this.amount = Integer.parseInt(value);
-      } catch (NumberFormatException e) {
-        throw new InvalidRecipeConfigException("Invalid value in 'amount': Not a number");
-      }
-      return true;
+    @Override
+    public boolean setAttribute(StaxFactory factory, String name, String value) throws InvalidRecipeConfigException,
+                                                                                XMLStreamException {
+        if ("amount".equals(name)) {
+            try {
+                this.amount = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                throw new InvalidRecipeConfigException("Invalid value in 'amount': Not a number");
+            }
+            return true;
+        }
+
+        return super.setAttribute(factory, name, value);
     }
 
-    return super.setAttribute(factory, name, value);
-  }
-
-  public int getAmount() {
-    return amount;
-  }
-
+    public int getAmount() {
+        return amount;
+    }
 }

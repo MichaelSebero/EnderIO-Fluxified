@@ -5,13 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.tuple.Pair;
-
-import crazypants.enderio.base.render.IBlockStateWrapper;
-import crazypants.enderio.base.render.IRenderMapper;
-import crazypants.enderio.base.render.property.EnumRenderMode;
-import crazypants.enderio.base.render.util.ItemQuadCollector;
-import crazypants.enderio.base.render.util.QuadCollector;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
@@ -22,48 +15,60 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WirelessRenderMapper implements IRenderMapper.IBlockRenderMapper, IRenderMapper.IItemRenderMapper.IItemStateMapper {
+import org.apache.commons.lang3.tuple.Pair;
 
-  public static final @Nonnull WirelessRenderMapper instance = new WirelessRenderMapper();
+import crazypants.enderio.base.render.IBlockStateWrapper;
+import crazypants.enderio.base.render.IRenderMapper;
+import crazypants.enderio.base.render.property.EnumRenderMode;
+import crazypants.enderio.base.render.util.ItemQuadCollector;
+import crazypants.enderio.base.render.util.QuadCollector;
 
-  private WirelessRenderMapper() {
-  }
+public class WirelessRenderMapper implements IRenderMapper.IBlockRenderMapper,
+                                  IRenderMapper.IItemRenderMapper.IItemStateMapper {
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public List<IBlockState> mapBlockRender(@Nonnull IBlockStateWrapper state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, BlockRenderLayer blockLayer,
-      @Nonnull QuadCollector quadCollector) {
-    TileEntity tileEntity = state.getTileEntity();
-    Block block = state.getBlock();
+    public static final @Nonnull WirelessRenderMapper instance = new WirelessRenderMapper();
 
-    if ((tileEntity instanceof TileWirelessCharger) && (block instanceof BlockNormalWirelessCharger)) {
-      return render(state.getState(), world, pos, blockLayer, (TileWirelessCharger) tileEntity, (BlockNormalWirelessCharger) block);
-    }
-    return null;
-  }
+    private WirelessRenderMapper() {}
 
-  @SideOnly(Side.CLIENT)
-  protected List<IBlockState> render(IBlockState state, IBlockAccess world, BlockPos pos, BlockRenderLayer blockLayer, TileWirelessCharger tileEntity,
-      BlockNormalWirelessCharger block) {
-    List<IBlockState> states = new ArrayList<IBlockState>();
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<IBlockState> mapBlockRender(@Nonnull IBlockStateWrapper state, @Nonnull IBlockAccess world,
+                                            @Nonnull BlockPos pos, BlockRenderLayer blockLayer,
+                                            @Nonnull QuadCollector quadCollector) {
+        TileEntity tileEntity = state.getTileEntity();
+        Block block = state.getBlock();
 
-    boolean active = tileEntity.isActive();
-
-    if (active) {
-      states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT_ON));
-    } else {
-      states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT));
+        if ((tileEntity instanceof TileWirelessCharger) && (block instanceof BlockNormalWirelessCharger)) {
+            return render(state.getState(), world, pos, blockLayer, (TileWirelessCharger) tileEntity,
+                    (BlockNormalWirelessCharger) block);
+        }
+        return null;
     }
 
-    return states;
-  }
+    @SideOnly(Side.CLIENT)
+    protected List<IBlockState> render(IBlockState state, IBlockAccess world, BlockPos pos, BlockRenderLayer blockLayer,
+                                       TileWirelessCharger tileEntity,
+                                       BlockNormalWirelessCharger block) {
+        List<IBlockState> states = new ArrayList<IBlockState>();
 
-  @Override
-  @SideOnly(Side.CLIENT)
-  public List<Pair<IBlockState, ItemStack>> mapItemRender(@Nonnull Block block, @Nonnull ItemStack stack, @Nonnull ItemQuadCollector itemQuadCollector) {
-    List<Pair<IBlockState, ItemStack>> states = new ArrayList<Pair<IBlockState, ItemStack>>();
-    states.add(Pair.of(block.getStateFromMeta(stack.getMetadata()).withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT_ON), stack));
-    return states;
-  }
+        boolean active = tileEntity.isActive();
 
+        if (active) {
+            states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT_ON));
+        } else {
+            states.add(state.withProperty(EnumRenderMode.RENDER, EnumRenderMode.FRONT));
+        }
+
+        return states;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public List<Pair<IBlockState, ItemStack>> mapItemRender(@Nonnull Block block, @Nonnull ItemStack stack,
+                                                            @Nonnull ItemQuadCollector itemQuadCollector) {
+        List<Pair<IBlockState, ItemStack>> states = new ArrayList<Pair<IBlockState, ItemStack>>();
+        states.add(Pair.of(block.getStateFromMeta(stack.getMetadata()).withProperty(EnumRenderMode.RENDER,
+                EnumRenderMode.FRONT_ON), stack));
+        return states;
+    }
 }

@@ -6,6 +6,5 @@ import crazypants.enderio.api.IModObject;
 
 public interface IHaveRenderers {
 
-  void registerRenderers(@Nonnull IModObject modObject);
-
+    void registerRenderers(@Nonnull IModObject modObject);
 }

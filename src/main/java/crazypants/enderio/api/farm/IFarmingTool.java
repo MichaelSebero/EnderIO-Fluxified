@@ -14,16 +14,16 @@ import net.minecraft.item.ItemStack;
  */
 public interface IFarmingTool {
 
-  public static class Tools {
+    public static class Tools {
+
+        /**
+         * These are all tools the Farming Station can handle. The fields will be filled at runtime.
+         */
+        public static IFarmingTool HAND = null, HOE = null, AXE = null, TREETAP = null, SHEARS = null, NONE = null;
+    }
+
     /**
-     * These are all tools the Farming Station can handle. The fields will be filled at runtime.
+     * @return True if the given item matche steh tool type.
      */
-    public static IFarmingTool HAND = null, HOE = null, AXE = null, TREETAP = null, SHEARS = null, NONE = null;
-  }
-
-  /**
-   * @return True if the given item matche steh tool type.
-   */
-  boolean itemMatches(@Nonnull ItemStack item);
-
+    boolean itemMatches(@Nonnull ItemStack item);
 }

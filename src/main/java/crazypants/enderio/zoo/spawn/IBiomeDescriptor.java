@@ -5,10 +5,9 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public interface IBiomeDescriptor {
 
-  BiomeDictionary.Type getType();
+    BiomeDictionary.Type getType();
 
-  ResourceLocation getRegistryName();
+    ResourceLocation getRegistryName();
 
-  boolean isExclude();
-
+    boolean isExclude();
 }

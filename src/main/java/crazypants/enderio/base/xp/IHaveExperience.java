@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 
 public interface IHaveExperience {
 
-  @Nonnull
-  ExperienceContainer getContainer();
-
+    @Nonnull
+    ExperienceContainer getContainer();
 }

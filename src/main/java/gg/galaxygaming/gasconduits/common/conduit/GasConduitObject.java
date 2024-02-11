@@ -1,6 +1,17 @@
 package gg.galaxygaming.gasconduits.common.conduit;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+
 import com.enderio.core.common.util.NullHelper;
+
 import crazypants.enderio.api.IModObject;
 import crazypants.enderio.api.IModTileEntity;
 import crazypants.enderio.base.EnderIOTab;
@@ -9,15 +20,9 @@ import crazypants.enderio.base.init.ModObjectRegistry;
 import crazypants.enderio.base.init.RegisterModObject;
 import gg.galaxygaming.gasconduits.GasConduitsConstants;
 import gg.galaxygaming.gasconduits.common.filter.ItemGasFilter;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
 public enum GasConduitObject implements IModObjectBase {
+
     itemGasConduit(ItemGasConduit::create),
     itemGasFilter(ItemGasFilter::create);
 
@@ -45,7 +50,8 @@ public enum GasConduitObject implements IModObjectBase {
         this(blockMaker, null, null);
     }
 
-    GasConduitObject(@Nonnull Function<IModObject, Block> blockMaker, @Nonnull BiFunction<IModObject, Block, Item> itemMaker) {
+    GasConduitObject(@Nonnull Function<IModObject, Block> blockMaker,
+                     @Nonnull BiFunction<IModObject, Block, Item> itemMaker) {
         this(blockMaker, itemMaker, null);
     }
 
@@ -53,7 +59,8 @@ public enum GasConduitObject implements IModObjectBase {
         this(blockMaker, null, modTileEntity);
     }
 
-    GasConduitObject(@Nullable Function<IModObject, Block> blockMaker, @Nullable BiFunction<IModObject, Block, Item> itemMaker, @Nullable IModTileEntity modTileEntity) {
+    GasConduitObject(@Nullable Function<IModObject, Block> blockMaker,
+                     @Nullable BiFunction<IModObject, Block, Item> itemMaker, @Nullable IModTileEntity modTileEntity) {
         this.unlocalisedName = ModObjectRegistry.sanitizeName(NullHelper.notnullJ(name(), "Enum.name()"));
         this.blockMaker = blockMaker;
         this.itemMaker = itemMaker;

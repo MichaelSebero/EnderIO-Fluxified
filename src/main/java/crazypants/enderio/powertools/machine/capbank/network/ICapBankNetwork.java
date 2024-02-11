@@ -10,75 +10,74 @@ import crazypants.enderio.powertools.machine.capbank.TileCapBank;
 
 public interface ICapBankNetwork extends IPowerStorage {
 
-  // ------ Network
+    // ------ Network
 
-  int getId();
+    int getId();
 
-  void addMember(@Nonnull TileCapBank cap);
+    void addMember(@Nonnull TileCapBank cap);
 
-  @Nonnull
-  Collection<TileCapBank> getMembers();
+    @Nonnull
+    Collection<TileCapBank> getMembers();
 
-  void destroyNetwork();
+    void destroyNetwork();
 
-  @Nonnull
-  NetworkState getState();
+    @Nonnull
+    NetworkState getState();
 
-  // ------ Energy
+    // ------ Energy
 
-  @Override
-  long getEnergyStoredL();
+    @Override
+    long getEnergyStoredL();
 
-  @Override
-  int addEnergy(int energy);
+    @Override
+    int addEnergy(int energy);
 
-  int receiveEnergy(int maxReceive, boolean simulate);
+    int receiveEnergy(int maxReceive, boolean simulate);
 
-  @Override
-  long getMaxEnergyStoredL();
+    @Override
+    long getMaxEnergyStoredL();
 
-  int getMaxIO();
+    int getMaxIO();
 
-  @Override
-  int getMaxOutput();
+    @Override
+    int getMaxOutput();
 
-  void setMaxOutput(int max);
+    void setMaxOutput(int max);
 
-  @Override
-  int getMaxInput();
+    @Override
+    int getMaxInput();
 
-  void setMaxInput(int max);
+    void setMaxInput(int max);
 
-  float getAverageChangePerTick();
+    float getAverageChangePerTick();
 
-  float getAverageInputPerTick();
+    float getAverageInputPerTick();
 
-  float getAverageOutputPerTick();
+    float getAverageOutputPerTick();
 
-  void removeReceptors(@Nonnull Collection<EnergyReceptor> receptors);
+    void removeReceptors(@Nonnull Collection<EnergyReceptor> receptors);
 
-  void addReceptors(@Nonnull Collection<EnergyReceptor> receptors);
+    void addReceptors(@Nonnull Collection<EnergyReceptor> receptors);
 
-  // ------ Redstone
+    // ------ Redstone
 
-  void setOutputControlMode(@Nonnull RedstoneControlMode outputControlMode);
+    void setOutputControlMode(@Nonnull RedstoneControlMode outputControlMode);
 
-  @Nonnull
-  RedstoneControlMode getOutputControlMode();
+    @Nonnull
+    RedstoneControlMode getOutputControlMode();
 
-  void setInputControlMode(@Nonnull RedstoneControlMode inputControlMode);
+    void setInputControlMode(@Nonnull RedstoneControlMode inputControlMode);
 
-  @Nonnull
-  RedstoneControlMode getInputControlMode();
+    @Nonnull
+    RedstoneControlMode getInputControlMode();
 
-  void updateRedstoneSignal(@Nonnull TileCapBank tileCapBank, boolean recievingSignal);
+    void updateRedstoneSignal(@Nonnull TileCapBank tileCapBank, boolean recievingSignal);
 
-  boolean isOutputEnabled();
+    boolean isOutputEnabled();
 
-  boolean isInputEnabled();
+    boolean isInputEnabled();
 
-  // ------- rendering info caching
+    // ------- rendering info caching
 
-  void invalidateDisplayInfoCache();
-
+    void invalidateDisplayInfoCache();
 }

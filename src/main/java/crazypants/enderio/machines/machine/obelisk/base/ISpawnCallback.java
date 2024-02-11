@@ -6,13 +6,12 @@ import net.minecraft.entity.EntityLivingBase;
 
 public interface ISpawnCallback {
 
-  public enum Result {
-    NEXT,
-    DENY,
-    DONE;
-  }
+    public enum Result {
+        NEXT,
+        DENY,
+        DONE;
+    }
 
-  @Nonnull
-  Result isSpawnPrevented(EntityLivingBase mob);
-
+    @Nonnull
+    Result isSpawnPrevented(EntityLivingBase mob);
 }

@@ -5,6 +5,10 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
+
 import com.enderio.core.common.util.NNList.NNIterator;
 import com.enderio.core.common.util.stackable.Things;
 
@@ -12,45 +16,42 @@ import info.loenwind.autosave.Registry;
 import info.loenwind.autosave.exceptions.NoHandlerFoundException;
 import info.loenwind.autosave.handlers.IHandler;
 import info.loenwind.autosave.util.NBTAction;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 
 public class HandleThings implements IHandler<Things> {
 
-  public HandleThings() {
-  }
+    public HandleThings() {}
 
-  @Override
-  public Class<?> getRootType() {
-    return Things.class;
-  }
-
-  @Override
-  public boolean store(Registry registry, Set<NBTAction> phase, NBTTagCompound nbt, Type type, String name, Things object)
-      throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoHandlerFoundException {
-
-    NBTTagList list = new NBTTagList();
-    for (NNIterator<String> itr = object.getNameList().fastIterator(); itr.hasNext();) {
-      list.appendTag(new NBTTagString(itr.next()));
+    @Override
+    public Class<?> getRootType() {
+        return Things.class;
     }
 
-    nbt.setTag(name, list);
+    @Override
+    public boolean store(Registry registry, Set<NBTAction> phase, NBTTagCompound nbt, Type type, String name,
+                         Things object)
+                                        throws IllegalArgumentException, IllegalAccessException, InstantiationException,
+                                        NoHandlerFoundException {
+        NBTTagList list = new NBTTagList();
+        for (NNIterator<String> itr = object.getNameList().fastIterator(); itr.hasNext();) {
+            list.appendTag(new NBTTagString(itr.next()));
+        }
 
-    return true;
-  }
+        nbt.setTag(name, list);
 
-  @Override
-  public Things read(Registry registry, Set<NBTAction> phase, NBTTagCompound nbt, Type type, String name,
-      @Nullable Things object) throws IllegalArgumentException, IllegalAccessException, InstantiationException, NoHandlerFoundException {
-
-    object = new Things();
-
-    NBTTagList list = nbt.getTagList(name, 8);
-    for (int i = 0; i < list.tagCount(); i++) {
-      object.add(list.getStringTagAt(i));
+        return true;
     }
 
-    return object;
-  }
+    @Override
+    public Things read(Registry registry, Set<NBTAction> phase, NBTTagCompound nbt, Type type, String name,
+                       @Nullable Things object) throws IllegalArgumentException, IllegalAccessException,
+                                                InstantiationException, NoHandlerFoundException {
+        object = new Things();
+
+        NBTTagList list = nbt.getTagList(name, 8);
+        for (int i = 0; i < list.tagCount(); i++) {
+            object.add(list.getStringTagAt(i));
+        }
+
+        return object;
+    }
 }

@@ -1,7 +1,20 @@
 package crazypants.enderio.machines.machine.soul;
 
+import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_POWER_BUFFER;
+import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_POWER_INTAKE;
+import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_POWER_USE;
+import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_SOUND_PITCH;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 import com.enderio.core.api.common.util.ITankAccess;
 import com.enderio.core.common.fluid.FluidWrapper;
@@ -26,250 +39,245 @@ import crazypants.enderio.machines.network.PacketHandler;
 import crazypants.enderio.util.Prep;
 import info.loenwind.autosave.annotations.Storable;
 import info.loenwind.autosave.annotations.Store;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-
-import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_POWER_BUFFER;
-import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_POWER_INTAKE;
-import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_POWER_USE;
-import static crazypants.enderio.machines.capacitor.CapacitorKey.SOUL_BINDER_SOUND_PITCH;
 
 @Storable
-public class TileSoulBinder extends AbstractPoweredTaskEntity implements IHaveExperience, ITankAccess, IPaintable.IPaintableTileEntity {
+public class TileSoulBinder extends AbstractPoweredTaskEntity
+                            implements IHaveExperience, ITankAccess, IPaintable.IPaintableTileEntity {
 
-  @Store
-  private final @Nonnull ExperienceContainer xpCont = new ExperienceContainer() {
-    @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-      return super.drain(from, Math.min(XpUtil.experienceToLiquid(getExcessXP()), maxDrain), doDrain);
+    @Store
+    private final @Nonnull ExperienceContainer xpCont = new ExperienceContainer() {
+
+        @Override
+        public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+            return super.drain(from, Math.min(XpUtil.experienceToLiquid(getExcessXP()), maxDrain), doDrain);
+        }
+
+        @Override
+        public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+            int max = XpUtil.experienceToLiquid(getXPRequired());
+            if (resource == null || max <= 0) {
+                return 0;
+            } else if (max < resource.amount) {
+                FluidStack copy = resource.copy();
+                copy.amount = max;
+                return super.fill(from, copy, doFill);
+            } else {
+                return super.fill(from, resource, doFill);
+            }
+        }
+    };
+
+    public TileSoulBinder() {
+        super(new SlotDefinition(2, 2, 1), SOUL_BINDER_POWER_INTAKE, SOUL_BINDER_POWER_BUFFER, SOUL_BINDER_POWER_USE);
+        xpCont.setTileEntity(this);
+        addICap(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facingIn -> getSmartTankFluidHandler().get(facingIn));
     }
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-      int max = XpUtil.experienceToLiquid(getXPRequired());
-      if (resource == null || max <= 0) {
-        return 0;
-      } else if (max < resource.amount) {
-        FluidStack copy = resource.copy();
-        copy.amount = max;
-        return super.fill(from, copy, doFill);
-      } else {
-        return super.fill(from, resource, doFill);
-      }
-    }
-  };
-
-  public TileSoulBinder() {
-    super(new SlotDefinition(2, 2, 1), SOUL_BINDER_POWER_INTAKE, SOUL_BINDER_POWER_BUFFER, SOUL_BINDER_POWER_USE);
-    xpCont.setTileEntity(this);
-    addICap(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facingIn -> getSmartTankFluidHandler().get(facingIn));
-  }
-
-  @Override
-  public @Nonnull ExperienceContainer getContainer() {
-    return xpCont;
-  }
-
-  @Override
-  public @Nonnull String getMachineName() {
-    return MachineRecipeRegistry.SOULBINDER;
-  }
-
-  @Override
-  public int getInventoryStackLimit() {
-    return 1;
-  }
-
-  @Override
-  public int getInventoryStackLimit(int slot) {
-    return getSlotDefinition().isOutputSlot(slot) ? 64 : super.getInventoryStackLimit(slot);
-  }
-
-  @Override
-  protected void processTasks(boolean redstoneChecksPassed) {
-    if (xpCont.isDirty()) {
-      PacketHandler.sendToAllAround(new PacketExperienceContainer(this), this);
-      xpCont.setDirty(false);
-    }
-    if (isActive()) {
-      // we have a very smooth block animation, so all clients need very detailed progress data
-      PacketHandler.INSTANCE.sendToAllAround(getProgressPacket(), this);
-    }
-    super.processTasks(redstoneChecksPassed);
-  }
-
-  @Override
-  protected IMachineRecipe canStartNextTask(long nextSeed) {
-    IMachineRecipe recipe = super.canStartNextTask(nextSeed);
-    if (recipe == null) {
-      return null;
+    public @Nonnull ExperienceContainer getContainer() {
+        return xpCont;
     }
 
-    int xpRequired = ((ISoulBinderRecipe) recipe).getExperienceRequired();
-    if (xpCont.getExperienceTotal() >= xpRequired) {
-      return recipe;
+    @Override
+    public @Nonnull String getMachineName() {
+        return MachineRecipeRegistry.SOULBINDER;
     }
-    return null;
-  }
 
-  public boolean needsXP() {
-    return getXPRequired() > 0;
-  }
-
-  /**
-   * Computes the required amount of XP to start the current recipe.
-   * 
-   * @return 0 if no XP is required, negative when more than required XP is stored.
-   */
-  private int getXPRequired() {
-    if (currentTask != null) {
-      return 0;
+    @Override
+    public int getInventoryStackLimit() {
+        return 1;
     }
-    IMachineRecipe nextRecipe = getNextRecipe();
-    if (!(nextRecipe instanceof ISoulBinderRecipe)) {
-      return 0;
+
+    @Override
+    public int getInventoryStackLimit(int slot) {
+        return getSlotDefinition().isOutputSlot(slot) ? 64 : super.getInventoryStackLimit(slot);
     }
-    return ((ISoulBinderRecipe) nextRecipe).getExperienceRequired() - getContainer().getExperienceTotalIntLimited();
-  }
 
-  public int getCurrentlyRequiredLevel() {
-    if (currentTask != null) {
-      return -1;
+    @Override
+    protected void processTasks(boolean redstoneChecksPassed) {
+        if (xpCont.isDirty()) {
+            PacketHandler.sendToAllAround(new PacketExperienceContainer(this), this);
+            xpCont.setDirty(false);
+        }
+        if (isActive()) {
+            // we have a very smooth block animation, so all clients need very detailed progress data
+            PacketHandler.INSTANCE.sendToAllAround(getProgressPacket(), this);
+        }
+        super.processTasks(redstoneChecksPassed);
     }
-    IMachineRecipe nextRecipe = getNextRecipe();
-    if (!(nextRecipe instanceof ISoulBinderRecipe)) {
-      return -1;
+
+    @Override
+    protected IMachineRecipe canStartNextTask(long nextSeed) {
+        IMachineRecipe recipe = super.canStartNextTask(nextSeed);
+        if (recipe == null) {
+            return null;
+        }
+
+        int xpRequired = ((ISoulBinderRecipe) recipe).getExperienceRequired();
+        if (xpCont.getExperienceTotal() >= xpRequired) {
+            return recipe;
+        }
+        return null;
     }
-    return ((ISoulBinderRecipe) nextRecipe).getExperienceLevelsRequired();
-  }
 
-  @Override
-  protected boolean startNextTask(@Nonnull IMachineRecipe nextRecipe, long nextSeed) {
-    int xpRequired = ((ISoulBinderRecipe) nextRecipe).getExperienceRequired();
-    if (xpCont.getExperienceTotal() < xpRequired) {
-      return false;
+    public boolean needsXP() {
+        return getXPRequired() > 0;
     }
-    if (super.startNextTask(nextRecipe, nextSeed)) {
-      xpCont.drain(null, XpUtil.experienceToLiquid(xpRequired), true);
-      forceUpdatePlayers();
-      return true;
+
+    /**
+     * Computes the required amount of XP to start the current recipe.
+     * 
+     * @return 0 if no XP is required, negative when more than required XP is stored.
+     */
+    private int getXPRequired() {
+        if (currentTask != null) {
+            return 0;
+        }
+        IMachineRecipe nextRecipe = getNextRecipe();
+        if (!(nextRecipe instanceof ISoulBinderRecipe)) {
+            return 0;
+        }
+        return ((ISoulBinderRecipe) nextRecipe).getExperienceRequired() - getContainer().getExperienceTotalIntLimited();
     }
-    return false;
-  }
 
-  @Override
-  public boolean isMachineItemValidForSlot(int slot, @Nonnull ItemStack item) {
-    if (!slotDefinition.isInputSlot(slot)) {
-      return false;
+    public int getCurrentlyRequiredLevel() {
+        if (currentTask != null) {
+            return -1;
+        }
+        IMachineRecipe nextRecipe = getNextRecipe();
+        if (!(nextRecipe instanceof ISoulBinderRecipe)) {
+            return -1;
+        }
+        return ((ISoulBinderRecipe) nextRecipe).getExperienceLevelsRequired();
     }
-    MachineRecipeInput newInput = new MachineRecipeInput(slot, item);
-    int otherSlot = slot == 0 ? 1 : 0;
-    if (Prep.isInvalid(getStackInSlot(otherSlot))) {
-      return MachineRecipeRegistry.instance.getRecipeForInput(getMachineLevel(), getMachineName(), newInput) != null;
-    } else {
-      NNList<MachineRecipeInput> inputs = new NNList<>(newInput, new MachineRecipeInput(otherSlot, getStackInSlot(otherSlot)));
-      return MachineRecipeRegistry.instance.getRecipeForInputs(getMachineLevel(), getMachineName(), inputs) != null;
+
+    @Override
+    protected boolean startNextTask(@Nonnull IMachineRecipe nextRecipe, long nextSeed) {
+        int xpRequired = ((ISoulBinderRecipe) nextRecipe).getExperienceRequired();
+        if (xpCont.getExperienceTotal() < xpRequired) {
+            return false;
+        }
+        if (super.startNextTask(nextRecipe, nextSeed)) {
+            xpCont.drain(null, XpUtil.experienceToLiquid(xpRequired), true);
+            forceUpdatePlayers();
+            return true;
+        }
+        return false;
     }
-  }
 
-  @Override
-  protected boolean doPull(@Nullable EnumFacing dir) {
-    if (super.doPull(dir)) {
-      return true;
+    @Override
+    public boolean isMachineItemValidForSlot(int slot, @Nonnull ItemStack item) {
+        if (!slotDefinition.isInputSlot(slot)) {
+            return false;
+        }
+        MachineRecipeInput newInput = new MachineRecipeInput(slot, item);
+        int otherSlot = slot == 0 ? 1 : 0;
+        if (Prep.isInvalid(getStackInSlot(otherSlot))) {
+            return MachineRecipeRegistry.instance.getRecipeForInput(getMachineLevel(), getMachineName(), newInput) !=
+                    null;
+        } else {
+            NNList<MachineRecipeInput> inputs = new NNList<>(newInput,
+                    new MachineRecipeInput(otherSlot, getStackInSlot(otherSlot)));
+            return MachineRecipeRegistry.instance.getRecipeForInputs(getMachineLevel(), getMachineName(), inputs) !=
+                    null;
+        }
     }
-    int req = getXPRequired();
-    if (dir != null && req > 0) {
-      if (FluidWrapper.transfer(world, getPos().offset(dir), dir.getOpposite(), xpCont,
-          Math.min(XpUtil.experienceToLiquid(req), SoulBinderConfig.soulFluidInputRate.get())) > 0) {
-        setTanksDirty();
-        return true;
-      }
+
+    @Override
+    protected boolean doPull(@Nullable EnumFacing dir) {
+        if (super.doPull(dir)) {
+            return true;
+        }
+        int req = getXPRequired();
+        if (dir != null && req > 0) {
+            if (FluidWrapper.transfer(world, getPos().offset(dir), dir.getOpposite(), xpCont,
+                    Math.min(XpUtil.experienceToLiquid(req), SoulBinderConfig.soulFluidInputRate.get())) > 0) {
+                setTanksDirty();
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
-  @Override
-  protected boolean doPush(@Nullable EnumFacing dir) {
-    if (super.doPush(dir)) {
-      return true;
+    @Override
+    protected boolean doPush(@Nullable EnumFacing dir) {
+        if (super.doPush(dir)) {
+            return true;
+        }
+        int maxAmount = Math.min(XpUtil.experienceToLiquid(getExcessXP()), SoulBinderConfig.soulFluidOutputRate.get());
+        if (dir != null && maxAmount > 0) {
+            if (FluidWrapper.transfer(xpCont, world, getPos().offset(dir), dir.getOpposite(), maxAmount) > 0) {
+                setTanksDirty();
+                return true;
+            }
+        }
+        return false;
     }
-    int maxAmount = Math.min(XpUtil.experienceToLiquid(getExcessXP()), SoulBinderConfig.soulFluidOutputRate.get());
-    if (dir != null && maxAmount > 0) {
-      if (FluidWrapper.transfer(xpCont, world, getPos().offset(dir), dir.getOpposite(), maxAmount) > 0) {
-        setTanksDirty();
-        return true;
-      }
+
+    /**
+     * Determines how much stored XP can/should be removed because it is not needed for the next recipe.
+     * 
+     * @return A number between 0 and the amount of stored XP
+     */
+    private int getExcessXP() {
+        if (currentTask == null) {
+            IMachineRecipe nextRecipe = getNextRecipe();
+            if (nextRecipe instanceof ISoulBinderRecipe) {
+                return Math.max(0, getContainer().getExperienceTotalIntLimited() -
+                        ((ISoulBinderRecipe) nextRecipe).getExperienceRequired());
+            }
+        }
+        return getContainer().getExperienceTotalIntLimited();
     }
-    return false;
-  }
 
-  /**
-   * Determines how much stored XP can/should be removed because it is not needed for the next recipe.
-   * 
-   * @return A number between 0 and the amount of stored XP
-   */
-  private int getExcessXP() {
-    if (currentTask == null) {
-      IMachineRecipe nextRecipe = getNextRecipe();
-      if (nextRecipe instanceof ISoulBinderRecipe) {
-        return Math.max(0, getContainer().getExperienceTotalIntLimited() - ((ISoulBinderRecipe) nextRecipe).getExperienceRequired());
-      }
+    @Override
+    public FluidTank getInputTank(FluidStack forFluidType) {
+        return xpCont;
     }
-    return getContainer().getExperienceTotalIntLimited();
-  }
 
-  @Override
-  public FluidTank getInputTank(FluidStack forFluidType) {
-    return xpCont;
-  }
-
-  @Override
-  public @Nonnull FluidTank[] getOutputTanks() {
-    return new FluidTank[] { xpCont };
-  }
-
-  @Override
-  public void setTanksDirty() {
-    xpCont.setDirty(true);
-  }
-
-  public boolean isWorking() {
-    return currentTask == null ? false : currentTask.getProgress() >= 0;
-  }
-
-  private boolean wasWorking = false;
-
-  @Override
-  protected void updateEntityClient() {
-    super.updateEntityClient();
-    if (wasWorking != isWorking()) {
-      wasWorking = isWorking();
-      updateBlock();
+    @Override
+    public @Nonnull FluidTank[] getOutputTanks() {
+        return new FluidTank[] { xpCont };
     }
-  }
 
-  @Override
-  public ResourceLocation getSound() {
-    return new ResourceLocation(EnderIO.DOMAIN, "machine.soulbinder");
-  }
-
-  @Override
-  public float getPitch() {
-    return MathHelper.clamp(0.75f + SOUL_BINDER_SOUND_PITCH.get(getCapacitorData()) * 0.05f + random.nextFloat() * 0.08f - 0.04f, 0.70f, 1.05f);
-  }
-
-  private SmartTankFluidHandler smartTankFluidHandler;
-
-  protected SmartTankFluidHandler getSmartTankFluidHandler() {
-    if (smartTankFluidHandler == null) {
-      smartTankFluidHandler = new SmartTankFluidMachineHandler(this, xpCont);
+    @Override
+    public void setTanksDirty() {
+        xpCont.setDirty(true);
     }
-    return smartTankFluidHandler;
-  }
 
+    public boolean isWorking() {
+        return currentTask == null ? false : currentTask.getProgress() >= 0;
+    }
+
+    private boolean wasWorking = false;
+
+    @Override
+    protected void updateEntityClient() {
+        super.updateEntityClient();
+        if (wasWorking != isWorking()) {
+            wasWorking = isWorking();
+            updateBlock();
+        }
+    }
+
+    @Override
+    public ResourceLocation getSound() {
+        return new ResourceLocation(EnderIO.DOMAIN, "machine.soulbinder");
+    }
+
+    @Override
+    public float getPitch() {
+        return MathHelper.clamp(
+                0.75f + SOUL_BINDER_SOUND_PITCH.get(getCapacitorData()) * 0.05f + random.nextFloat() * 0.08f - 0.04f,
+                0.70f, 1.05f);
+    }
+
+    private SmartTankFluidHandler smartTankFluidHandler;
+
+    protected SmartTankFluidHandler getSmartTankFluidHandler() {
+        if (smartTankFluidHandler == null) {
+            smartTankFluidHandler = new SmartTankFluidMachineHandler(this, xpCont);
+        }
+        return smartTankFluidHandler;
+    }
 }

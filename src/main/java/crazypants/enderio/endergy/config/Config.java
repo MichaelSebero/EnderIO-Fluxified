@@ -5,9 +5,9 @@ import crazypants.enderio.endergy.EnderIOEndergy;
 
 public final class Config {
 
-  public static final ValueFactoryEIO F = new ValueFactoryEIO(EnderIOEndergy.MODID);
+    public static final ValueFactoryEIO F = new ValueFactoryEIO(EnderIOEndergy.MODID);
 
-  static {
-    EndergyConfig.F.getClass();
-  }
+    static {
+        EndergyConfig.F.getClass();
+    }
 }
