@@ -39,9 +39,10 @@
  */
 dependencies {
     api("com.enderio:endercore:0.5.78")
-    api("info.loenwind:autosave:1.0.11") // todo shade
-    api("info.loenwind:autoconfig:1.0.2") // todo shade
-    api("info.loenwind:ap:1.0.0")
+
+    shadowCompile("info.loenwind:autosave:1.0.11")
+    shadowCompile("info.loenwind:autoconfig:1.0.2")
+    devOnlyNonPublishable("info.loenwind:ap:1.0.0")
     annotationProcessor("info.loenwind:ap:1.0.0")
 
     devOnlyNonPublishable rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
