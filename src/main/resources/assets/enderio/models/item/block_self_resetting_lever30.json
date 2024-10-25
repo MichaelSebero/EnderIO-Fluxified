@@ -1,6 +1,7 @@
 {
-    "parent": "item/generated",
+    "parent": "item/template/lever_template",
     "textures": {
-        "layer0": "blocks/lever"
+        "base": "blocks/cobblestone",
+        "lever": "blocks/lever"
     }
 }

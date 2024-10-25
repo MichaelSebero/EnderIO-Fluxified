@@ -1,5 +1,5 @@
 {
-    "parent": "item/generated",
+    "parent": "item/template/ladder_template",
     "textures": {
         "layer0": "enderio:blocks/block_dark_steel_ladder"
     }

@@ -1,6 +1,7 @@
 {
-    "parent": "item/generated",
+    "parent": "item/template/door_template",
     "textures": {
-        "layer0": "enderio:items/item_dark_steel_door"
+        "bottom": "blocks/block_dark_steel_door_lower",
+        "top": "blocks/block_dark_steel_door_upper"
     }
 }

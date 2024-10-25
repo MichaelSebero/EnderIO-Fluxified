@@ -13,7 +13,7 @@
     },
     "variants":{
         "render":{
-			"defaults":{ "model":"enderio:transform/block" },
+			"defaults":{ "model":"enderio:template/enhanced_machine_template" },
 			"auto":{ "model":"enderio:null" },
             "front":{                                             "submodel":{ "front":{ "model":"enderio:block_enhanced_sagmill", "y":180 } } },
             "front_east":{                                        "submodel":{ "front":{ "model":"enderio:block_enhanced_sagmill", "y":270 } } },

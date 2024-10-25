@@ -834,11 +834,11 @@ enderio.farm.note.noPower=No Power
 enderio.farm.note.noCapacitor=No Capacitor
 enderio.farm.note.noWater=No Water
 
-enderio.power.symbol=µI
-enderio.power.format=%s µI
-enderio.power.format.of=%s / %s µI
-enderio.power.format.pertick=%s µI/t
-enderio.power.format.name=Micro Infinity (%s)
+enderio.power.symbol=RF
+enderio.power.format=%s RF
+enderio.power.format.of=%s / %s RF
+enderio.power.format.pertick=%s RF/t
+enderio.power.format.name=RF (%s)
 enderio.power.format.details=A unit of energy
 
 enderio.temperature.format.deg_c=%s °C
@@ -2094,7 +2094,7 @@ enderio.gui.stirling_generator.output=Generating: %s
 enderio.gui.stirling_generator.efficiency=Efficiency: %s%%
 enderio.gui.stirling_generator.upgradeslot=Upgrade slot
 enderio.gui.stirling_generator.upgrades={0} gives {2}{1,number,#.#}x{3} efficiency
-enderio.gui.stirling_generator.remaining=Remaining {0,number,percent}|{1,choice,0#|0<{1}m }{2,number}s|{3,number,#,###} µI
+enderio.gui.stirling_generator.remaining=Remaining {0,number,percent}|{1,choice,0#|0<{1}m }{2,number}s|{3,number,#,###} RF
 
 enderio.gui.zombie_generator.output=Generating: %s
 enderio.gui.zombie_generator.fuelTank=Nutrient Tank
@@ -2347,7 +2347,7 @@ enderio.jei.solar_panel.range.line1=Actual power generated depends on the weathe
 enderio.block_solar_panel.tooltip.maxoutput=Max Output: %s
 
 # These 4 use the brain-dead TextComponentTranslation format
-enderio.block_solar_panel.probe.production=%1$s panel(s) producing %2$s µI/t now and %3$s µI/t peak
+enderio.block_solar_panel.probe.production=%1$s panel(s) producing %2$s RF/t now and %3$s RF/t peak
 enderio.block_solar_panel.probe.last_access=\u0020Energy was last accessed %s ticks ago
 enderio.block_solar_panel.probe.no_sun=\u0020Panel at %s cannot see the sun!
 enderio.block_solar_panel.probe.all_sun=\u0020All panels can see the sun!
@@ -2410,14 +2410,14 @@ tile.block_enhanced_vat.name=The Enhanced Vat
 tile.block_enhanced_vat.tooltip.detailed.line1=Used to brew EnderIO fluids
 
 tile.block_wired_charger.name=Wired Charger
-tile.block_wired_charger.tooltip.detailed.line1=Charges items with µI
+tile.block_wired_charger.tooltip.detailed.line1=Charges items with RF
 tile.block_wired_charger.tooltip.detailed.line2=Scales with the size of the item's energy storage
 
 tile.block_simple_wired_charger.name=Simple Wired Charger
-tile.block_simple_wired_charger.tooltip.detailed.line2=Charges items with µI
+tile.block_simple_wired_charger.tooltip.detailed.line2=Charges items with RF
 
 tile.block_enhanced_wired_charger.name=Enhanced Wired Charger
-tile.block_enhanced_wired_charger.tooltip.detailed.line1=Charges items with µI
+tile.block_enhanced_wired_charger.tooltip.detailed.line1=Charges items with RF
 tile.block_enhanced_wired_charger.tooltip.detailed.line2=Scales with the size of the item's energy storage
 
 tile.block_wireless_charger.name=Wireless Charger

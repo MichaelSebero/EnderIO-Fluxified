@@ -1,5 +1,5 @@
 {
-    "parent": "item/generated",
+    "parent": "item/template/iron_bars_template",
     "textures": {
         "layer0": "enderio:blocks/block_end_iron_bars"
     }

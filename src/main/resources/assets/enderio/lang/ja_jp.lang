@@ -829,11 +829,11 @@ enderio.farm.note.noPower=電力不足
 enderio.farm.note.noCapacitor=コンデンサ未挿入
 enderio.farm.note.noWater=水不足
 
-enderio.power.symbol=µI
-enderio.power.format=%s µI
-enderio.power.format.of=%s / %s µI
-enderio.power.format.pertick=%s µI/t
-enderio.power.format.name=マイクロ・インフィニティ（%s）
+enderio.power.symbol=RF
+enderio.power.format=%s RF
+enderio.power.format.of=%s / %s RF
+enderio.power.format.pertick=%s RF/t
+enderio.power.format.name=RF（%s）
 enderio.power.format.details=エネルギーの単位
 
 enderio.temperature.format.deg_c=%s ℃
@@ -2039,7 +2039,7 @@ enderio.gui.stirling_generator.output=発電中：%s
 enderio.gui.stirling_generator.efficiency=燃焼効率：%s％
 enderio.gui.stirling_generator.upgradeslot=アップグレードスロット
 enderio.gui.stirling_generator.upgrades={0}：{2}{1,number,#.#}x{3} 効率上昇
-enderio.gui.stirling_generator.remaining=残り {0,number,percent}|{1,choice,0#|0<{1} 分 }{2,number} 秒|{3,number,#,###} µI
+enderio.gui.stirling_generator.remaining=残り {0,number,percent}|{1,choice,0#|0<{1} 分 }{2,number} 秒|{3,number,#,###} RF
 
 enderio.gui.zombie_generator.output=発電中：%s
 enderio.gui.zombie_generator.fuelTank=栄養液タンク
@@ -2287,7 +2287,7 @@ enderio.jei.solar_panel.range.line1=実際の発電量は、天候や太陽の�
 enderio.block_solar_panel.tooltip.maxoutput=最大出力：%s
 
 # These 4 use the brain-dead TextComponentTranslation format
-enderio.block_solar_panel.probe.production=%1$s 個の太陽電池の現在発電量：%2$s µI/t（最大発電量：%3$s µI/t）
+enderio.block_solar_panel.probe.production=%1$s 個の太陽電池の現在発電量：%2$s RF/t（最大発電量：%3$s RF/t）
 enderio.block_solar_panel.probe.last_access=\u0020最後の電力情報参照から %s ティック経過
 enderio.block_solar_panel.probe.no_sun=\u0020%s に位置する太陽電池は太陽から遮られています
 enderio.block_solar_panel.probe.all_sun=\u0020すべての太陽電池が発電可能です
@@ -2350,14 +2350,14 @@ tile.block_enhanced_vat.name=改良型醸造装置
 tile.block_enhanced_vat.tooltip.detailed.line1=Ender IO の液体を醸造。
 
 tile.block_wired_charger.name=有線充電装置
-tile.block_wired_charger.tooltip.detailed.line1=アイテムを µI で充電。
+tile.block_wired_charger.tooltip.detailed.line1=アイテムを RF で充電。
 tile.block_wired_charger.tooltip.detailed.line2=充電速度は蓄電容量に比例。
 
 tile.block_simple_wired_charger.name=簡易型有線充電装置
-tile.block_simple_wired_charger.tooltip.detailed.line2=アイテムを µI で充電。
+tile.block_simple_wired_charger.tooltip.detailed.line2=アイテムを RF で充電。
 
 tile.block_enhanced_wired_charger.name=改良型有線充電装置
-tile.block_enhanced_wired_charger.tooltip.detailed.line1=アイテムを µI で充電。
+tile.block_enhanced_wired_charger.tooltip.detailed.line1=アイテムを RF で充電。
 tile.block_enhanced_wired_charger.tooltip.detailed.line2=充電速度は蓄電容量に比例。
 
 tile.block_wireless_charger.name=無線充電装置
