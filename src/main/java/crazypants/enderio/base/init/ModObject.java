@@ -84,7 +84,6 @@ import crazypants.enderio.base.item.darksteel.ItemDarkSteelShield;
 import crazypants.enderio.base.item.darksteel.ItemDarkSteelSword;
 import crazypants.enderio.base.item.darksteel.ItemDarkSteelTreetap;
 import crazypants.enderio.base.item.darksteel.ItemInventoryCharger;
-import crazypants.enderio.base.item.eggs.ItemOwlEgg;
 import crazypants.enderio.base.item.enderface.ItemEnderface;
 import crazypants.enderio.base.item.magnet.ItemMagnet;
 import crazypants.enderio.base.item.rodofreturn.ItemRodOfReturn;
@@ -341,8 +340,6 @@ public enum ModObject implements IModObjectBase {
     itemDarkSteelUpgrade(ItemUpgrades::create),
 
     blockDeathPouch(BlockGrave::create, ModTileEntity.TileGrave),
-
-    item_owl_egg(ItemOwlEgg::create),
 
     // endergy Items
     blockAlloyEndergy(BlockEndergyAlloy::create),

@@ -22,12 +22,6 @@ public class LangParser {
             "F:/github/manual/EnderIO_1710/resources/assets/enderio/lang/", //
             "C:/github/EnderIO_1710/resources/assets/enderio/lang/", //
 
-            "F:/github/manual/EnderZoo_1122/resources/assets/enderzoo/lang/", //
-            "C:/github/EnderZoo/resources/assets/enderzoo/lang/", //
-
-            "F:/github/manual/EnderZoo/resources/assets/enderzoo/lang/", //
-            "C:/github/EnderZoo_1710/resources/assets/enderzoo/lang/" //
-
     };
 
     private static String[] submods = { "enderio-base", "enderio-conduits", "enderio-integration-forestry",

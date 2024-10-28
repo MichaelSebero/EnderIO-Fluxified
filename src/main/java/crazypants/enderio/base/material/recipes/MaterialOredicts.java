@@ -123,10 +123,6 @@ public class MaterialOredicts {
         registerOre("toolHoe", new ItemStack(Items.DIAMOND_HOE, 1, OreDictionary.WILDCARD_VALUE));
         registerOre("toolHoe", new ItemStack(Items.GOLDEN_HOE, 1, OreDictionary.WILDCARD_VALUE));
 
-        // Zoo
-        registerOre("egg", new ItemStack(ModObject.item_owl_egg.getItemNN()));
-        registerOre("eggOwl", new ItemStack(ModObject.item_owl_egg.getItemNN()));
-
         // Shears
         registerOre("toolShears", new ItemStack(Items.SHEARS, 1, OreDictionary.WILDCARD_VALUE));
         registerOre("toolShears",

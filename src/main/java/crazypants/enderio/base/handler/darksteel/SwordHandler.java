@@ -49,7 +49,6 @@ import crazypants.enderio.base.config.config.DarkSteelConfig;
 import crazypants.enderio.base.integration.tic.TicProxy;
 import crazypants.enderio.base.item.darksteel.ItemDarkSteelSword;
 import crazypants.enderio.base.item.darksteel.upgrade.energy.EnergyUpgradeManager;
-import crazypants.enderio.base.material.material.Material;
 import crazypants.enderio.util.Prep;
 import info.loenwind.autoconfig.factory.IValue;
 
@@ -57,11 +56,6 @@ import info.loenwind.autoconfig.factory.IValue;
 public class SwordHandler {
 
     public static final @Nonnull String HIT_BY_DARK_STEEL_SWORD = "hitByDarkSteelSword";
-    private static final @Nonnull ResourceLocation ENDERZOO_ENDERMINY = new ResourceLocation("enderzoo", "enderminy"); // TODO
-                                                                                                                       // 1.13
-                                                                                                                       // remove
-    private static final @Nonnull ResourceLocation ENDERIOZOO_ENDERMINY = new ResourceLocation("enderiozoo",
-            "enderminy");
 
     @SubscribeEvent
     public static void onEnderTeleport(EnderTeleportEvent evt) {
@@ -91,10 +85,8 @@ public class SwordHandler {
         if (isEquipped(player)) {
             ResourceLocation name = EntityList.getKey(killedMob);
             final boolean isEnderman = killedMob instanceof EntityEnderman;
-            final boolean isEnderminy = !isEnderman &&
-                    (ENDERZOO_ENDERMINY.equals(name) || ENDERIOZOO_ENDERMINY.equals(name));
-            if (isEnderman || isEnderminy) {
-                ItemStack dropItem = isEnderminy ? Material.SHARD_ENDER.getStack() : new ItemStack(Items.ENDER_PEARL);
+            if (isEnderman) {
+                ItemStack dropItem = new ItemStack(Items.ENDER_PEARL);
                 int numPearls = 0;
                 double chance = DarkSteelConfig.darkSteelSwordEnderPearlDropChance.get();
                 while (chance >= 1) {
