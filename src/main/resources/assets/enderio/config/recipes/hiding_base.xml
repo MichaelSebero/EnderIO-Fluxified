@@ -321,8 +321,6 @@ XML editor will display that as tooltips when editing this file.
 
       <item name="enderio:item_staff_of_levity:0" show="false" />
 
-      <item name="enderio:item_owl_egg:0" show="false" />
-
       <item name="blockCrudeSteel" show="false" />
       <item name="blockCrystallineAlloy" show="false" />
       <item name="blockMelodicAlloy" show="false" />
